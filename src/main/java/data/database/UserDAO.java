@@ -40,7 +40,8 @@ public class UserDAO {
         Connection conn = DBConnection.getConnection();
         try {
             Statement statement = conn.createStatement();
-            String query = "SELECT * FROM User WHERE username = " + username;
+            String query = "SELECT * FROM User WHERE username = '" + username + "'";
+            System.out.println(query);
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
