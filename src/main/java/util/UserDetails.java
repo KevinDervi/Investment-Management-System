@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 
 public class UserDetails {
+    //TODO update database to reflect this order
     private static Long id;
     private static String username;
     private static String password;
