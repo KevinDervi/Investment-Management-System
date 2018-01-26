@@ -7,18 +7,18 @@ import java.sql.SQLException;
 public class DBConnection {
 
     private static Connection conn = null;
-    private static String DB_ADDRESS = "localhost";
-    private static String DB_PORT = "3306";
-    private static String DB_TYPE = "mysql";
-    private static String DB_NAME = "fyp";
+    private static final String DB_ADDRESS = "localhost";
+    private static final String DB_PORT = "3306";
+    private static final String DB_TYPE = "mysql";
+    private static final String DB_NAME = "fyp";
 
-    private static String DB_USERNAME = "common_user";
-    private static String DB_PASSWORD = "fyp";
+    private static final String DB_USERNAME = "common_user";
+    private static final String DB_PASSWORD = "fyp";
 
-    private static String DRIVER_TYPE = "jdbc";
-    private static String DRIVER_NAME = "com.mysql.jdbc.Driver";
+    private static final String DRIVER_TYPE = "jdbc";
+    private static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
 
-    private static String DB_URL = DRIVER_TYPE + ":" + DB_TYPE + "://" + DB_ADDRESS + ":" + DB_PORT + "/" + DB_NAME;
+    private static final String DB_URL = DRIVER_TYPE + ":" + DB_TYPE + "://" + DB_ADDRESS + ":" + DB_PORT + "/" + DB_NAME;
 
     private DBConnection(){}
 

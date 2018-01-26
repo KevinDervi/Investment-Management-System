@@ -6,14 +6,14 @@ import main.java.data.database.UserDAO;
  * performs the necessary checks before adding a user to the database
  */
 public class CreateUser {
-    private static int MAX_TEXT_LENGTH = 40;
-    private static int MIN_TEXT_LENGTH = 3;
+    private static final int MAX_TEXT_LENGTH = 40;
+    private static final int MIN_TEXT_LENGTH = 3;
 
-    private static int MAX_USERNAME_LENGTH = 16;
-    private static int MIN_USERNAME_LENGTH = 5;
+    private static final int MAX_USERNAME_LENGTH = 16;
+    private static final int MIN_USERNAME_LENGTH = 5;
 
-    private static int MAX_PASSWORD_LENGTH = 16;
-    private static int MIN_PASSWORD45_LENGTH = 5;
+    private static final int MAX_PASSWORD_LENGTH = 16;
+    private static final int MIN_PASSWORD45_LENGTH = 5;
 
     private CreateUser(){}
 
