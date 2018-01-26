@@ -1,4 +1,6 @@
-package main.java.util;
+package main.java.logic.account_information;
+
+import main.java.util.CardDetails;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,7 +10,6 @@ import java.util.ArrayList;
  */
 
 public class UserDetails {
-    //TODO update database to reflect this order
     private static Long id;
     private static String username;
     private static String password;
@@ -17,6 +18,7 @@ public class UserDetails {
     private static String email;
     private static BigDecimal balance;
 
+    private static CardDetails cardBeingUsed;
     private static ArrayList<CardDetails> cards;
 
 
@@ -33,6 +35,7 @@ public class UserDetails {
         surname = null;
         email = null;
         balance = null;
+        cardBeingUsed = null;
         cards = null;
     }
 
@@ -92,6 +95,14 @@ public class UserDetails {
         UserDetails.balance = balance;
     }
 
+    public static CardDetails getCardBeingUsed() {
+        return cardBeingUsed;
+    }
+
+    public static void setCardBeingUsed(CardDetails cardBeingUsed) {
+        UserDetails.cardBeingUsed = cardBeingUsed;
+    }
+
     public static ArrayList<CardDetails> getCards() {
         return cards;
     }
@@ -104,7 +115,7 @@ public class UserDetails {
         UserDetails.cards.add(card);
     }
 
-    public static void addCard(Long cardId){
+    public static void removeCard(Long cardId){
         //TODO remove card
     }
 }

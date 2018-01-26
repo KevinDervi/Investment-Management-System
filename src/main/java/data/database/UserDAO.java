@@ -38,7 +38,9 @@ public class UserDAO {
         Connection conn = DBConnection.getConnection();
         try {
             Statement statement = conn.createStatement();
-            String query = "SELECT * FROM User WHERE username = '" + username + "'";
+            String query = "SELECT * " +
+                    "FROM User " +
+                    "WHERE username = '" + username + "'";
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
@@ -58,9 +60,19 @@ public class UserDAO {
         Connection conn = DBConnection.getConnection();
         try {
             Statement statement = conn.createStatement();
-            String insert = "INSERT INTO User VALUES( NULL , '" + username + "',  PASSWORD('" + password + "')  , '" + firstname + "', '" + surname + "', '" + email + "', " + new BigDecimal(0)  + ", NULL )";
+            String insert = "INSERT INTO User " +
+                    "VALUES( " +
+                    "NULL , '" +
+                    username + "',  " +
+                    "PASSWORD('" + password + "')  , '" +
+                    firstname + "', '" +
+                    surname + "', '" +
+                    email + "', " +
+                    new BigDecimal(0)  + ", " +
+                    "CURRENT_TIMESTAMP, " +
+                    "NULL )";
             System.out.println("insert statement: "+ insert);
-            System.out.println("value from insert =" + statement.executeUpdate(insert));
+            System.out.println("value from insert = " + statement.executeUpdate(insert));
 
         } catch (SQLException e){
             System.out.println("error inserting");
@@ -69,7 +81,54 @@ public class UserDAO {
 
     }
 
-    protected static void authenticateUser(String username, String password){
+    protected static boolean authenticateUser(String username, String password){
+        Connection conn = DBConnection.getConnection();
+        try {
+            Statement statement = conn.createStatement();
+            String query = "SELECT * FROM User " +
+                    "WHERE " +
+                    "username = '" + username + "' " +
+                    "AND " +
+                    "password = PASSWORD('" + password + "')";
+
+            ResultSet resultSet = statement.executeQuery(query); //actual values from query
+
+            if (resultSet.next()){ //if there is a user that exists with username and password match
+                return true;
+            }
+
+        } catch (SQLException e){
+            System.out.println("error with authenticating user");
+            e.printStackTrace();
+        }
+
+        //if no results/connection
+        return false;
+    }
+
+    public static boolean checkUsernameExists(String username) {
+        if (getUser(username) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static int updateCardBeingUsed(Long cardId, String username){
+        Connection conn = DBConnection.getConnection();
+        try {
+            //TODO first check if the card is connected to the user via card used by table
+
+            Statement statement = conn.createStatement();
+            String query = "UPDATE User.cardBeingUsed set cardBeingUsed = " + cardId + " WHERE username = '" + username + "'";
+
+            return statement.executeUpdate(query); //return 1 if successful, 0 if unsuccessful
+
+
+        } catch (SQLException e){
+            System.out.println("error with query");
+            e.printStackTrace();
+            return -1;
+        }
 
     }
 
