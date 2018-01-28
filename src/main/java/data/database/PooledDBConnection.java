@@ -6,6 +6,8 @@ import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+// TODO add license/copyright to C3PO library here
+
 public class PooledDBConnection {
 
     private static final String DB_ADDRESS = "localhost";
@@ -55,10 +57,17 @@ public class PooledDBConnection {
 
     /**
      * takes an unused connection from the pool and returns it
-     * @return
+     * @return a single connection from the pool
      */
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
+        try {
             return comboPooledDBConnection.getConnection();
+        } catch (SQLException e) {
+            System.out.println("unable to retrieve connection from pool");
+            e.printStackTrace();
+        }
+        // return null if unable to get connection
+        return null;
     }
 
 }

@@ -12,11 +12,12 @@ class DBValuesConvertToJava {
     /**
      * input a result set and have it coverted into a hashmap of column name and value pairs
      */
-    protected static Map<String, Object> convert(ResultSet resultSet) throws SQLException{
+    protected static Map<String, Object> convertToSingleHashMap(ResultSet resultSet) throws SQLException{
         Map<String, Object> data = new HashMap<>();
 
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         //TODO if number of rows greater than 1 then make a list of hash maps otherwise return a single (or make another method for converting lists)
+        //TODO check that there is only a single value in the result set
 
         int noOfColumns = resultSetMetaData.getColumnCount();
         System.out.println("number of rows: " + resultSet);

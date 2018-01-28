@@ -9,19 +9,21 @@ public class UserDAO {
 
     private static String TABLE_NAME = "user";
 
+    /**
+     * get all details of a single user
+     * @param id primary key value of user
+     * @return hash map of user information
+     */
     public static Map<String, Object> getUser(int id){
 
-        Map<String, Object> userInfo = new HashMap<>();
-
-
-        Connection conn = DBConnection.getConnection();
+        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM User WHERE id = " + id;
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from
 
-            return DBValuesConvertToJava.convert(resultSet);
+            return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
 
         } catch (SQLException e){
             System.out.println("error with query");
@@ -33,9 +35,14 @@ public class UserDAO {
 
     }
 
+    /**
+     * get all details of a single user
+     * @param username users username
+     * @return hash map of user information
+     */
     public static Map<String, Object> getUser(String username){
 
-        Connection conn = DBConnection.getConnection();
+        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
             Statement statement = conn.createStatement();
             String query = "SELECT * " +
@@ -44,7 +51,7 @@ public class UserDAO {
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
-            return DBValuesConvertToJava.convert(resultSet);
+            return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
 
         } catch (SQLException e){
             System.out.println("error with query");
@@ -57,7 +64,7 @@ public class UserDAO {
     }
 
     public static void createNewUser(String username, String password, String firstname, String surname, String email){
-        Connection conn = DBConnection.getConnection();
+        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
             Statement statement = conn.createStatement();
             String insert = "INSERT INTO User " +
@@ -82,7 +89,7 @@ public class UserDAO {
     }
 
     protected static boolean authenticateUser(String username, String password){
-        Connection conn = DBConnection.getConnection();
+        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM User " +
@@ -114,7 +121,7 @@ public class UserDAO {
     }
 
     public static int updateCardBeingUsed(Long cardId, String username){
-        Connection conn = DBConnection.getConnection();
+        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
             //TODO first check if the card is connected to the user via card used by table
 
@@ -127,7 +134,7 @@ public class UserDAO {
         } catch (SQLException e){
             System.out.println("error with query");
             e.printStackTrace();
-            return -1;
+            return 0;
         }
 
     }
