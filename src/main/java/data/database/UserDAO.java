@@ -11,6 +11,8 @@ public class UserDAO {
 
     private static String TABLE_NAME = "User";
 
+    private UserDAO(){}
+
     /**
      * get all details of a single user
      * @param id primary key value of user
