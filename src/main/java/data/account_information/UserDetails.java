@@ -1,4 +1,4 @@
-package main.java.logic.account_information;
+package main.java.data.account_information;
 
 import main.java.util.CardDetails;
 
