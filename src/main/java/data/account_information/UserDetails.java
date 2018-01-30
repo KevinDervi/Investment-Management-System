@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * where the users details will be stored during their current session
  */
-
+// TODO make singleton class
 public class UserDetails {
     private static Long id;
     private static String username;
