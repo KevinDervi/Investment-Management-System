@@ -1,4 +1,4 @@
-package main.java.data.account_information;
+package main.java.data.internal_model;
 
 import main.java.util.CardDetails;
 

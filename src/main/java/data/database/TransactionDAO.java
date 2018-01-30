@@ -1,6 +1,6 @@
 package main.java.data.database;
 
-import main.java.data.account_information.UserDetails;
+import main.java.data.internal_model.UserDetails;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,11 +1,10 @@
 package main.java.data.database;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-import main.java.data.account_information.UserDetails;
+import main.java.data.internal_model.UserDetails;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserDAO {

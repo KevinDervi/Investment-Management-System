@@ -1,7 +1,6 @@
 package main.java.data.database;
 
-import main.java.data.account_information.UserDetails;
-import main.java.data.stock_data.BrokerFee;
+import main.java.data.internal_model.UserDetails;
 import main.java.util.Investment;
 
 import java.sql.Connection;
