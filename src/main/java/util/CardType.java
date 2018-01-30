@@ -1,5 +1,8 @@
 package main.java.util;
 
 public enum CardType {
-    // TODO add card types
+    VISA,
+    MASTER_CARD,
+    AMERICAN_EXPRESS
+
 }

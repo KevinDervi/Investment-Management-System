@@ -20,7 +20,7 @@ class DBValuesConvertToJava {
         //TODO check that there is only a single value in the result set
 
         int noOfColumns = resultSetMetaData.getColumnCount();
-        System.out.println("number of rows: " + resultSet);
+
         System.out.println();
         if(resultSet.next()){
             System.out.println("contains at least 1 value");
