@@ -34,7 +34,7 @@ public class CardDetailsDAO {
             rsOfInsertedId.next(); // set pointer to the first value (which is id of the inserted row)
 
             Long iDOfCardJustInserted = rsOfInsertedId.getLong(1);
-            // TODO attach the card to the user
+            // TODO close connection/resultSet/statement (maybe make a utility class)
             CardUsedByDAO.attachCardToUser(iDOfCardJustInserted);
 
         } catch(MySQLIntegrityConstraintViolationException e){

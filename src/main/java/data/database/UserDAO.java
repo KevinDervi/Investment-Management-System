@@ -54,7 +54,7 @@ public class UserDAO {
                     "WHERE username = '" + username + "'";
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from query
-
+            // TODO close connection/resultSet/statement (maybe make a utility class)
             return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
 
         } catch (SQLException e){
