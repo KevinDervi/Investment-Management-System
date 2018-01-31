@@ -29,7 +29,7 @@ public class UserDAO {
             statement = conn.createStatement();
             String query = "SELECT * FROM User WHERE id = " + id;
 
-            ResultSet resultSet = statement.executeQuery(query); //actual values from
+            ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
             return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
 

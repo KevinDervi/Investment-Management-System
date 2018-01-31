@@ -1,7 +1,7 @@
 package main.java.data.database;
 
 import main.java.data.internal_model.UserDetails;
-import main.java.util.Investment;
+import main.java.util.InvestmentHeld;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,7 +33,7 @@ public class InvestmentsHeldDAO {
 
             statement.executeUpdate(insert);
         } catch (SQLException e) {
-            System.out.println("error inserting invesmtment held");
+            System.out.println("error inserting investment held");
             e.printStackTrace();
         }finally {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
@@ -44,7 +44,11 @@ public class InvestmentsHeldDAO {
         // TODO check that it is at 0 before removing
     }
 
-    public static ArrayList<Investment> getAllInvestments(){
+    public static void sellStockFromInvestment(Long investmentId, Long amountToRemove){
+
+    }
+
+    public static ArrayList<InvestmentHeld> getAllInvestments(){
         return null;
     }
 }
