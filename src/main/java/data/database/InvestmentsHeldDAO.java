@@ -19,18 +19,16 @@ public class InvestmentsHeldDAO {
         Statement statement = null;
 
         try {
-            Long transactionId = TransactionDAO.createTransaction();
-
             conn = PooledDBConnection.getInstance().getConnection();
 
             statement = conn.createStatement();
             String insert = "INSERT INTO InvestmentsHeld " +
                     "VALUES(" +
-                    stockBuyId + ", '" + // id of transaction buy
-                    UserDetails.getId() + "', " + // user id
-                    quantity + ", " + // quantity bought
+                    stockBuyId + ", " + // id of transaction buy
+                    UserDetails.getId() + ", " + // user id
+                    quantity + // quantity bought
                     ")";
-
+            System.out.println(insert);
             statement.executeUpdate(insert);
         } catch (SQLException e) {
             System.out.println("error inserting investment held");

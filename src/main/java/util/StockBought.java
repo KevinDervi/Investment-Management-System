@@ -1,19 +1,19 @@
 package main.java.util;
 
-import main.java.data.database.StockBuyDAO;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class StockBought {
-    private Long TransactionId;
+    private Long transactionId;
+    private BigDecimal individualPrice;
     private String stockSymbol;
     private Long quantityBought;
     private BigDecimal brokerFee;
     private Timestamp timeBought;
 
-    public StockBought(Long transactionId, String stockSymbol, Long quantityBought, BigDecimal brokerFee, Timestamp timeBought) {
-        TransactionId = transactionId;
+    public StockBought(Long transactionId,BigDecimal individualPrice, String stockSymbol, Long quantityBought, BigDecimal brokerFee, Timestamp timeBought) {
+        this.transactionId = transactionId;
+        this.individualPrice = individualPrice;
         this.stockSymbol = stockSymbol;
         this.quantityBought = quantityBought;
         this.brokerFee = brokerFee;
@@ -21,7 +21,11 @@ public class StockBought {
     }
 
     public Long getTransactionId() {
-        return TransactionId;
+        return transactionId;
+    }
+
+    public BigDecimal getIndividualPrice() {
+        return individualPrice;
     }
 
     public String getStockSymbol() {
@@ -38,5 +42,10 @@ public class StockBought {
 
     public Timestamp getTimeBought() {
         return timeBought;
+    }
+
+    @Override
+    public String toString() {
+        return "Stock Bought ID: " + transactionId + ", stock Bought: " + stockSymbol + ", individual price: " + individualPrice + ", quantity bought: " + quantityBought + ", transaction fee: " + brokerFee + ", time bought: " + timeBought;
     }
 }

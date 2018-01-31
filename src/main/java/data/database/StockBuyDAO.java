@@ -5,11 +5,9 @@ import main.java.data.stock_data.BrokerFee;
 import main.java.util.StockBought;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class StockBuyDAO {
 
@@ -54,6 +52,8 @@ public class StockBuyDAO {
         ResultSet rs = null;
         Statement statement = null;
 
+        ArrayList<StockBought> listOfBoughtStock = new ArrayList<>();
+
         try {
             conn = PooledDBConnection.getInstance().getConnection();
 
@@ -67,15 +67,32 @@ public class StockBuyDAO {
                     "AND " +
                     "userId = " + UserDetails.getId();
 
-            statement.executeQuery(query);
+            rs = statement.executeQuery(query);
+            ArrayList<Map<String, Object> > results = DBValuesConvertToJava.convertToHashMapArrayList(rs);
 
+            for (Map<String, Object> row : results){
+                StockBought x = convertToStockBought(row);
+                listOfBoughtStock.add(x);
+            }
 
         } catch (SQLException e) {
             System.out.println("error with getting all stocks bought");
         } finally {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
-        return null;
+        return listOfBoughtStock;
+    }
+
+    private static StockBought convertToStockBought(Map<String, Object> row){
+        Long id = (Long) row.get("transactionId");
+        String stockSymbol = (String) row.get("stockSymbol");
+        BigDecimal individualPrice = (BigDecimal) row.get("individualPrice"); 
+        Long quantityBought = (Long) row.get("quantity");
+        BigDecimal brokerFee = (BigDecimal) row.get("brokerFee");
+        Timestamp timeBought = (Timestamp) row.get("timeOfTransaction");
+        
+        return new StockBought(id, individualPrice, stockSymbol, quantityBought, brokerFee, timeBought);
+
     }
 }
 

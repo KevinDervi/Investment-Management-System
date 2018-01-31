@@ -22,7 +22,9 @@ public class TransactionDAO {
         try {
             conn = PooledDBConnection.getInstance().getConnection();
 
-            String insert = "INSERT INTO User " +
+            statement = conn.createStatement();
+
+            String insert = "INSERT INTO Transaction " +
                     "VALUES( " +
                     "NULL , '" + // id
                     UserDetails.getId() + "', " + // user id
