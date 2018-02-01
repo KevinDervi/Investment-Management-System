@@ -27,7 +27,9 @@ public class UserDAO {
             conn = PooledDBConnection.getInstance().getConnection();
 
             statement = conn.createStatement();
-            String query = "SELECT * FROM User WHERE id = " + id;
+            String query = "SELECT * " +
+                    "FROM User " +
+                    "WHERE id = " + id;
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
@@ -169,11 +171,11 @@ public class UserDAO {
             conn = PooledDBConnection.getInstance().getConnection();
 
             statement = conn.createStatement();
-            String query = "UPDATE User.cardBeingUsed" +
+            String query = "UPDATE User" +
                     " set cardBeingUsed = " + cardId +
-                    " WHERE id = '" + UserDetails.getId() + "'";
+                    " WHERE id = " + UserDetails.getId();
 
-            statement.executeUpdate(query); //return 1 if successful, 0 if unsuccessful
+            statement.executeUpdate(query);
 
         } catch (SQLException e){
             System.out.println("error with updating CardBeingUsed table");
@@ -182,6 +184,33 @@ public class UserDAO {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
+    }
+
+    /**
+     * will modify the user balance by a specific value
+     * @param value
+     */
+    public static void modifyBalanceBy(BigDecimal value){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
+            String update = "UPDATE User" +
+                    " set balance = balance + " + value +
+                    " WHERE id = " + UserDetails.getId();
+
+            statement.executeUpdate(update);
+
+        } catch (SQLException e){
+            System.out.println("error with updating user balance");
+            e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
+        }
     }
 
 }

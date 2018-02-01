@@ -38,6 +38,8 @@ public class StockBuyDAO {
 
             // insert what was just bought into investments held
             InvestmentsHeldDAO.addInvesntment(transactionId, quantity);
+            // TODO remove amount invested (individual price x quantitity) from user balance
+
 
         } catch (SQLException e) {
             System.out.println("error with buying stock");
