@@ -18,7 +18,7 @@ public class UserDAO {
      * @param id primary key value of user
      * @return hash map of user information
      */
-    public static Map<String, Object> getUser(int id){
+    public static Map<String, Object> getUser(Long id){
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
@@ -173,7 +173,7 @@ public class UserDAO {
             statement = conn.createStatement();
             String query = "UPDATE User" +
                     " set cardBeingUsed = " + cardId +
-                    " WHERE id = " + UserDetails.getId();
+                    " WHERE id = " + UserDetails.getInstance().getId();
 
             statement.executeUpdate(query);
 
@@ -201,7 +201,7 @@ public class UserDAO {
             statement = conn.createStatement();
             String update = "UPDATE User" +
                     " set balance = balance + " + value +
-                    " WHERE id = " + UserDetails.getId();
+                    " WHERE id = " + UserDetails.getInstance().getId();
 
             statement.executeUpdate(update);
 
@@ -224,7 +224,7 @@ public class UserDAO {
             statement = conn.createStatement();
             String update = "UPDATE User" +
                     " set cardBeingUsed = " + cardId +
-                    " WHERE id = " + UserDetails.getId();
+                    " WHERE id = " + UserDetails.getInstance().getId();
 
             statement.executeUpdate(update);
 

@@ -1,5 +1,6 @@
 package main.java.data.internal_model;
 
+import main.java.data.database.UserDAO;
 import main.java.util.CardDetails;
 
 import java.math.BigDecimal;
@@ -10,24 +11,37 @@ import java.util.ArrayList;
  */
 // TODO make singleton class
 public class UserDetails {
-    private static Long id;
-    private static String username;
-    private static String password;
-    private static String firstname;
-    private static String surname;
-    private static String email;
-    private static BigDecimal balance;
+    private Long id;
+    private String username;
+    private String password;
+    private String firstname;
+    private String surname;
+    private String email;
+    private BigDecimal balance;
 
-    private static CardDetails cardBeingUsed;
-    private static ArrayList<CardDetails> cards;
+    private CardDetails cardBeingUsed;
+    private ArrayList<CardDetails> cards;
 
+    private static UserDetails instance;
 
     private UserDetails(){}
+
+    public static UserDetails getInstance() {
+        if (instance == null) {
+            instance = new UserDetails();
+        }
+        return instance;
+    }
+
+    public void initialiseUserDetails(String username){
+        UserDAO.getUser(username);
+
+    }
 
     /**
      * reset values on logout
      */
-    public static void reset(){
+    public void reset(){
         id = null;
         username = null;
         password = null;
@@ -39,83 +53,85 @@ public class UserDetails {
         cards = null;
     }
 
-    public static Long getId() {
+    public Long getId() {
         return id;
     }
 
-    public static void setId(Long id) {
-        UserDetails.id = id;
+    private void setId(Long id) {
+        this.id = id;
     }
 
-    public static String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public static void setUsername(String username) {
-        UserDetails.username = username;
+    private void setUsername(String username) {
+        this.username = username;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public static void setPassword(String password) {
-        UserDetails.password = password;
+    private void setPassword(String password) {
+        this.password = password;
     }
 
-    public static String getFirstname() {
+    public String getFirstname() {
         return firstname;
     }
 
-    public static void setFirstname(String firstname) {
-        UserDetails.firstname = firstname;
+    private void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public static String getSurname() {
+    public String getSurname() {
         return surname;
     }
 
-    public static void setSurname(String surname) {
-        UserDetails.surname = surname;
+    private void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public static String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public static void setEmail(String email) {
-        UserDetails.email = email;
+    private void setEmail(String email) {
+        this.email = email;
     }
 
-    public static BigDecimal getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public static void setBalance(BigDecimal balance) {
-        UserDetails.balance = balance;
+    private void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
-    public static CardDetails getCardBeingUsed() {
+    public CardDetails getCardBeingUsed() {
         return cardBeingUsed;
     }
 
-    public static void setCardBeingUsed(CardDetails cardBeingUsed) {
-        UserDetails.cardBeingUsed = cardBeingUsed;
+    private void setCardBeingUsed(CardDetails cardBeingUsed) {
+        this.cardBeingUsed = cardBeingUsed;
     }
 
-    public static ArrayList<CardDetails> getCards() {
+    public ArrayList<CardDetails> getCards() {
         return cards;
     }
 
-    public static void setCards(ArrayList<CardDetails> cards) {
-        UserDetails.cards = cards;
+    private void setCards(ArrayList<CardDetails> cards) {
+        this.cards = cards;
     }
 
-    public static void addCard(CardDetails card){
-        UserDetails.cards.add(card);
+    public void addCard(CardDetails card){
+        this.cards.add(card);
     }
 
-    public static void removeCard(Long cardId){
+    public void removeCard(Long cardId){
         //TODO remove card
     }
+
+    // TODO have update methods for Username, Password, and email that does logic and interacts with the DAO
 }

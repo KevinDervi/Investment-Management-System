@@ -26,7 +26,7 @@ public class InvestmentsHeldDAO {
             String insert = "INSERT INTO InvestmentsHeld " +
                     "VALUES(" +
                     stockBuyId + ", " + // id of transaction buy
-                    UserDetails.getId() + ", " + // user id
+                    UserDetails.getInstance().getId() + ", " + // user id
                     quantity + // quantity bought
                     ")";
             System.out.println(insert);
@@ -79,8 +79,9 @@ public class InvestmentsHeldDAO {
             statement = conn.createStatement();
             String delete = "DELETE FROM InvestmentsHeld  " +
                     "WHERE StockBuyId = " + stockBuyId;
+
             System.out.println(delete);
-            statement.execute(delete);
+            statement.executeUpdate(delete);
         } catch (SQLException e) {
             System.out.println("error deleting investment held");
             e.printStackTrace();
@@ -102,7 +103,7 @@ public class InvestmentsHeldDAO {
             statement = conn.createStatement();
             String update = "UPDATE InvestmentsHeld" +
                     " set quantityLeft = quantityLeft - " + amountToRemove +
-                    " WHERE id = '" + UserDetails.getId() + "'";
+                    " WHERE id = '" + UserDetails.getInstance().getId() + "'";
 
             statement.executeUpdate(update);
 

@@ -67,7 +67,7 @@ public class StockBuyDAO {
                     "ON " +
                     "transactionId = id " +
                     "AND " +
-                    "userId = " + UserDetails.getId();
+                    "userId = " + UserDetails.getInstance().getId();
 
             rs = statement.executeQuery(query);
             ArrayList<Map<String, Object> > results = DBValuesConvertToJava.convertToHashMapArrayList(rs);

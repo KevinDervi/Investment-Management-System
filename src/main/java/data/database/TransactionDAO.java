@@ -27,7 +27,7 @@ public class TransactionDAO {
             String insert = "INSERT INTO Transaction " +
                     "VALUES( " +
                     "NULL , '" + // id
-                    UserDetails.getId() + "', " + // user id
+                    UserDetails.getInstance().getId() + "', " + // user id
                     "CURRENT_TIMESTAMP)"; // time of transaction
 
             statement.executeUpdate(insert, Statement.RETURN_GENERATED_KEYS);

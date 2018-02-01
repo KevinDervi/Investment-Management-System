@@ -12,11 +12,14 @@ public class CardDetailsDAO {
     private CardDetailsDAO(){}
 
     public static void createNewCard(CardType type, String cardNumber, Date expirationDate, String nameOnCard, int securityCode) {
-        // TODO also add to card used by User
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
 
-        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
-            Statement statement = conn.createStatement();
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
             String query =  "INSERT INTO CardDetails " +
                     "VALUES( " +
                     "NULL , '" + // id
@@ -29,15 +32,16 @@ public class CardDetailsDAO {
 
             statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 
-            ResultSet rsOfInsertedId = statement.getGeneratedKeys();
+            // gets the ID of the key just inserted
+            rs = statement.getGeneratedKeys();
 
-            rsOfInsertedId.next(); // set pointer to the first value (which is id of the inserted row)
+            rs.next(); // set pointer to the first value (which is id of the inserted row)
 
-            Long iDOfCardJustInserted = rsOfInsertedId.getLong(1);
+            Long iDOfCardJustInserted = rs.getLong(1);
             // TODO close connection/resultSet/statement (maybe make a utility class)
 
             // TODO make all DAO methods only do one thing and allow internal model to to the database logic
-            CardUsedByDAO.attachCardToUser(iDOfCardJustInserted);
+            //CardUsedByDAO.attachCardToUser(iDOfCardJustInserted);
 
         } catch(MySQLIntegrityConstraintViolationException e){
             System.out.println("card is already in table");
@@ -46,6 +50,8 @@ public class CardDetailsDAO {
         } catch (SQLException e){
             System.out.println("unable to insert card into database");
             e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
     }

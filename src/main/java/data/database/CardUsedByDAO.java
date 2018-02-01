@@ -19,7 +19,7 @@ public class CardUsedByDAO {
             Statement statement = conn.createStatement();
             String query = "INSERT INTO CardUsedBy " +
                     "VALUES( " +
-                    UserDetails.getId() + ", " + // user id
+                    UserDetails.getInstance().getId() + ", " + // user id
                     cardToAttachId + // card id
                     " )";
 
