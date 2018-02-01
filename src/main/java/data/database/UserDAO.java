@@ -1,35 +1,45 @@
 package main.java.data.database;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+import main.java.data.internal_model.UserDetails;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserDAO {
 
     private static String TABLE_NAME = "User";
 
+    private UserDAO(){}
+
     /**
      * get all details of a single user
      * @param id primary key value of user
      * @return hash map of user information
      */
-    public static Map<String, Object> getUser(int id){
+    public static Map<String, Object> getUser(Long id){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
 
-        Connection conn = PooledDBConnection.getInstance().getConnection();
         try {
-            Statement statement = conn.createStatement();
-            String query = "SELECT * FROM User WHERE id = " + id;
+            conn = PooledDBConnection.getInstance().getConnection();
 
-            ResultSet resultSet = statement.executeQuery(query); //actual values from
+            statement = conn.createStatement();
+            String query = "SELECT * " +
+                    "FROM User " +
+                    "WHERE id = " + id;
+
+            ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
             return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
 
         } catch (SQLException e){
             System.out.println("error with getUser(id) query");
             e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
         //if no results/connection
@@ -44,20 +54,27 @@ public class UserDAO {
      */
     public static Map<String, Object> getUser(String username){
 
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
         try {
-            Statement statement = conn.createStatement();
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
             String query = "SELECT * " +
                     "FROM User " +
                     "WHERE username = '" + username + "'";
 
             ResultSet resultSet = statement.executeQuery(query); //actual values from query
-
+            // TODO close connection/resultSet/statement (maybe make a utility class)
             return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
 
         } catch (SQLException e){
             System.out.println("error with getUser(username) query");
             e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
         //if no results/connection
@@ -74,9 +91,13 @@ public class UserDAO {
      * @param email
      */
     public static void createNewUser(String username, String password, String firstname, String surname, String email){
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        conn = PooledDBConnection.getInstance().getConnection();
         try {
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             String insert = "INSERT INTO User " +
                     "VALUES( " +
                     "NULL , '" +
@@ -97,14 +118,21 @@ public class UserDAO {
         } catch (SQLException e){
             System.out.println("error creating a new user");
             e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
     }
 
     protected static boolean authenticateUser(String username, String password){
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+
         try {
-            Statement statement = conn.createStatement();
+            conn = PooledDBConnection.getInstance().getConnection();
+            statement = conn.createStatement();
             String query = "SELECT * FROM User " +
                     "WHERE " +
                     "username = '" + username + "' " +
@@ -120,6 +148,8 @@ public class UserDAO {
         } catch (SQLException e){
             System.out.println("error with authenticating user");
             e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
         //if no results/connection
@@ -130,22 +160,80 @@ public class UserDAO {
         return getUser(username) != null;
     }
 
-    public static int updateCardBeingUsed(Long cardId, String username){
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+    public static void updateCardBeingUsed(Long cardId){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
         try {
             //TODO first check if the card is connected to the user via card used by table
 
-            Statement statement = conn.createStatement();
-            String query = "UPDATE User.cardBeingUsed set cardBeingUsed = " + cardId + " WHERE username = '" + username + "'";
+            conn = PooledDBConnection.getInstance().getConnection();
 
-            return statement.executeUpdate(query); //return 1 if successful, 0 if unsuccessful
+            statement = conn.createStatement();
+            String query = "UPDATE User" +
+                    " set cardBeingUsed = " + cardId +
+                    " WHERE id = " + UserDetails.getInstance().getId();
+
+            statement.executeUpdate(query);
 
         } catch (SQLException e){
             System.out.println("error with updating CardBeingUsed table");
             e.printStackTrace();
-            return 0;
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
+    }
+
+    /**
+     * will modify the user balance by a specific value
+     * @param value
+     */
+    public static void modifyBalanceBy(BigDecimal value){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
+            String update = "UPDATE User" +
+                    " set balance = balance + " + value +
+                    " WHERE id = " + UserDetails.getInstance().getId();
+
+            statement.executeUpdate(update);
+
+        } catch (SQLException e){
+            System.out.println("error with updating user balance");
+            e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
+        }
+    }
+
+    public static void modifyCardCurrentlyBeingUsed(Long cardId){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
+            String update = "UPDATE User" +
+                    " set cardBeingUsed = " + cardId +
+                    " WHERE id = " + UserDetails.getInstance().getId();
+
+            statement.executeUpdate(update);
+
+        } catch (SQLException e){
+            System.out.println("error with updating user balance");
+            e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
+        }
     }
 
 }

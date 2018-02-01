@@ -4,7 +4,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 // TODO add license/copyright to C3PO library here
 
@@ -68,6 +70,35 @@ public class PooledDBConnection {
         }
         // return null if unable to get connection
         return null;
+    }
+
+    public void closeConnection(Connection conn, Statement statement, ResultSet rs){
+        if (rs != null){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.out.println("error closing result set");
+                e.printStackTrace();
+            }
+        }
+
+        if (statement != null){
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                System.out.println("error closing statement");
+                e.printStackTrace();
+            }
+        }
+
+        if (conn != null){
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                System.out.println("error closing connection");
+                e.printStackTrace();
+            }
+        }
     }
 
 }
