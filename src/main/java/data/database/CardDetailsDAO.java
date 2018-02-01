@@ -35,6 +35,8 @@ public class CardDetailsDAO {
 
             Long iDOfCardJustInserted = rsOfInsertedId.getLong(1);
             // TODO close connection/resultSet/statement (maybe make a utility class)
+
+            // TODO make all DAO methods only do one thing and allow internal model to to the database logic
             CardUsedByDAO.attachCardToUser(iDOfCardJustInserted);
 
         } catch(MySQLIntegrityConstraintViolationException e){

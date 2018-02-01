@@ -213,4 +213,27 @@ public class UserDAO {
         }
     }
 
+    public static void modifyCardCurrentlyBeingUsed(Long cardId){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
+            String update = "UPDATE User" +
+                    " set cardBeingUsed = " + cardId +
+                    " WHERE id = " + UserDetails.getId();
+
+            statement.executeUpdate(update);
+
+        } catch (SQLException e){
+            System.out.println("error with updating user balance");
+            e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
+        }
+    }
+
 }
