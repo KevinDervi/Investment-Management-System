@@ -1,4 +1,4 @@
-package main.java.Presentation;
+package main.java.Controller;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,15 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import main.java.logic.CreateUser;
+import main.java.logic.SignUpLogic;
 
 public class SignUp extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Investment Management System");
 
@@ -113,7 +109,7 @@ public class SignUp extends Application {
                 String surnameInput = surnameTextField.getText();
                 String emailInput = emailTextField.getText();
 
-                CreateUser.createUser(usernameInput, passwordInput, firstNameInput, surnameInput, emailInput);
+                SignUpLogic.createUser(usernameInput, passwordInput, firstNameInput, surnameInput, emailInput);
             }
         });
 

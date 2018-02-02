@@ -53,6 +53,10 @@ public class UserDetails {
         cards = null;
     }
 
+    public boolean authenticateUser(String username, String password){
+        return UserDAO.authenticateUser(username, password);
+    }
+
     public Long getId() {
         return id;
     }

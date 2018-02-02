@@ -2,20 +2,15 @@ package main.java.logic;
 
 import main.java.data.database.UserDAO;
 
-/**
- * performs the necessary checks before adding a user to the database
- */
-public class CreateUser {
+public class validateInput {
     private static final int MAX_TEXT_LENGTH = 40;
-    private static final int MIN_TEXT_LENGTH = 3;
+    private static final int MIN_TEXT_LENGTH = 2;
 
     private static final int MAX_USERNAME_LENGTH = 16;
     private static final int MIN_USERNAME_LENGTH = 5;
 
     private static final int MAX_PASSWORD_LENGTH = 16;
     private static final int MIN_PASSWORD45_LENGTH = 5;
-
-    private CreateUser(){}
 
     /**
      * checks if the username follows guidelines and has not been taken by another user
@@ -56,11 +51,6 @@ public class CreateUser {
         return email.matches("^[a-zA-Z0-9+]+@[a-zA-Z]+\\.?[a-zA-Z]+\\.[a-zA-Z]+$");
     }
 
-    public static boolean createUser(String username, String password, String firstName, String surname, String email){
-        UserDAO.createNewUser(username, password, firstName, surname, email);
-        return true;
-    }
-
     // utility functions
     private static boolean isAlphaneumeric(String text){
         return text.matches("[a-zA-Z0-9]*");
@@ -69,6 +59,4 @@ public class CreateUser {
     private static boolean isAlphabetOnly(String text){
         return text.matches("[a-zA-Z]*");
     }
-
-
 }

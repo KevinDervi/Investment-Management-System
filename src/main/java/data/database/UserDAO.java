@@ -124,7 +124,7 @@ public class UserDAO {
 
     }
 
-    protected static boolean authenticateUser(String username, String password){
+    public static boolean authenticateUser(String username, String password){
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
