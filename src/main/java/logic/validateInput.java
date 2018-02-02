@@ -51,7 +51,7 @@ public class validateInput {
     // generic guideline functions
 
     public static boolean isTooLong(String text){
-        return text.length() <= MAX_TEXT_LENGTH;
+        return text.length() >= MAX_TEXT_LENGTH;
     }
 
     public static boolean isTooShort(String text){

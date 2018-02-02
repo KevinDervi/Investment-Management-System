@@ -105,9 +105,10 @@ public class SignUpViewController {
         // username validation
         String usernameMessage = SignUpLogic.getUsernameErrorMessage(username);
 
-        if(usernameErrorMessage != null){
+        if(usernameMessage != null){
             usernameErrorMessage.setText(usernameMessage);
             validInputs = false;
+
         }
 
         //password validation
@@ -121,11 +122,13 @@ public class SignUpViewController {
         //re-typed password validation
         String reTypedPasswordMessage = getReTypedPasswordMessage();
 
-        if(retypedPassword != null){
+
+        if(reTypedPasswordMessage != null){
             reTypedPasswordErrorMessage.setText(reTypedPasswordMessage);
             validInputs = false;
-        }
 
+        }
+        System.out.println(validInputs);
         // if all inputs have been validated
         if(validInputs){
             SignUpLogic.createUser(username, password, firstName, surname, email);
