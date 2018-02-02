@@ -70,6 +70,7 @@ public class SignUpViewController {
         resetErrorMessages();
 
         boolean validInputs = true;
+
         String firstName = firstNameTextField.getText();
         String surname = surnameTextField.getText();
         String email = emailTextField.getText();
@@ -77,17 +78,53 @@ public class SignUpViewController {
         String password = passwordTextField.getText();
         String retypedPassword = reTypedPassword.getText();
 
-        // will return null if it is valid
-        String firstNameMessage = firstNameGetErrorMessage(firstName);
+        // first name validation
+        String firstNameMessage = SignUpLogic.getGenericTextErrorMessage(firstName);
 
         if(firstNameMessage != null){
             firstNameErrorMessage.setText(firstNameMessage);
             validInputs = false;
         }
 
+        //surname validation
+        String surnameMessage = SignUpLogic.getGenericTextErrorMessage(surname);
 
+        if(surnameMessage != null){
+            surnameErrorMessage.setText(surnameMessage);
+            validInputs = false;
+        }
 
+        // E-mail validation
+        String emailMessage = SignUpLogic.getEmailErrorMessage(email);
 
+        if(emailMessage != null){
+            emailErrorMessage.setText(emailMessage);
+            validInputs = false;
+        }
+
+        // username validation
+        String usernameMessage = SignUpLogic.getUsernameErrorMessage(username);
+
+        if(usernameErrorMessage != null){
+            usernameErrorMessage.setText(usernameMessage);
+            validInputs = false;
+        }
+
+        //password validation
+        String passwordMessage = SignUpLogic.getPasswordErrorMessage(password);
+
+        if(passwordMessage != null){
+            passwordErrorMessage.setText(passwordMessage);
+            validInputs = false;
+        }
+
+        //re-typed password validation
+        String reTypedPasswordMessage = getReTypedPasswordMessage();
+
+        if(retypedPassword != null){
+            reTypedPasswordErrorMessage.setText(reTypedPasswordMessage);
+            validInputs = false;
+        }
 
         // if all inputs have been validated
         if(validInputs){
@@ -97,9 +134,18 @@ public class SignUpViewController {
 
     }
 
-    private String firstNameGetErrorMessage(String firstName) {
-        return "test";
+    private String getReTypedPasswordMessage(){
+        String password = passwordTextField.getText();
+        String retypedPassword = reTypedPassword.getText();
+
+        if(!password.equals(retypedPassword)){
+            return "Does not match password";
+        }
+
+        return null;
     }
+
+
 
     /**
      * gets the stage of the Sign up scene and replaces it with the sign in scene

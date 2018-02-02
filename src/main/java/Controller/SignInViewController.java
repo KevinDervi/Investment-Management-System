@@ -48,6 +48,11 @@ public class SignInViewController {
         }
 
         // TODO get main investment management system controller from FXML Loader and call its initialise method to load properly
+        // no need can populate automatically using this method in the controller and nothing has to be called
+//        @FXML
+//        public void initialize() {
+//            System.out.println("second");
+//        }
     }
 
     @FXML

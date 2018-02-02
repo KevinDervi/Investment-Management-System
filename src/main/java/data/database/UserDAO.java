@@ -79,7 +79,37 @@ public class UserDAO {
 
         //if no results/connection
         return null;
+    }
 
+    public static boolean existsEmail(String email){
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
+            String query = "SELECT email " +
+                    "FROM User " +
+                    "WHERE email = '" + email+ "'";
+
+            ResultSet resultSet = statement.executeQuery(query); //actual values from query
+            if(resultSet.next()){
+                return true;
+            }else {
+                return false;
+            }
+
+        } catch (SQLException e){
+            System.out.println("error with existsEmail query");
+            e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
+        }
+
+        // TODO temp solution
+        return true;
     }
 
     /**
