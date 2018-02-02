@@ -35,12 +35,24 @@ public class SignInViewController {
     private TextField usernameTextField;
 
     @FXML
-    void HandleSignIn(ActionEvent event) {
+    void HandleSignIn(ActionEvent event) throws Exception{
         String usernameInput = usernameTextField.getText();
         String passwordInput = passwordTextField.getText();
 
         if (SignInLogic.Authentication(usernameInput, passwordInput)){
             SignInLogic.loadUser(usernameInput);
+            // create new window
+            Stage newStage = new Stage();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/InvestmentManagementView.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+
+            newStage.setScene(new Scene(root));
+            newStage.show();
+
+            // close the current window
+            Stage currentStage = (Stage) signInButton.getScene().getWindow();
+            currentStage.close();
 
         }
         else{
@@ -53,6 +65,8 @@ public class SignInViewController {
 //        public void initialize() {
 //            System.out.println("second");
 //        }
+
+
     }
 
     @FXML
