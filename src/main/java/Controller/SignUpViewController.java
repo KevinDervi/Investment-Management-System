@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -16,13 +17,13 @@ import main.java.logic.SignUpLogic;
 public class SignUpViewController {
 
     @FXML
-    private TextField reTypedPassword;
+    private PasswordField reTypedPasswordTextField;
 
     @FXML
     private Label passwordErrorMessage;
 
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordTextField;
 
     @FXML
     private TextField emailTextField;
@@ -76,7 +77,7 @@ public class SignUpViewController {
         String email = emailTextField.getText();
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
-        String retypedPassword = reTypedPassword.getText();
+        String retypedPassword = reTypedPasswordTextField.getText();
 
         // first name validation
         String firstNameMessage = SignUpLogic.getGenericTextErrorMessage(firstName);
@@ -139,7 +140,7 @@ public class SignUpViewController {
 
     private String getReTypedPasswordMessage(){
         String password = passwordTextField.getText();
-        String retypedPassword = reTypedPassword.getText();
+        String retypedPassword = reTypedPasswordTextField.getText();
 
         if(!password.equals(retypedPassword)){
             return "Does not match password";
