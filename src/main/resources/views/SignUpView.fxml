@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller.SignUpViewController">
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints />
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints minHeight="0.0" prefHeight="0.0" />
+        <RowConstraints />
+        <RowConstraints minHeight="0.0" prefHeight="0.0" />
+        <RowConstraints />
+        <RowConstraints minHeight="0.0" prefHeight="0.0" />
+      <RowConstraints />
+      <RowConstraints minHeight="0.0" prefHeight="0.0" />
+      <RowConstraints />
+      <RowConstraints minHeight="0.0" prefHeight="0.0" />
+      <RowConstraints />
+      <RowConstraints minHeight="0.0" prefHeight="0.0" />
+      <RowConstraints />
+    </rowConstraints>
+    <children>
+        <Label alignment="CENTER" text="Sign Up" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+            <font>
+                <Font name="Segoe UI" size="20.0" />
+            </font>
+        </Label>
+        <Label text="First Name:" GridPane.rowIndex="1" />
+        <Label text="Surname:" GridPane.rowIndex="3" />
+        <Label text="E-mail:" GridPane.rowIndex="5" />
+        <Label text="Username:" GridPane.rowIndex="7" />
+        <Label text="Password:" GridPane.rowIndex="9" />
+        <Label text="Re-type Password:" GridPane.rowIndex="11" />
+        <TextField fx:id="firstNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="surnameTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <TextField fx:id="usernameTextField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        <VBox alignment="CENTER" spacing="10.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="13">
+            <children>
+                <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" text="Back" />
+            </children>
+        </VBox>
+      <Label fx:id="firstNameErrorMessage" textFill="#d30000" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="surnameErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label fx:id="emailErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label fx:id="usernameErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <Label fx:id="passwordErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+      <Label fx:id="reTypedPasswordErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+      <Label contentDisplay="GRAPHIC_ONLY" GridPane.columnIndex="2" GridPane.rowIndex="7">
+         <graphic>
+              <ImageView fx:id="usernameInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                      <Image url="@../images/Information_Icon.png" />
+                  </image>
+              </ImageView>
+         </graphic>
+         <tooltip>
+            <Tooltip text="Username:&#10; •Must be Alphaneumeric&#10; •Minimum length: 3" />
+
+         </tooltip>
+      </Label>
+      <Label contentDisplay="GRAPHIC_ONLY" GridPane.columnIndex="2" GridPane.rowIndex="9">
+         <graphic>
+              <ImageView fx:id="passwordInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                      <Image url="@../images/Information_Icon.png" />
+                  </image>
+              </ImageView>
+         </graphic>
+         <tooltip>
+            <Tooltip text="Password:&#10; •Minimum length: 5" />
+         </tooltip>
+      </Label>
+      <PasswordField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+      <PasswordField fx:id="reTypedPasswordTextField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+    </children>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+</GridPane>
