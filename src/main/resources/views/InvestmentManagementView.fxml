@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Username">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font></Label>
+            <HBox>
+               <children>
+                  <Label text="Account Balance: " />
+                  <Label text="£1234" />
+               </children>
+            </HBox>
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Account statistics" />
+            <Label text="Portfolio">
+               <font>
+                  <Font name="Segoe UI" size="16.0" />
+               </font></Label>
+            <HBox>
+               <children>
+                  <Label text="(search icon)" />
+                  <TextField promptText="Search for Stock" style="-fx-background-radius: 10px;" />
+               </children>
+            </HBox>
+            <ListView />
+         </children>
+      </VBox>
+   </left>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Account">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Settings" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Settings">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Help" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="About">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+        <items>
+            <HBox prefHeight="84.0" prefWidth="498.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Technical Details" />
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Open" />
+                              <Label text="High" GridPane.columnIndex="1" />
+                              <Label text="Low" GridPane.columnIndex="2" />
+                              <Label text="Close" GridPane.columnIndex="3" />
+                              <Label text="Volume" GridPane.columnIndex="4" />
+                              <Label text="1234" GridPane.rowIndex="1" />
+                              <Label text="1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="1234" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label text="1234" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Label text="1234" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Button mnemonicParsing="false" text="Add to watchlist" />
+                        <Button mnemonicParsing="false" text="Set notification" />
+                        <Button mnemonicParsing="false" text="Stock Analysis" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox>
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Interval" />
+                              <HBox>
+                                 <children>
+                                    <ToggleButton mnemonicParsing="false" text="1-min">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="IntervalToggleGroup" />
+                                       </toggleGroup>
+                                    </ToggleButton>
+                                    <ToggleButton mnemonicParsing="false" text="5-min" />
+                                    <ToggleButton mnemonicParsing="false" text="15-min" />
+                                    <ToggleButton mnemonicParsing="false" text="30-min" />
+                                    <ToggleButton mnemonicParsing="false" text="60-min" />
+                                    <ToggleButton mnemonicParsing="false" text="daily" />
+                                    <ToggleButton mnemonicParsing="false" text="weekly" />
+                                    <ToggleButton mnemonicParsing="false" text="monthly" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <HBox>
+                           <children>
+                              <ToggleButton mnemonicParsing="false" text="Real-time" />
+                              <ToggleButton mnemonicParsing="false" text="Full history" />
+                           </children>
+                        </HBox>
+                        <Label text="Graph Type:" />
+                        <ComboBox prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <LineChart title="Stock Data">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </VBox>
+        </items>
+      </SplitPane>
+   </center>
+   <right>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Stock Symbol" />
+            <Label text="Current Price:" GridPane.rowIndex="1" />
+            <Label text="£1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Changes:" GridPane.rowIndex="2" />
+            <Label text="Daily:" GridPane.rowIndex="3" />
+            <Label text="Weekly:" GridPane.rowIndex="4" />
+            <Label text="Monthly:" GridPane.rowIndex="5" />
+            <Label text="6-month:" GridPane.rowIndex="6" />
+            <Label text="Yearly:" GridPane.rowIndex="7" />
+            <Label text="Image Paceholder" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="change in value" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="percent change in value" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-border: 1px;" text="Buy" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Sell" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+         </children>
+      </GridPane>
+   </right>
+</BorderPane>
