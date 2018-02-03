@@ -68,7 +68,7 @@
          <graphic>
               <ImageView fx:id="usernameInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@../images/Information_Icon.png" />
+                      <Image url="@/main/resources/images/Information_Icon.png" />
                   </image>
               </ImageView>
          </graphic>
@@ -81,7 +81,7 @@
          <graphic>
               <ImageView fx:id="passwordInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@../images/Information_Icon.png" />
+                      <Image url="@/main/resources/images/Information_Icon.png" />
                   </image>
               </ImageView>
          </graphic>
