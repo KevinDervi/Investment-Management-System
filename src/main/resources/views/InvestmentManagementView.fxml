@@ -36,7 +36,7 @@
                </children>
             </HBox>
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Account statistics" />
-            <Label text="Portfolio">
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Portfolio">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font></Label>
@@ -83,7 +83,11 @@
                <children>
                   <VBox>
                      <children>
-                        <Label text="Technical Details" />
+                        <Label text="Technical Details">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Label>
                         <GridPane hgap="10.0" vgap="10.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
