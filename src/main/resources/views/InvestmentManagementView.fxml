@@ -10,7 +10,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -47,7 +46,7 @@
                   <TextField promptText="Search for Stock" style="-fx-background-radius: 10px;" />
                </children>
             </HBox>
-            <ListView />
+            <ListView maxHeight="1.7976931348623157E308" />
          </children>
       </VBox>
    </left>
@@ -78,14 +77,14 @@
       </MenuBar>
    </top>
    <center>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-        <items>
-            <HBox prefHeight="84.0" prefWidth="498.0">
+      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="84.0" prefWidth="498.0" spacing="10.0">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox>
                      <children>
                         <Label text="Technical Details" />
-                        <GridPane>
+                        <GridPane hgap="10.0" vgap="10.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -113,7 +112,7 @@
                         </GridPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox spacing="10.0">
                      <children>
                         <Button mnemonicParsing="false" text="Add to watchlist" />
                         <Button mnemonicParsing="false" text="Set notification" />
@@ -122,14 +121,14 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox>
+            <VBox VBox.vgrow="ALWAYS">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox alignment="CENTER">
                            <children>
-                              <Label text="Interval" />
-                              <HBox>
+                              <Label alignment="CENTER" text="Interval" />
+                              <HBox alignment="CENTER_LEFT">
                                  <children>
                                     <ToggleButton mnemonicParsing="false" text="1-min">
                                        <toggleGroup>
@@ -167,11 +166,11 @@
                   </LineChart>
                </children>
             </VBox>
-        </items>
-      </SplitPane>
+         </children>
+      </VBox>
    </center>
    <right>
-      <GridPane BorderPane.alignment="CENTER">
+      <GridPane alignment="TOP_RIGHT" vgap="10.0" BorderPane.alignment="TOP_RIGHT">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -199,9 +198,9 @@
             <Label text="Monthly:" GridPane.rowIndex="5" />
             <Label text="6-month:" GridPane.rowIndex="6" />
             <Label text="Yearly:" GridPane.rowIndex="7" />
-            <Label text="Image Paceholder" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="change in value" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label text="percent change in value" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Label text="Image" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="-10.54" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="+5.4%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-border: 1px;" text="Buy" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Sell" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
          </children>
