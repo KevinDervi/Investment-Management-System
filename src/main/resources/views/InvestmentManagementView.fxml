@@ -46,7 +46,7 @@
                   <TextField promptText="Search for Stock" style="-fx-background-radius: 10px;" />
                </children>
             </HBox>
-            <ListView maxHeight="1.7976931348623157E308" />
+            <ListView maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </left>
@@ -77,9 +77,9 @@
       </MenuBar>
    </top>
    <center>
-      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="84.0" prefWidth="498.0" spacing="10.0">
+            <HBox maxHeight="1.7976931348623157E308" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox>
                      <children>
@@ -121,7 +121,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox VBox.vgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="10.0">
                      <children>
@@ -156,7 +156,7 @@
                         <ComboBox prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <LineChart title="Stock Data">
+                  <LineChart maxHeight="1.7976931348623157E308" title="Stock Data">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
