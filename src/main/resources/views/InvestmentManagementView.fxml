@@ -76,6 +76,9 @@
             </HBox>
             <ListView maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
          </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
       </VBox>
    </left>
    <top>
@@ -199,6 +202,9 @@
                </children>
             </VBox>
          </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
       </VBox>
    </center>
    <right>
@@ -219,9 +225,13 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Stock Symbol" />
+            <Label text="Stock Symbol" GridPane.columnSpan="2">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font></Label>
             <Label text="Current Price:" GridPane.rowIndex="1" />
             <Label text="£1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Changes:" GridPane.rowIndex="2" />
@@ -233,8 +243,15 @@
             <Label text="Image" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="-10.54" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label text="+5.4%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-border: 1px;" text="Buy" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Sell" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="71.0" style="-fx-border: 1px; -fx-background-color: lightgreen;" text="Buy" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font name="Segoe UI" size="25.0" />
+               </font></Button>
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="71.0" style="-fx-background-color: red;" text="Sell" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font name="Segoe UI" size="25.0" />
+               </font></Button>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="This is a filler label to space the objects properly" textFill="TRANSPARENT" GridPane.columnSpan="4" GridPane.rowIndex="8" GridPane.vgrow="ALWAYS" />
          </children>
       </GridPane>
    </right>
