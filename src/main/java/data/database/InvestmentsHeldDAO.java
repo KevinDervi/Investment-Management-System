@@ -49,7 +49,8 @@ public class InvestmentsHeldDAO {
             conn = PooledDBConnection.getInstance().getConnection();
 
             statement = conn.createStatement();
-            String query = "SELECT * FROM InvestmentsHeld " +
+            String query = "SELECT * " +
+                    "FROM InvestmentsHeld " +
                     "WHERE " +
                     "stockBuyId = " + stockBuyId;
 
