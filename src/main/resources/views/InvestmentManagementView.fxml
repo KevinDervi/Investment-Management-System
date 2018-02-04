@@ -26,7 +26,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <left>
       <VBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -40,7 +40,7 @@
                   <Label text="£1234" />
                </children>
             </HBox>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Account statistics" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-border-color: #d465da; -fx-background-color: transparent;" text="Account statistics" textFill="#d465da" />
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Portfolio">
                <font>
                   <Font name="Segoe UI" size="16.0" />
@@ -54,7 +54,7 @@
                   </ImageView>
                   <AnchorPane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField maxWidth="1.7976931348623157E308" promptText="Search for Stock" style="-fx-background-radius: 10px;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <TextField maxWidth="1.7976931348623157E308" promptText="Search for Stock" style="-fx-border-color: #d465da; -fx-border-radius: 10px; -fx-background-radius: 10px;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                         <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Button" AnchorPane.rightAnchor="0.0">
                            <graphic>
                               <ImageView fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
@@ -74,7 +74,7 @@
                   <Insets left="5.0" right="5.0" />
                </padding>
             </HBox>
-            <ListView maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+            <ListView maxHeight="1.7976931348623157E308" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -82,7 +82,7 @@
       </VBox>
    </left>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar style="-fx-border-color: #d465da; -fx-background-color: #d465da;" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Account">
             <items>
@@ -151,14 +151,14 @@
                      <children>
                         <Button mnemonicParsing="false" text="Add to watchlist" />
                         <Button mnemonicParsing="false" text="Set notification" />
-                        <Button mnemonicParsing="false" text="Stock Analysis" />
+                        <Button mnemonicParsing="false" style="-fx-border-color: #d465da; -fx-background-color: #b4bbc6;" text="Stock Analysis" textFill="#d465da" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <VBox maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                  <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                      <children>
                         <VBox alignment="CENTER">
                            <children>
@@ -181,17 +181,20 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox>
+                        <HBox alignment="BOTTOM_CENTER">
                            <children>
                               <ToggleButton mnemonicParsing="false" text="Real-time" />
                               <ToggleButton mnemonicParsing="false" text="Full history" />
                            </children>
                         </HBox>
-                        <Label text="Graph Type:" />
+                        <Label text="Graph Type:">
+                           <padding>
+                              <Insets bottom="5.0" />
+                           </padding></Label>
                         <ComboBox prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <LineChart maxHeight="1.7976931348623157E308" title="Stock Data">
+                  <LineChart title="Stock Data">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
