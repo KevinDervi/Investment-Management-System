@@ -26,22 +26,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background" stylesheets="@../css_styles/blue_mode.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <left>
       <VBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Username">
+            <Label text="Username" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font></Label>
             <HBox>
                <children>
-                  <Label text="Account Balance: " />
-                  <Label text="£1234" />
+                  <Label text="Account Balance: " textFill="WHITE" />
+                  <Label text="£1234" textFill="WHITE" />
                </children>
             </HBox>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-border-color: #d465da; -fx-background-color: transparent;" text="Account statistics" textFill="#d465da" />
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Portfolio">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Account statistics" textFill="WHITE" />
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Portfolio" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font></Label>
@@ -54,8 +54,8 @@
                   </ImageView>
                   <AnchorPane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField maxWidth="1.7976931348623157E308" promptText="Search for Stock" style="-fx-border-color: #d465da; -fx-border-radius: 10px; -fx-background-radius: 10px;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Button" AnchorPane.rightAnchor="0.0">
+                        <TextField maxWidth="1.7976931348623157E308" promptText="Search for Stock" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="button-search-text-removal" text="Button" AnchorPane.rightAnchor="0.0">
                            <graphic>
                               <ImageView fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -77,12 +77,12 @@
             <ListView maxHeight="1.7976931348623157E308" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
-            <Insets left="10.0" />
+            <Insets left="10.0" top="10.0" />
          </padding>
       </VBox>
    </left>
    <top>
-      <MenuBar style="-fx-border-color: #d465da; -fx-background-color: #d465da;" BorderPane.alignment="CENTER">
+      <MenuBar stylesheets="@../css_styles/blue_mode.css" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Account">
             <items>
@@ -110,11 +110,11 @@
    <center>
       <VBox maxHeight="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox maxHeight="1.7976931348623157E308" spacing="10.0" VBox.vgrow="ALWAYS">
+            <HBox spacing="10.0">
                <children>
                   <VBox>
                      <children>
-                        <Label text="Technical Details">
+                        <Label text="Technical Details" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI" size="20.0" />
                            </font>
@@ -133,16 +133,22 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Open" />
-                              <Label text="High" GridPane.columnIndex="1" />
-                              <Label text="Low" GridPane.columnIndex="2" />
-                              <Label text="Close" GridPane.columnIndex="3" />
-                              <Label text="Volume" GridPane.columnIndex="4" />
-                              <Label text="1234" GridPane.rowIndex="1" />
-                              <Label text="1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="1234" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label text="1234" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <Label text="1234" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <Label text="Open" textFill="WHITE" />
+                              <Label text="High" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label text="Low" textFill="WHITE" GridPane.columnIndex="2" />
+                              <Label text="Close" textFill="WHITE" GridPane.columnIndex="3" />
+                              <Label text="Volume" textFill="WHITE" GridPane.columnIndex="4" />
+                              <Label text="1234" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font></Label>
+                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font></Label>
                            </children>
                         </GridPane>
                      </children>
@@ -150,13 +156,13 @@
                   <VBox spacing="10.0">
                      <children>
                         <Button mnemonicParsing="false" text="Add to watchlist" />
-                        <Button mnemonicParsing="false" text="Set notification" />
-                        <Button mnemonicParsing="false" style="-fx-border-color: #d465da; -fx-background-color: #b4bbc6;" text="Stock Analysis" textFill="#d465da" />
+                        <Button mnemonicParsing="false" text="Set notification" textFill="WHITE" />
+                        <Button mnemonicParsing="false" text="Stock Analysis" textFill="WHITE" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308">
                <children>
                   <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                      <children>
@@ -194,7 +200,7 @@
                         <ComboBox prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <LineChart title="Stock Data">
+                  <LineChart stylesheets="@../css_styles/blue_mode.css" title="Stock Data">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -206,56 +212,64 @@
             </VBox>
          </children>
          <padding>
-            <Insets left="10.0" right="10.0" />
+            <Insets left="10.0" right="10.0" top="10.0" />
          </padding>
       </VBox>
    </center>
    <right>
-      <GridPane alignment="TOP_RIGHT" vgap="10.0" BorderPane.alignment="TOP_RIGHT">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <VBox BorderPane.alignment="TOP_RIGHT">
          <children>
-            <Label text="Stock Symbol" GridPane.columnSpan="2">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font></Label>
-            <Label text="Current Price:" GridPane.rowIndex="1" />
-            <Label text="£1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Changes:" GridPane.rowIndex="2" />
-            <Label text="Daily:" GridPane.rowIndex="3" />
-            <Label text="Weekly:" GridPane.rowIndex="4" />
-            <Label text="Monthly:" GridPane.rowIndex="5" />
-            <Label text="6-month:" GridPane.rowIndex="6" />
-            <Label text="Yearly:" GridPane.rowIndex="7" />
-            <Label text="Image" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="-10.54" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label text="+5.4%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="71.0" style="-fx-border: 1px; -fx-background-color: lightgreen;" text="Buy" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="BOTTOM">
-               <font>
-                  <Font name="Segoe UI" size="25.0" />
-               </font></Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="71.0" style="-fx-background-color: red;" text="Sell" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="BOTTOM">
-               <font>
-                  <Font name="Segoe UI" size="25.0" />
-               </font></Button>
-            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="This is a filler label to space the objects properly" textFill="TRANSPARENT" GridPane.columnSpan="4" GridPane.rowIndex="8" GridPane.vgrow="ALWAYS" />
+            <GridPane alignment="TOP_RIGHT" vgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Stock Symbol" GridPane.columnSpan="2">
+                     <font>
+                        <Font name="Segoe UI" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label text="Current Price:" GridPane.rowIndex="1" />
+                  <Label text="£1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Changes:" GridPane.rowIndex="2" />
+                  <Label text="Daily:" GridPane.rowIndex="3" />
+                  <Label text="Weekly:" GridPane.rowIndex="4" />
+                  <Label text="Monthly:" GridPane.rowIndex="5" />
+                  <Label text="6-month:" GridPane.rowIndex="6" />
+                  <Label text="Yearly:" GridPane.rowIndex="7" />
+                  <Label text="Image" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label styleClass="label-colour-change" text="-10.54" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label styleClass="label-colour-change" text="+5.4%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+            <HBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-buy" text="Buy" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Segoe UI" size="25.0" />
+                     </font>
+                  </Button>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Segoe UI" size="25.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
-      </GridPane>
+      </VBox>
    </right>
 </BorderPane>

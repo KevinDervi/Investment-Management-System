@@ -1,0 +1,102 @@
+.button {
+    -fx-background-color:  #00bcd4;
+    -fx-border-color: #00BCD4;
+    -fx-text-fill: white;
+
+}
+
+.button:hover{
+    -fx-background-color: #4DD0E1;
+}
+
+.button-buy{
+    -fx-background-color: lightgreen;
+}
+
+.button-buy:hover{
+    -fx-background-color: green;
+}
+
+.button-sell{
+    -fx-background-color: red;
+}
+
+.button-sell:hover{
+    -fx-background-color: #ff4f4c;
+}
+
+.button-search-text-removal{
+    -fx-background-color: transparent;
+    -fx-border-color: null;
+}
+
+.toggle-button{
+    -fx-background-color:  #00bcd4;
+    -fx-border-color: #FB8C00;
+    -fx-text-fill: white;
+    -fx-background-insets: 0;
+}
+
+.toggle-button:hover{
+    -fx-background-color: #4DD0E1;
+}
+.toggle-button:focused{
+    -fx-background-color: #FB8C00;
+}
+.label {
+    -fx-text-fill: white;
+}
+
+.label-colour-change{
+    -fx-text-fill: purple;
+}
+
+.background {
+    -fx-background-color: #757575;
+}
+
+.text-field {
+    -fx-border-color:  #00bcd4;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.menu-bar {
+    -fx-background-color: #00bcd4;
+    -fx-text-fill: white;
+}
+
+.chart {
+    -fx-text-fill: white;
+}
+
+.chart-plot-background {
+    -fx-background-color: #757575;
+}
+
+.axis {
+    -fx-tick-label-fill: white;
+}
+
+.axis-label {
+    -fx-text-fill: white;
+}
+
+.combo-box{
+    -fx-text-fill: white;
+    -fx-background-color: #00bcd4;
+}
+
+.combo-box:hover{
+    -fx-background-color: #4DD0E1;
+}
+
+.combo-box-popup{
+    -fx-text-fill: white;
+    -fx-background-color: #00bcd4;
+}
+
+.combo-box-popup:hover{
+    -fx-background-color: #4DD0E1;
+}
+
