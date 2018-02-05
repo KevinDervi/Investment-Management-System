@@ -1,3 +1,7 @@
+.background {
+    -fx-background-color: #757575;
+}
+
 .button {
     -fx-background-color:  #00bcd4;
     -fx-border-color: #00BCD4;
@@ -40,19 +44,17 @@
 .toggle-button:hover{
     -fx-background-color: #4DD0E1;
 }
+
 .toggle-button:focused{
     -fx-background-color: #FB8C00;
 }
+
 .label {
     -fx-text-fill: white;
 }
 
 .label-colour-change{
     -fx-text-fill: purple;
-}
-
-.background {
-    -fx-background-color: #757575;
 }
 
 .text-field {

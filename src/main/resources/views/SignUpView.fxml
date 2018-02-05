@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller.SignUpViewController">
+<GridPane alignment="CENTER" hgap="10.0" styleClass="background" stylesheets="@../css_styles/blue_mode.css" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller.SignUpViewController">
     <columnConstraints>
         <ColumnConstraints />
         <ColumnConstraints />
@@ -68,7 +68,7 @@
          <graphic>
               <ImageView fx:id="usernameInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@/main/resources/images/Information_Icon.png" />
+                      <Image url="@/main/resources/images/Information_Icon_grey.png" />
                   </image>
               </ImageView>
          </graphic>
@@ -81,7 +81,7 @@
          <graphic>
               <ImageView fx:id="passwordInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@/main/resources/images/Information_Icon.png" />
+                      <Image url="@/main/resources/images/Information_Icon_grey.png" />
                   </image>
               </ImageView>
          </graphic>

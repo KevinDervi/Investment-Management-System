@@ -49,7 +49,7 @@
                <children>
                   <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/main/resources/images/Search_Icon.png" />
+                        <Image url="@/main/resources/images/Search_Icon_grey.png" />
                      </image>
                   </ImageView>
                   <AnchorPane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
@@ -59,7 +59,7 @@
                            <graphic>
                               <ImageView fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@/main/resources/images/X_Icon.png" />
+                                    <Image url="@/main/resources/images/X_Icon_grey.png" />
                                  </image>
                               </ImageView>
                            </graphic>
