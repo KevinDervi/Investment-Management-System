@@ -24,12 +24,15 @@ public class StockDataAPI {
     public static JSONObject getStockData(StockTimeSeriesType function, String stockSymbol, StockTimeSeriesIntradayInterval interval, StockOutputSize outputSize) throws Exception {
         if (function != StockTimeSeriesType.TIME_SERIES_INTRADAY){
             assert interval == null;
+        }else {
+            assert interval != null;
+            System.out.println(interval);
         }
 
         String url = "https://www.alphavantage.co/query?";
-        url += "function=" + function;
-        url += "&";
         url += "symbol=" + stockSymbol;
+        url += "&";
+        url += "function=" + function;
         url += "&";
 
         // interval only applies when the time series in intraday
@@ -47,7 +50,9 @@ public class StockDataAPI {
 
         // simplest way to get json object from url
         URL stockURL = new URL(url);
+        System.out.println(stockURL);
         JSONTokener tokener = new JSONTokener(stockURL.openStream());
+
         JSONObject json = new JSONObject(tokener);
 
 
