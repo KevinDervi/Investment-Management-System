@@ -85,6 +85,7 @@ public class CurrentStockInformation {
             // 503 response code, try again in 2 seconds
             System.out.println("503 responde code, waiting 2 seconds and trying again");
             Thread.sleep(2000);
+            // TODO limit to 3 tries only or may be infinite
             updateChartData();
         }
 
