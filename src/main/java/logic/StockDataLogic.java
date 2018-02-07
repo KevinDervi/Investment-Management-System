@@ -14,6 +14,7 @@ public class StockDataLogic {
 
     // TODO add conversion methods for candlestick chart and normal line chart
 
+    // TODO make chart data return a series of data that can be added straight to the chart
     public static List<BarData> getCandleStickChartData(){
         // values must be double and date must be gregorian calendar
         List<StockData> rawData = CurrentStockInformation.getInstance().getChartData();
