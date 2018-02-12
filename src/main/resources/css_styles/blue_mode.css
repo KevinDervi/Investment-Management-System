@@ -53,6 +53,15 @@
     -fx-text-fill: white;
 }
 
+.label-error-message {
+    -fx-text-fill: white;
+    -fx-background-color: red;
+    -fx-background-radius: 10px;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+
+}
+
 .label-colour-change{
     -fx-text-fill: purple;
 }
