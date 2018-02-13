@@ -58,7 +58,7 @@
     -fx-background-color: #4DD0E1;
 }
 
-.toggle-button:focused{
+.toggle-button:selected{
     -fx-background-color: #FB8C00;
 }
 
