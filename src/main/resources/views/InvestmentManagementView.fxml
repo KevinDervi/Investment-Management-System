@@ -26,22 +26,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background" stylesheets="@../css_styles/blue_mode.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background" stylesheets="@../css_styles/blue_mode.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <left>
       <VBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Username" textFill="WHITE">
+            <Label fx:id="labelUsername" styleClass="label-title" text="Username" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font></Label>
             <HBox>
                <children>
-                  <Label text="Account Balance: " textFill="WHITE" />
-                  <Label text="£1234" textFill="WHITE" />
+                  <Label styleClass="label-data" text="Account Balance: " textFill="WHITE" />
+                  <Label fx:id="labelAccountBalance" styleClass="label-data" text="£1234" textFill="WHITE" />
                </children>
             </HBox>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Account statistics" textFill="WHITE" />
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Portfolio" textFill="WHITE">
+            <Button fx:id="ButtonDespositWirthdraw" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Deposit / Withdraw" textFill="WHITE" />
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="label-title" text="Portfolio" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font></Label>
@@ -54,8 +54,8 @@
                   </ImageView>
                   <AnchorPane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField maxWidth="1.7976931348623157E308" promptText="Search for Stock" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="button-search-text-removal" text="Button" AnchorPane.rightAnchor="0.0">
+                        <TextField fx:id="TextFieldStockSearch" maxWidth="1.7976931348623157E308" promptText="Search for Stock" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <Button fx:id="ButtonDeleteSearchText" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="button-search-text-removal" text="Button" AnchorPane.rightAnchor="0.0">
                            <graphic>
                               <ImageView fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -74,7 +74,7 @@
                   <Insets left="5.0" right="5.0" />
                </padding>
             </HBox>
-            <ListView maxHeight="1.7976931348623157E308" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="ListViewInvestmentHeld" maxHeight="1.7976931348623157E308" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
@@ -82,14 +82,14 @@
       </VBox>
    </left>
    <top>
-      <MenuBar stylesheets="@../css_styles/blue_mode.css" BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menuHelp" stylesheets="@../css_styles/blue_mode.css" BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="Account">
+          <Menu fx:id="menuAccount" mnemonicParsing="false" text="Account">
             <items>
               <MenuItem mnemonicParsing="false" text="Settings" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Settings">
+          <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings">
             <items>
               <MenuItem mnemonicParsing="false" text="Help" />
             </items>
@@ -99,7 +99,7 @@
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="About">
+            <Menu fx:id="MenuAbout" mnemonicParsing="false" text="About">
               <items>
                 <MenuItem mnemonicParsing="false" text="Action 1" />
               </items>
@@ -114,7 +114,7 @@
                <children>
                   <VBox>
                      <children>
-                        <Label text="Technical Details" textFill="WHITE">
+                        <Label styleClass="label-title" text="Technical Details" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI" size="20.0" />
                            </font>
@@ -133,19 +133,19 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Open" textFill="WHITE" />
-                              <Label text="High" textFill="WHITE" GridPane.columnIndex="1" />
-                              <Label text="Low" textFill="WHITE" GridPane.columnIndex="2" />
-                              <Label text="Close" textFill="WHITE" GridPane.columnIndex="3" />
-                              <Label text="Volume" textFill="WHITE" GridPane.columnIndex="4" />
-                              <Label text="1234" textFill="WHITE" GridPane.rowIndex="1" />
-                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                              <Label styleClass="label-data" text="Open" textFill="WHITE" />
+                              <Label styleClass="label-data" text="High" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label styleClass="label-data" text="Low" textFill="WHITE" GridPane.columnIndex="2" />
+                              <Label styleClass="label-data" text="Close" textFill="WHITE" GridPane.columnIndex="3" />
+                              <Label styleClass="label-data" text="Volume" textFill="WHITE" GridPane.columnIndex="4" />
+                              <Label fx:id="labelOpenValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label fx:id="labelHighValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="labelLowValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label fx:id="labelCloseValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font></Label>
-                              <Label text="1234" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                              <Label fx:id="labelVolumeValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font></Label>
@@ -168,39 +168,42 @@
                      <children>
                         <VBox alignment="CENTER">
                            <children>
-                              <Label alignment="CENTER" text="Interval" />
+                              <Label alignment="CENTER" styleClass="label-data" text="Interval" />
                               <HBox alignment="CENTER_LEFT">
                                  <children>
-                                    <ToggleButton mnemonicParsing="false" text="1-min">
+                                    <ToggleButton fx:id="ToggleButton1Min" mnemonicParsing="false" selected="true" text="1-min">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="IntervalToggleGroup" />
                                        </toggleGroup>
                                     </ToggleButton>
-                                    <ToggleButton mnemonicParsing="false" text="5-min" />
-                                    <ToggleButton mnemonicParsing="false" text="15-min" />
-                                    <ToggleButton mnemonicParsing="false" text="30-min" />
-                                    <ToggleButton mnemonicParsing="false" text="60-min" />
-                                    <ToggleButton mnemonicParsing="false" text="daily" />
-                                    <ToggleButton mnemonicParsing="false" text="weekly" />
-                                    <ToggleButton mnemonicParsing="false" text="monthly" />
+                                    <ToggleButton fx:id="ToggleButton5Min" mnemonicParsing="false" text="5-min" toggleGroup="$IntervalToggleGroup" />
+                                    <ToggleButton fx:id="ToggleButton15Min" mnemonicParsing="false" text="15-min" toggleGroup="$IntervalToggleGroup" />
+                                    <ToggleButton fx:id="ToggleButton30Min" mnemonicParsing="false" text="30-min" toggleGroup="$IntervalToggleGroup" />
+                                    <ToggleButton fx:id="ToggleButton60Min" mnemonicParsing="false" text="60-min" toggleGroup="$IntervalToggleGroup" />
+                                    <ToggleButton fx:id="ToggleButtonDaily" mnemonicParsing="false" text="daily" toggleGroup="$IntervalToggleGroup" />
+                                    <ToggleButton fx:id="ToggleButtonWeekly" mnemonicParsing="false" text="weekly" toggleGroup="$IntervalToggleGroup" />
+                                    <ToggleButton fx:id="ToggleButtonMonthly" mnemonicParsing="false" text="monthly" toggleGroup="$IntervalToggleGroup" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                         <HBox alignment="BOTTOM_CENTER">
                            <children>
-                              <ToggleButton mnemonicParsing="false" text="Real-time" />
-                              <ToggleButton mnemonicParsing="false" text="Full history" />
+                              <ToggleButton fx:id="ToggleButtonRealTime" mnemonicParsing="false" selected="true" text="Real-time">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="outputSizeToggleGroup" />
+                                 </toggleGroup></ToggleButton>
+                              <ToggleButton fx:id="ToggleButtonFullHistory" mnemonicParsing="false" text="Full history" toggleGroup="$outputSizeToggleGroup" />
                            </children>
                         </HBox>
                         <Label text="Graph Type:">
                            <padding>
                               <Insets bottom="5.0" />
                            </padding></Label>
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="ComboBoxGraphType" prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <LineChart stylesheets="@../css_styles/blue_mode.css" title="Stock Data">
+                  <LineChart legendVisible="false" maxHeight="1.7976931348623157E308" stylesheets="@../css_styles/blue_mode.css" title="Stock Data" VBox.vgrow="ALWAYS">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -234,35 +237,42 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Stock Symbol" GridPane.columnSpan="2">
+                  <Label fx:id="labelStockSymbol" styleClass="label-title" text="Stock Symbol" GridPane.columnSpan="2">
                      <font>
                         <Font name="Segoe UI" size="20.0" />
                      </font>
                   </Label>
-                  <Label text="Current Price:" GridPane.rowIndex="1" />
-                  <Label text="£1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label text="Changes:" GridPane.rowIndex="2" />
-                  <Label text="Daily:" GridPane.rowIndex="3" />
-                  <Label text="Weekly:" GridPane.rowIndex="4" />
-                  <Label text="Monthly:" GridPane.rowIndex="5" />
-                  <Label text="6-month:" GridPane.rowIndex="6" />
-                  <Label text="Yearly:" GridPane.rowIndex="7" />
-                  <Label text="Image" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label styleClass="label-colour-change" text="-10.54" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Label styleClass="label-colour-change" text="+5.4%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Label styleClass="label-data" text="Current Price:" GridPane.rowIndex="1" />
+                  <Label fx:id="labelCurrentStockPrice" styleClass="label-data" text="£1234" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label styleClass="label-data" text="Changes:" GridPane.rowIndex="2" />
+                  <Label styleClass="label-data" text="Daily:" GridPane.rowIndex="3" />
+                  <Label styleClass="label-data" text="Weekly:" GridPane.rowIndex="4" />
+                  <Label styleClass="label-data" text="Monthly:" GridPane.rowIndex="5" />
+                  <Label styleClass="label-data" text="Yearly:" GridPane.rowIndex="6" />
+                  <Label fx:id="labelDailyStockChange" styleClass="label-colour-change" text="-10.54" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label fx:id="labelDailyStockChangePercentage" styleClass="label-colour-change" text="+5.4%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <ImageView fx:id="imageDailyStockChange" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <ImageView fx:id="imageWeeklyStockChange" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ImageView fx:id="imageMonthlyStockChange" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <ImageView fx:id="imageYearlyStockChange" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label fx:id="labelWeeklyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Label fx:id="labelWeeklyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Label fx:id="labelMonthlyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <Label fx:id="labelYearlyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Label fx:id="labelMonthlyStockChangePercentage" styleClass="label-colour-change" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <Label fx:id="labelYearlyStockChangePercentage" styleClass="label-colour-change" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="6" />
                </children>
             </GridPane>
             <HBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-buy" text="Buy" HBox.hgrow="ALWAYS">
+                  <Button fx:id="ButtonBuyStock" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-buy" text="Buy" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Segoe UI" size="25.0" />
                      </font>
                   </Button>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
+                  <Button fx:id="ButtonSellStock" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Segoe UI" size="25.0" />
                      </font>

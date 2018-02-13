@@ -1,6 +1,5 @@
 package main.java.data.internal_model;
 
-import com.zoicapital.stockchartsfx.BarData;
 import main.java.data.stock_data.StockDataAPI;
 import main.java.util.StockData;
 import main.java.util.StockOutputSize;
@@ -41,6 +40,10 @@ public class CurrentStockInformation {
     }
 
     public void setFunction(StockTimeSeriesType function) {
+        // make interval null if time series is not intraday
+        if (function != StockTimeSeriesType.TIME_SERIES_INTRADAY){
+            interval = null;
+        }
         this.function = function;
     }
 
@@ -56,8 +59,24 @@ public class CurrentStockInformation {
         this.outputSize = outputSize;
     }
 
-    public void setInstance(CurrentStockInformation instance) {
-        Instance = instance;
+    public boolean isStockMarketsClosed() {
+        return stockMarketsClosed;
+    }
+
+    public StockTimeSeriesType getFunction() {
+        return function;
+    }
+
+    public String getStockSymbol() {
+        return stockSymbol;
+    }
+
+    public StockTimeSeriesIntradayInterval getInterval() {
+        return interval;
+    }
+
+    public StockOutputSize getOutputSize() {
+        return outputSize;
     }
 
     public ArrayList<StockData> getChartData() {
@@ -78,19 +97,23 @@ public class CurrentStockInformation {
         assert outputSize != null;
 
         // get json data
-        JSONObject JSONStockdata = null;
+        JSONObject JSONStockData;
         try {
-            JSONStockdata = StockDataAPI.getStockData(function, stockSymbol, interval, outputSize);
+            JSONStockData = StockDataAPI.getStockData(function, stockSymbol, interval, outputSize);
+
+            System.out.println(JSONStockData.toString(4));
+
+            if (JSONStockData != null) chartData = toArrayList(JSONStockData);
+
         } catch (IOException e){
             // 503 response code, try again in 2 seconds
-            System.out.println("503 responde code, waiting 2 seconds and trying again");
+            System.out.println("503 response code, waiting 2 seconds and trying again");
             Thread.sleep(2000);
             // TODO limit to 3 tries only or may be infinite
             updateChartData();
         }
 
-        System.out.println(JSONStockdata.toString(4));
-        if (JSONStockdata != null) toArrayList(JSONStockdata);
+
 
 
 
@@ -98,7 +121,7 @@ public class CurrentStockInformation {
 
     }
 
-    private void toArrayList(JSONObject data) throws JSONException {
+    private ArrayList<StockData> toArrayList(JSONObject data) throws JSONException {
         ArrayList<StockData> stockDataArrayList = new ArrayList<>();
 
         String StockDataTitle = getStockDataJSONTitle(function);
@@ -142,7 +165,7 @@ public class CurrentStockInformation {
 
 
         // finally add the data retrieved to
-        chartData = stockDataArrayList;
+        return stockDataArrayList;
 
     }
 
