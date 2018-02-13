@@ -14,7 +14,6 @@
     -fx-background-color:  #00bcd4;
     -fx-border-color: #00BCD4;
     -fx-text-fill: white;
-    -fx-font-family: "Segoe UI";
 
 }
 
@@ -28,6 +27,7 @@
 
 .button-buy:hover{
     -fx-background-color: green;
+    -fx-max-width: 100%;
 }
 
 .button-sell{
@@ -36,6 +36,7 @@
 
 .button-sell:hover{
     -fx-background-color: #ff4f4c;
+    -fx-fill-width: true;
 }
 
 .button-search-text-removal{
