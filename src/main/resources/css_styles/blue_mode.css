@@ -106,7 +106,7 @@
 }
 
 .chart-plot-background {
-    -fx-background-color: #757575;
+    -fx-background-color: transparent;
 }
 
 .axis {
@@ -135,3 +135,7 @@
     -fx-background-color: #4DD0E1;
 }
 
+.scroll-pane{
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}

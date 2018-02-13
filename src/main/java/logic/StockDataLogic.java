@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import main.java.data.internal_model.CurrentStockInformation;
 import main.java.util.StockData;
+import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesIntradayInterval;
 import main.java.util.StockTimeSeriesType;
 
@@ -30,18 +31,23 @@ public class StockDataLogic {
         for (StockData d : rawData) {
             // convert to bar data because it is required by the candlestick chart API
             BarData convertedData = toBarData(d);
-            //
+
             String XAxislabel = sdf.format(convertedData.getDateTime().getTime());
             series.getData().add(new XYChart.Data<>(XAxislabel, convertedData.getOpen(), convertedData));
         }
 
         // can be added directly to the chart without further modifications
-        return FXCollections.<XYChart.Series<String, Number>>observableArrayList(series);
+        return FXCollections.observableArrayList(series);
     }
 
+    public static ObservableList<XYChart.Series<String, Number>> getLineChartData(){
+        ArrayList<StockData> rawData = CurrentStockInformation.getInstance().getChartData();
+
+        return null;
+    }
 
     /**
-     * ensures no redundant data on X axis with proper formatting
+     * ensures no redundant data on X axis with proper date formatting
      * @return
      */
     private static SimpleDateFormat getXAxisFormat() {
@@ -49,7 +55,7 @@ public class StockDataLogic {
         StockTimeSeriesType function = CurrentStockInformation.getInstance().getFunction();
         StockTimeSeriesIntradayInterval interval = CurrentStockInformation.getInstance().getInterval();
 
-        if(function == StockTimeSeriesType.TIME_SERIES_DAILY){
+        if(function == StockTimeSeriesType.TIME_SERIES_INTRADAY){
             // now check the interval
 
             if(interval == StockTimeSeriesIntradayInterval.T60){
@@ -68,11 +74,6 @@ public class StockDataLogic {
 
     }
 
-    public static XYChart.Series getLineChartData(){
-        ArrayList<StockData> rawData = CurrentStockInformation.getInstance().getChartData();
-
-        return null;
-    }
 
     private static BarData toBarData(StockData data){
 
@@ -91,5 +92,31 @@ public class StockDataLogic {
         BarData barData = new BarData(dateTime, open, high, low, close, volume);
 
         return barData;
+    }
+
+    public static void updateChartData() throws Exception{
+
+        CurrentStockInformation.getInstance().updateChartData();
+    }
+
+
+    public static void setFunction(StockTimeSeriesType function){
+        CurrentStockInformation.getInstance().setFunction(function);
+    }
+
+    public static void setStockSymbol(String symbol){
+        CurrentStockInformation.getInstance().setStockSymbol(symbol);
+    }
+
+    public static void setInterval(StockTimeSeriesIntradayInterval interval){
+        CurrentStockInformation.getInstance().setInterval(interval);
+    }
+
+    public static void setOutputSize(StockOutputSize outputSize){
+        CurrentStockInformation.getInstance().setOutputSize(outputSize);
+    }
+
+    public static String getCurrentSymbol(){
+        return CurrentStockInformation.getInstance().getStockSymbol();
     }
 }
