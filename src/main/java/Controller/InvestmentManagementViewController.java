@@ -161,4 +161,7 @@ public class InvestmentManagementViewController {
     // TODO add stock analysis with KNN
     // TODO add card functionality (withdraw add remove view deposit)
 
+
+    // TODO maybe use stack pane for pop ups to make the background dark and force user input
+
 }
