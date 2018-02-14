@@ -27,7 +27,7 @@
 
 .button-buy:hover{
     -fx-background-color: green;
-    -fx-max-width: 100%;
+
 }
 
 .button-sell{
@@ -81,7 +81,7 @@
     -fx-text-fill: white;
     -fx-background-color: red;
     -fx-background-radius: 10px;
-    -fx-font-size: 14px;
+    -fx-font-size:  14px;
     -fx-alignment: center;
 
 }
@@ -103,6 +103,7 @@
 
 .chart {
     -fx-text-fill: white;
+    -fx-background-color: transparent;
 }
 
 .chart-plot-background {
@@ -110,7 +111,23 @@
 }
 
 .axis {
+
     -fx-tick-label-fill: white;
+    -fx-text-fill: null;
+    -fx-font-color: null;
+    -fx-font-family: null;
+    -fx-font-size: null;
+    -fx-tick-label-font: null;
+    -fx-tick-label-font-size: null;
+    /*
+    -fx-text-fill: #FFFFFF;
+    -fx-font-color: #FFFFFF;
+    -fx-tick-label-fill: #FFFFFF;
+    -fx-font-size: 8pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-tick-length: 20;
+    -fx-minor-tick-length: 10;
+    */
 }
 
 .axis-label {
@@ -138,4 +155,6 @@
 .scroll-pane{
     -fx-background-color: transparent;
     -fx-background: transparent;
+    -fx-font: null;
+    -fx-font-size: null;
 }

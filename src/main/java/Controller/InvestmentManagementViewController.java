@@ -5,10 +5,13 @@ import com.zoicapital.stockchartsfx.CandleStickChart;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import main.java.logic.StockDataLogic;
@@ -194,7 +197,7 @@ public class InvestmentManagementViewController {
         // add chart to the graph pane
         addChartToPane(chartStockData);
 
-        paneChart.setStyle("-fx-background-color: transparent");
+
 
     }
 
@@ -220,6 +223,7 @@ public class InvestmentManagementViewController {
     private void updateCandleStickChart() {
         ObservableList<XYChart.Series<String, Number>> data = StockDataLogic.getCandleStickChartData();
         chartStockData.setData(data);
+        chartStockData.setPrefWidth(data.get(0).getData().size() * 20);
     }
 
     private void updateLineChart(){
@@ -235,7 +239,16 @@ public class InvestmentManagementViewController {
 
         chartStockData = new CandleStickChart(title, emptyDataSet);
 
-        chartStockData.setStyle("-fx-background-color: transparent");
+        chartStockData.setLegendVisible(false);
+
+        chartStockData.getStylesheets().add(getClass().getResource("/main/resources//css_styles/blue_mode.css").toExternalForm());
+
+
+        System.out.println("tick font: " + chartStockData.getXAxis().getTickLabelFont());
+
+
+
+
     }
 
     private void addChartToPane(XYChart<String, Number> chartStockData) {
