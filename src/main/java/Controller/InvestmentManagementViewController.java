@@ -169,6 +169,9 @@ public class InvestmentManagementViewController {
 
         displaySAndP500();
 
+        // add graph types
+        comboBoxGraphType.getItems().addAll("CandleStick", "Line");
+        comboBoxGraphType.getSelectionModel().selectFirst();
 
         // TODO check if user card details == null and force user to enter details before allowing them to trade
     }
@@ -197,9 +200,7 @@ public class InvestmentManagementViewController {
         // add chart to the graph pane
         addChartToPane(chartStockData);
 
-        // add graph types
-        comboBoxGraphType.getItems().addAll("CandleStick", "Line");
-        comboBoxGraphType.getSelectionModel().selectFirst();
+
 
     }
 
