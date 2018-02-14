@@ -239,16 +239,22 @@ public class InvestmentManagementViewController {
 
         chartStockData = new CandleStickChart(title, emptyDataSet);
 
+        styleChart(chartStockData);
+
+    }
+
+    /**
+     * stock data chart is created and added seperatly from the FXML file due to needing to swap between charts and
+     * therefore requires its on setup when newly created
+     * @param chartStockData
+     */
+    private void styleChart(XYChart<String, Number> chartStockData) {
+
         chartStockData.setLegendVisible(false);
 
         chartStockData.getStylesheets().add(getClass().getResource("/main/resources//css_styles/blue_mode.css").toExternalForm());
-
-
-        System.out.println("tick font: " + chartStockData.getXAxis().getTickLabelFont());
-
-
-
-
+        
+        chartStockData.setAlternativeColumnFillVisible(true);
     }
 
     private void addChartToPane(XYChart<String, Number> chartStockData) {

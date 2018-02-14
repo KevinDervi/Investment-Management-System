@@ -49,7 +49,7 @@
 }
 
 .toggle-button{
-    -fx-background-color:  #00bcd4;
+    -fx-background-color: #00bcd4;
     -fx-border-color: #FB8C00;
     -fx-text-fill: white;
     -fx-background-insets: 0;
@@ -108,10 +108,10 @@
 
 .chart-plot-background {
     -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
 
 .axis {
-
     -fx-tick-label-fill: white;
     -fx-text-fill: null;
     -fx-font-color: null;
@@ -119,15 +119,15 @@
     -fx-font-size: null;
     -fx-tick-label-font: null;
     -fx-tick-label-font-size: null;
-    /*
-    -fx-text-fill: #FFFFFF;
-    -fx-font-color: #FFFFFF;
-    -fx-tick-label-fill: #FFFFFF;
-    -fx-font-size: 8pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-tick-length: 20;
-    -fx-minor-tick-length: 10;
-    */
+}
+
+.axis-tick-mark {
+    -fx-stroke: #00bcd4;
+}
+
+/* removes minor tick marks from chart */
+.axis-minor-tick-mark{
+    -fx-stroke: transparent;
 }
 
 .axis-label {
@@ -155,6 +155,34 @@
 .scroll-pane{
     -fx-background-color: transparent;
     -fx-background: transparent;
+
+    /* this is required to stop the chart tick labels from changing size */
     -fx-font: null;
     -fx-font-size: null;
+}
+
+.scroll-pane > .corner{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.scroll-bar .thumb{
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .track{
+    -fx-background-color: #00bcd4;
+    -fx-background-radius: 5px;
+}
+
+.increment-button, .decrement-button{
+    -fx-background-color: transparent;
+}
+
+.increment-arrow, .decrement-arrow {
+    -fx-background-color: white;
 }
