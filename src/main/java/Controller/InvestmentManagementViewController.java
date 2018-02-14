@@ -107,7 +107,7 @@ public class InvestmentManagementViewController {
     private ToggleButton ToggleButtonFullHistory;
 
     @FXML
-    private ComboBox<?> ComboBoxGraphType;
+    private ComboBox<String> comboBoxGraphType;
 
     @FXML
     private ScrollPane paneChart;
@@ -197,7 +197,9 @@ public class InvestmentManagementViewController {
         // add chart to the graph pane
         addChartToPane(chartStockData);
 
-
+        // add graph types
+        comboBoxGraphType.getItems().addAll("CandleStick", "Line");
+        comboBoxGraphType.getSelectionModel().selectFirst();
 
     }
 
@@ -244,7 +246,7 @@ public class InvestmentManagementViewController {
     }
 
     /**
-     * stock data chart is created and added seperatly from the FXML file due to needing to swap between charts and
+     * stock data chart is created and added separately from the FXML file due to needing to swap between charts and
      * therefore requires its on setup when newly created
      * @param chartStockData
      */
@@ -253,8 +255,6 @@ public class InvestmentManagementViewController {
         chartStockData.setLegendVisible(false);
 
         chartStockData.getStylesheets().add(getClass().getResource("/main/resources//css_styles/blue_mode.css").toExternalForm());
-        
-        chartStockData.setAlternativeColumnFillVisible(true);
     }
 
     private void addChartToPane(XYChart<String, Number> chartStockData) {
@@ -267,6 +267,8 @@ public class InvestmentManagementViewController {
         ObservableList<XYChart.Series<String, Number>> emptyDataSet = FXCollections.observableArrayList(new XYChart.Series<>());
 
         chartStockData = new LineChart<>(new CategoryAxis(), new NumberAxis(), emptyDataSet);
+
+        styleChart(chartStockData);
     }
 
 

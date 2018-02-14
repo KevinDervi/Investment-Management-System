@@ -198,7 +198,7 @@
                            <padding>
                               <Insets bottom="5.0" />
                            </padding></Label>
-                        <ComboBox fx:id="ComboBoxGraphType" prefWidth="150.0" />
+                        <ComboBox fx:id="comboBoxGraphType" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <ScrollPane fx:id="paneChart" focusTraversable="false" maxHeight="1.7976931348623157E308" prefViewportWidth="100.0" VBox.vgrow="ALWAYS" />
