@@ -101,7 +101,7 @@ public class CurrentStockInformation {
         try {
             JSONStockData = StockDataAPI.getStockData(function, stockSymbol, interval, outputSize);
 
-            System.out.println(JSONStockData.toString(4));
+            //System.out.println(JSONStockData.toString(4));
 
             if (JSONStockData != null) chartData = toArrayList(JSONStockData);
 

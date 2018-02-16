@@ -50,7 +50,7 @@ public class StockDataAPI {
 
         // simplest way to get json object from url
         URL stockURL = new URL(url);
-        System.out.println(stockURL);
+        //System.out.println(stockURL);
         JSONTokener tokener = new JSONTokener(stockURL.openStream());
 
         JSONObject json = new JSONObject(tokener);
@@ -62,6 +62,8 @@ public class StockDataAPI {
         }catch (Exception e){
             return json;
         }
+
+        // TODO store stock data as a local file and return that instead if the url fails
         // else throw exception
         System.out.println(json.toString(4)); // print out error message
         throw new Exception("error with api call");

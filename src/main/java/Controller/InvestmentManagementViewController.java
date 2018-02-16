@@ -15,10 +15,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import main.java.logic.StockDataLogic;
+import main.java.logic.UserDetailsLogic;
 import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesIntradayInterval;
 import main.java.util.StockTimeSeriesType;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -173,7 +176,13 @@ public class InvestmentManagementViewController {
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
 
+        // update user details
+        updateUserDetails();
+
+
         // TODO check if user card details == null and force user to enter details before allowing them to trade
+
+        // TODO start initial threads here
     }
 
     // TODO disable sell button if user does not hold any investments in that stock
@@ -182,6 +191,15 @@ public class InvestmentManagementViewController {
     // TODO delete all text when "X" button is pressed
     // TODO add stock analysis with KNN
     // TODO add card functionality (withdraw add remove view deposit)
+
+    // TODO execute transactions (or anything that involves multiple tables at once) as batch statements or use
+
+    /**
+     * dbConnection.setAutoCommit(false); to start a transaction block.
+     * dbConnection.commit(); to end a transaction block
+     *
+     * this means that all executions between these two statements will either all happen successfully or none will happen
+     */
 
 
     // TODO maybe use stack pane for pop ups to make the background dark and force user input
@@ -274,6 +292,40 @@ public class InvestmentManagementViewController {
 
 
     // ===================================== USER DETAILS METHODS ========================================
+
+        private void updateUserDetails(){
+            updateUsername();
+            updateBalance();
+        }
+
+        private void updateUsername(){
+            labelUsername.setText(getUsername());
+        }
+
+        private String getUsername(){
+            return UserDetailsLogic.getUsername();
+        }
+
+        private void updateBalance(){
+            // TODO format balance to two Decimal places
+            labelAccountBalance.setText("$" + getBalance());
+        }
+
+        public BigDecimal getBalance(){
+            return UserDetailsLogic.getBalalance();
+        }
+
+        private void modifyBalance(BigDecimal amount){
+            try {
+                UserDetailsLogic.updateBalance(amount);
+            }catch (SQLException e){
+                // TODO diaplay an error message
+            }
+
+
+        }
+
+
 
 
 

@@ -4,7 +4,10 @@ import main.java.data.database.UserDAO;
 import main.java.util.CardDetails;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * where the users details will be stored during their current session
@@ -34,7 +37,17 @@ public class UserDetails {
     }
 
     public void initialiseUserDetails(String username){
-        UserDAO.getUser(username);
+        Map<String, Object> details = UserDAO.getUser(username);
+        // TODO add the values from get user to the details
+        id = (long) details.get("id");
+        this.username = (String) details.get("username");
+        firstname = (String) details.get("firstname");
+        surname = (String) details.get("surname");
+        email = (String) details.get("email");
+        balance = (BigDecimal) details.get("balance");
+
+        // TODO add cards being used
+
 
     }
 
@@ -138,4 +151,12 @@ public class UserDetails {
     }
 
     // TODO have update methods for Username, Password, and email that does logic and interacts with the DAO
+
+    public void updateBalance(BigDecimal byAmount) throws SQLException {
+        UserDAO.modifyBalanceBy(byAmount);
+
+        // if error is thrown and the database was unable to update then the internal model will not update
+        setBalance(balance.add(byAmount));
+    }
+
 }
