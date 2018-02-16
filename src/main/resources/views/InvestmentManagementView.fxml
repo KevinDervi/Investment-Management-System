@@ -201,7 +201,10 @@
                         <ComboBox fx:id="comboBoxGraphType" prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <ScrollPane fx:id="paneChart" focusTraversable="false" maxHeight="1.7976931348623157E308" pannable="true" prefViewportWidth="100.0" VBox.vgrow="ALWAYS" />
+                  <ScrollPane fx:id="paneChart" focusTraversable="false" maxHeight="1.7976931348623157E308" pannable="true" prefViewportWidth="100.0" VBox.vgrow="ALWAYS">
+                     <cursor>
+                        <Cursor fx:constant="OPEN_HAND" />
+                     </cursor></ScrollPane>
                </children>
             </VBox>
          </children>
