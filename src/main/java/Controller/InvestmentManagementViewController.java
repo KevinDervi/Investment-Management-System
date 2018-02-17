@@ -5,6 +5,8 @@ import com.zoicapital.stockchartsfx.CandleStickChart;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
@@ -16,6 +18,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
+import main.java.util.ChartType;
 import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesIntradayInterval;
 import main.java.util.StockTimeSeriesType;
@@ -162,6 +165,8 @@ public class InvestmentManagementViewController {
     @FXML
     private Button ButtonSellStock;
 
+    private StockDataLogic.StockDataUpdaterService chartUpdater;
+
     /**
      * the initialize method is run after the view is created and has access to the FXML widgets while the constructor does now
      */
@@ -172,13 +177,38 @@ public class InvestmentManagementViewController {
 
         displaySAndP500();
 
+        // attach graph to the service
+        chartUpdater = new StockDataLogic().new StockDataUpdaterService();
+        chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
+        chartUpdater.start();
+        chartStockData.dataProperty().bind(chartUpdater.valueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
+        labelHighValue.textProperty().bind(chartUpdater.messageProperty()); // remove this line
+
+//        chartUpdater.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+//            @Override
+//            public void handle(WorkerStateEvent event) {
+//                System.out.println("has succ");
+//                chartStockData.setData(chartUpdater.getValue());
+//                chartStockData.setPrefWidth(chartUpdater.getValue().get(0).getData().size() * 20); // set size of data
+//            }
+//        });
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+//        System.out.println(chartUpdater.valueProperty().get().get(0).getData().get(0).getYValue());
+//        System.out.println(chartUpdater.valueProperty().toString());
+
+
         // add graph types
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
 
         // update user details
         updateUserDetails();
-
+        // TODO place all threads in the business logic and let the controller class observe the logic layer
 
         // TODO check if user card details == null and force user to enter details before allowing them to trade
 
@@ -213,8 +243,8 @@ public class InvestmentManagementViewController {
         StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
 
         // create and populate the graph
-        updateGraph();
-
+        //updateGraph();
+        createCandleStickChart("test");
         // add chart to the graph pane
         addChartToPane(chartStockData);
 
@@ -244,7 +274,7 @@ public class InvestmentManagementViewController {
     private void updateCandleStickChart() {
         ObservableList<XYChart.Series<String, Number>> data = StockDataLogic.getCandleStickChartData();
         chartStockData.setData(data);
-        chartStockData.setPrefWidth(data.get(0).getData().size() * 20);
+        chartStockData.setPrefWidth(data.get(0).getData().size() * 20); // set size of data
     }
 
     private void updateLineChart(){

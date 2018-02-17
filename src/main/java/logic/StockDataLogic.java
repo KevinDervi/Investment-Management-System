@@ -3,12 +3,14 @@ package main.java.logic;
 import com.zoicapital.stockchartsfx.BarData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.scene.chart.XYChart;
+import javafx.util.Duration;
 import main.java.data.internal_model.CurrentStockInformation;
-import main.java.util.StockData;
-import main.java.util.StockOutputSize;
-import main.java.util.StockTimeSeriesIntradayInterval;
-import main.java.util.StockTimeSeriesType;
+import main.java.util.*;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -32,8 +34,8 @@ public class StockDataLogic {
             // convert to bar data because it is required by the candlestick chart API
             BarData convertedData = toBarData(d);
 
-            String XAxislabel = sdf.format(convertedData.getDateTime().getTime());
-            series.getData().add(new XYChart.Data<>(XAxislabel, convertedData.getOpen(), convertedData));
+            String XAxisLabel = sdf.format(convertedData.getDateTime().getTime());
+            series.getData().add(new XYChart.Data<>(XAxisLabel, convertedData.getOpen(), convertedData));
         }
 
         // can be added directly to the chart without further modifications
@@ -41,9 +43,22 @@ public class StockDataLogic {
     }
 
     public static ObservableList<XYChart.Series<String, Number>> getLineChartData(){
-        ArrayList<StockData> rawData = CurrentStockInformation.getInstance().getChartData();
+        // values must be double and date must be gregorian calendar
+        List<StockData> rawData = CurrentStockInformation.getInstance().getChartData();
 
-        return null;
+        // convert the data to a chart ready format
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        SimpleDateFormat sdf = getXAxisFormat();
+        for (StockData d : rawData) {
+
+            String XAxisLabel = sdf.format( Date.from( d.getDateTime())); // Instant converted to Date
+            series.getData().add(new XYChart.Data<>(XAxisLabel, d.getClose()));
+        }
+
+        // can be added directly to the chart without further modifications
+        return FXCollections.observableArrayList(series);
+
     }
 
     /**
@@ -118,5 +133,62 @@ public class StockDataLogic {
 
     public static String getCurrentSymbol(){
         return CurrentStockInformation.getInstance().getStockSymbol();
+    }
+
+
+    /**
+     * updates the internal data and UI every set interval
+     */
+    public class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
+
+        ChartType chartTypeToReturn = null; // should be candlestick or line
+
+        ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
+
+        public StockDataUpdaterService() {
+            super();
+            this.setPeriod(Duration.seconds(60));  // set default time of 60 second periods (update the chart every minute)
+
+        }
+
+        public void setChartTypeToReturn(ChartType type){
+            chartTypeToReturn = type;
+        }
+
+        @Override
+        protected Task<ObservableList<XYChart.Series<String, Number> > > createTask() {
+
+            return new updateChartTask();
+        }
+
+
+        private class updateChartTask extends Task<ObservableList<XYChart.Series<String, Number> > >{
+
+            @Override
+            protected ObservableList<XYChart.Series<String, Number> > call() throws Exception {
+                System.out.println("scheduled service StockDataUpdaterService is starting");
+                updateMessage("getting data now");
+                // update internal model first with the latest information
+                StockDataLogic.updateChartData();
+
+                // then return the correct dataType
+                if (StockDataUpdaterService.this.chartTypeToReturn == ChartType.CANDLESTICK){
+                    ObservableList<XYChart.Series<String, Number>> test = StockDataLogic.getCandleStickChartData();
+                    System.out.println(test.get(0).getData().get(0).getYValue());
+                    this.updateValue(test);
+                    updateMessage("data has been retrieved");
+                    return test;
+
+                }else if (StockDataUpdaterService.this.chartTypeToReturn == ChartType.LINE){
+
+                    return StockDataLogic.getLineChartData();
+
+                }else {
+                    throw new Exception("no valid chart type given to StockDataUpdaterService");
+                }
+            }
+        }
+
+
     }
 }

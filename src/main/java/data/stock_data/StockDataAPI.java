@@ -60,6 +60,7 @@ public class StockDataAPI {
         try{
             json.getString("Error Message");
         }catch (Exception e){
+            System.out.println("stock data retrieval successful");
             return json;
         }
 
