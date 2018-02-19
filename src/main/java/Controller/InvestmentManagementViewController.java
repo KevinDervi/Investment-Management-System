@@ -187,9 +187,9 @@ public class InvestmentManagementViewController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //test
+        //test - how to restart a service
         System.out.println(chartUpdater.cancel());
-        createLineChart("line chart test");
+        createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
         chartUpdater.setChartTypeToReturn(ChartType.LINE);
         chartUpdater.restart();
 
