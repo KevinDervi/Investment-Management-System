@@ -4,13 +4,11 @@ import com.zoicapital.stockchartsfx.BarData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.chart.XYChart;
 import javafx.util.Duration;
 import main.java.data.internal_model.CurrentStockInformation;
 import main.java.util.*;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -143,12 +141,9 @@ public class StockDataLogic {
 
         ChartType chartTypeToReturn = null; // should be candlestick or line
 
-        ObservableList<XYChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-
         public StockDataUpdaterService() {
             super();
             this.setPeriod(Duration.seconds(60));  // set default time of 60 second periods (update the chart every minute)
-
         }
 
         public void setChartTypeToReturn(ChartType type){
@@ -166,24 +161,31 @@ public class StockDataLogic {
 
             @Override
             protected ObservableList<XYChart.Series<String, Number> > call() throws Exception {
-                System.out.println("scheduled service StockDataUpdaterService is starting");
-                updateMessage("getting data now");
+                System.out.println("scheduled service StockDataUpdaterService is starting, type: " + chartTypeToReturn);
                 // update internal model first with the latest information
+
+                if(isCancelled()){
+                    System.out.println("task was cancelled");
+                    return null;
+                }
                 StockDataLogic.updateChartData();
 
+
+                if(isCancelled()){
+                    System.out.println("task was cancelled");
+                    return null;
+                }
                 // then return the correct dataType
-                if (StockDataUpdaterService.this.chartTypeToReturn == ChartType.CANDLESTICK){
-                    ObservableList<XYChart.Series<String, Number>> test = StockDataLogic.getCandleStickChartData();
-                    System.out.println(test.get(0).getData().get(0).getYValue());
-                    this.updateValue(test);
-                    updateMessage("data has been retrieved");
-                    return test;
+                if (chartTypeToReturn == ChartType.CANDLESTICK){
+                    System.out.println("returning candlestick chart data");
+                    return StockDataLogic.getCandleStickChartData();
 
-                }else if (StockDataUpdaterService.this.chartTypeToReturn == ChartType.LINE){
-
+                }else if (chartTypeToReturn == ChartType.LINE){
+                    System.out.println("returning line chart data");
                     return StockDataLogic.getLineChartData();
 
                 }else {
+                    System.out.println("error chart type");
                     throw new Exception("no valid chart type given to StockDataUpdaterService");
                 }
             }

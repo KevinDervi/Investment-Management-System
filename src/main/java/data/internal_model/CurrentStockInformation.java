@@ -99,11 +99,25 @@ public class CurrentStockInformation {
         // get json data
         JSONObject JSONStockData;
         try {
+            // TODO talk about threads not being fully terminated and still being run in background despite interruption
+            if(Thread.interrupted()){
+                System.out.println("stopping update of internal model due to thread interruption");
+                return;
+            }
+
             JSONStockData = StockDataAPI.getStockData(function, stockSymbol, interval, outputSize);
 
             //System.out.println(JSONStockData.toString(4));
+            ArrayList<StockData> convertedData = toArrayList(JSONStockData);
 
-            if (JSONStockData != null) chartData = toArrayList(JSONStockData);
+
+            // this method should be run in a background thread and is checked if the thread is not interrupted before updating the internal model
+            if(Thread.interrupted()){
+                System.out.println("stopping update of internal model due to thread interruption");
+                return;
+            }
+            if (JSONStockData != null) chartData = convertedData;
+            else throw new Exception("JOSNStockData is null");
 
         } catch (IOException e){
             // 503 response code, try again in 2 seconds

@@ -165,7 +165,7 @@ public class InvestmentManagementViewController {
     @FXML
     private Button ButtonSellStock;
 
-    private StockDataLogic.StockDataUpdaterService chartUpdater;
+    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
 
     /**
      * the initialize method is run after the view is created and has access to the FXML widgets while the constructor does now
@@ -175,36 +175,29 @@ public class InvestmentManagementViewController {
         // TODO populate users investments held
         // TODO populate stock data views initially with S&P 500 or dow jones
 
-        displaySAndP500();
-
-        // attach graph to the service
-        chartUpdater = new StockDataLogic().new StockDataUpdaterService();
+        // set initial values for chart updater
         chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
+
+
+        displaySAndP500();
+        // start service
         chartUpdater.start();
-        chartStockData.dataProperty().bind(chartUpdater.valueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
-        labelHighValue.textProperty().bind(chartUpdater.messageProperty()); // remove this line
-
-//        chartUpdater.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-//            @Override
-//            public void handle(WorkerStateEvent event) {
-//                System.out.println("has succ");
-//                chartStockData.setData(chartUpdater.getValue());
-//                chartStockData.setPrefWidth(chartUpdater.getValue().get(0).getData().size() * 20); // set size of data
-//            }
-//        });
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-//        System.out.println(chartUpdater.valueProperty().get().get(0).getData().get(0).getYValue());
-//        System.out.println(chartUpdater.valueProperty().toString());
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //test
+        System.out.println(chartUpdater.cancel());
+        createLineChart("line chart test");
+        chartUpdater.setChartTypeToReturn(ChartType.LINE);
+        chartUpdater.restart();
 
 
         // add graph types
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
+
 
         // update user details
         updateUserDetails();
@@ -242,11 +235,10 @@ public class InvestmentManagementViewController {
         StockDataLogic.setStockSymbol("SPX"); // SPX = S&P 500 index
         StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
 
-        // create and populate the graph
-        //updateGraph();
-        createCandleStickChart("test");
+        // create the graph
+        createCandleStickChart("SFC");
         // add chart to the graph pane
-        addChartToPane(chartStockData);
+        //addChartToPane(chartStockData);
 
 
 
@@ -266,15 +258,13 @@ public class InvestmentManagementViewController {
         // TODO check what type of chart it is (candlestick or line)
 
         createCandleStickChart(currentSymbol);
-        updateCandleStickChart();
-
 
     }
 
     private void updateCandleStickChart() {
         ObservableList<XYChart.Series<String, Number>> data = StockDataLogic.getCandleStickChartData();
         chartStockData.setData(data);
-        chartStockData.setPrefWidth(data.get(0).getData().size() * 20); // set size of data
+
     }
 
     private void updateLineChart(){
@@ -292,6 +282,32 @@ public class InvestmentManagementViewController {
 
         styleChart(chartStockData);
 
+        addChartToPane(chartStockData);
+
+        attachServiceToChart(chartStockData);
+
+    }
+
+    /**
+     * binds the observable properties received from the service to the chart
+     * @param chartStockData
+     */
+    private void attachServiceToChart(XYChart<String, Number> chartStockData) {
+        int distanceBetweenValues = 20;
+        // TODO maybe change value if line graph or candlestick graph here
+
+        // attach service to the graph
+        chartStockData.dataProperty().unbind();
+        chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
+
+
+        chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
+            chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
+
+        });
+
+        chartUpdater.stateProperty().addListener((observable, oldValue, newValue) -> System.out.println("change listener state: " + oldValue + " -> " + newValue));
+        chartUpdater.messageProperty().addListener((observable, oldValue, newValue) -> System.out.println("message: " + newValue));
     }
 
     /**
@@ -317,7 +333,14 @@ public class InvestmentManagementViewController {
 
         chartStockData = new LineChart<>(new CategoryAxis(), new NumberAxis(), emptyDataSet);
 
+        // TODO make stock line chart its own object and style it as such
+        chartStockData.setAnimated(false);
+
         styleChart(chartStockData);
+
+        addChartToPane(chartStockData);
+
+        attachServiceToChart(chartStockData);
     }
 
 
