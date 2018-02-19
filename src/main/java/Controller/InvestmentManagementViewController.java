@@ -306,8 +306,8 @@ public class InvestmentManagementViewController {
 
         });
 
-        chartUpdater.stateProperty().addListener((observable, oldValue, newValue) -> System.out.println("change listener state: " + oldValue + " -> " + newValue));
-        chartUpdater.messageProperty().addListener((observable, oldValue, newValue) -> System.out.println("message: " + newValue));
+        //chartUpdater.stateProperty().addListener((observable, oldValue, newValue) -> System.out.println("change listener state: " + oldValue + " -> " + newValue));
+        //chartUpdater.messageProperty().addListener((observable, oldValue, newValue) -> System.out.println("message: " + newValue));
     }
 
     /**
