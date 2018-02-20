@@ -72,7 +72,7 @@
                   <Insets left="5.0" right="5.0" />
                </padding>
             </HBox>
-            <ListView fx:id="ListViewInvestmentHeld" maxHeight="1.7976931348623157E308" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="ListViewInvestmentHeld" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
@@ -80,7 +80,7 @@
       </VBox>
    </left>
    <top>
-      <MenuBar fx:id="menuHelp" stylesheets="@../css_styles/blue_mode.css" BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menuHelp" BorderPane.alignment="CENTER">
         <menus>
           <Menu fx:id="menuAccount" mnemonicParsing="false" text="Account">
             <items>

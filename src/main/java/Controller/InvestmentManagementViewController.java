@@ -4,6 +4,7 @@ import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.WorkerStateEvent;
@@ -47,7 +48,7 @@ public class InvestmentManagementViewController {
     private Button ButtonDeleteSearchText;
 
     @FXML
-    private ListView<?> ListViewInvestmentHeld;
+    private ListView<InvestmentHeldListCell> ListViewInvestmentHeld;
 
     @FXML
     private MenuBar menuHelp;
@@ -165,7 +166,9 @@ public class InvestmentManagementViewController {
     @FXML
     private Button ButtonSellStock;
 
+    // data
     private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
+
 
     /**
      * the initialize method is run after the view is created and has access to the FXML widgets while the constructor does now
@@ -201,6 +204,19 @@ public class InvestmentManagementViewController {
 
         // update user details
         updateUserDetails();
+
+
+        // update investments held
+        ObservableList<InvestmentHeldListCell> listCells = FXCollections.observableArrayList();
+        listCells.addAll(new InvestmentHeldListCell(), new InvestmentHeldListCell());
+
+        listCells.addListener((ListChangeListener<InvestmentHeldListCell>) c -> {
+            System.out.println("added");
+            ListViewInvestmentHeld.getItems().setAll(c.getList());
+        });
+
+        listCells.add(new InvestmentHeldListCell());
+
         // TODO place all threads in the business logic and let the controller class observe the logic layer
 
         // TODO check if user card details == null and force user to enter details before allowing them to trade
