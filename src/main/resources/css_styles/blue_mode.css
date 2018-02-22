@@ -190,14 +190,26 @@
 
 .list-view{
     -fx-background-color: transparent;
-
+    -fx-label-padding: 10px;
 }
 
-.list-cell{
+.list-cell:filled{
     -fx-background-color: transparent;
+    -fx-border-color: #00bcd4;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+
+    -fx-border-width: 4px;
+}
+
+.list-cell:filled:hover{
+    -fx-border-color: #4DD0E1;
+}
+
+.list-cell:filled:selected{
+    -fx-border-color: #FB8C00;
 }
 
 .list-cell:empty{
     -fx-background-color: transparent;
-
 }
