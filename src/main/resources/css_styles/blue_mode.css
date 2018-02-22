@@ -190,8 +190,14 @@
 
 .list-view{
     -fx-background-color: transparent;
+
 }
 
 .list-cell{
-    -fx-text-fill: black;
+    -fx-background-color: transparent;
+}
+
+.list-cell:empty{
+    -fx-background-color: transparent;
+
 }

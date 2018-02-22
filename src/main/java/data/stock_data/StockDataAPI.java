@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.net.URL;
+import java.util.HashSet;
 
 public class StockDataAPI {
 
@@ -59,6 +60,8 @@ public class StockDataAPI {
         // look for an error message if none is found then return the data
         try{
             json.getString("Error Message");
+
+            // TODO if error then return JSON data from a local file
         }catch (Exception e){
             System.out.println("stock data retrieval successful");
             return json;
@@ -68,5 +71,14 @@ public class StockDataAPI {
         // else throw exception
         System.out.println(json.toString(4)); // print out error message
         throw new Exception("error with api call");
+    }
+
+
+    public JSONObject getSingleLatestStockData(String symbol){
+        return null;
+    }
+
+    public JSONObject getmultipleLatestStockData(HashSet<String> symbols){
+        return null;
     }
 }

@@ -17,16 +17,16 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.util.Callback;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
-import main.java.util.ChartType;
-import main.java.util.StockOutputSize;
-import main.java.util.StockTimeSeriesIntradayInterval;
-import main.java.util.StockTimeSeriesType;
+import main.java.util.*;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class InvestmentManagementViewController {
     private Button ButtonDeleteSearchText;
 
     @FXML
-    private ListView<InvestmentHeldListCell> ListViewInvestmentHeld;
+    private ListView<InvestmentHeld> ListViewInvestmentHeld;
 
     @FXML
     private MenuBar menuHelp;
@@ -177,14 +177,8 @@ public class InvestmentManagementViewController {
     public void initialize(){
         // TODO populate users investments held
         // TODO populate stock data views initially with S&P 500 or dow jones
+        setupGraph();
 
-        // set initial values for chart updater
-        chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
-
-
-        displaySAndP500();
-        // start service
-        chartUpdater.start();
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -192,36 +186,40 @@ public class InvestmentManagementViewController {
         }
         //test - how to restart a service
         System.out.println(chartUpdater.cancel());
-        createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
-        chartUpdater.setChartTypeToReturn(ChartType.LINE);
+        //createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
+        //chartUpdater.setChartTypeToReturn(ChartType.LINE);
         chartUpdater.restart();
 
+        // TODO make buying and selling a service in the logic layer and have it communicate with the database and when successfull it will return a value which will be binded to the listview
 
-        // add graph types
-        comboBoxGraphType.getItems().addAll("CandleStick", "Line");
-        comboBoxGraphType.getSelectionModel().selectFirst();
 
 
         // update user details
         updateUserDetails();
 
-
-        // update investments held
-        ObservableList<InvestmentHeldListCell> listCells = FXCollections.observableArrayList();
-        listCells.addAll(new InvestmentHeldListCell(), new InvestmentHeldListCell());
-
-        listCells.addListener((ListChangeListener<InvestmentHeldListCell>) c -> {
-            System.out.println("added");
-            ListViewInvestmentHeld.getItems().setAll(c.getList());
-        });
-
-        listCells.add(new InvestmentHeldListCell());
+        // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
 
         // TODO place all threads in the business logic and let the controller class observe the logic layer
 
         // TODO check if user card details == null and force user to enter details before allowing them to trade
 
         // TODO start initial threads here
+    }
+
+    private void setupGraph() {
+        // set initial values for chart updater
+        chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
+
+
+        displaySAndP500();
+
+        // start service
+        chartUpdater.start();
+
+
+        // add graph types
+        comboBoxGraphType.getItems().addAll("CandleStick", "Line");
+        comboBoxGraphType.getSelectionModel().selectFirst();
     }
 
     // TODO disable sell button if user does not hold any investments in that stock
@@ -318,7 +316,12 @@ public class InvestmentManagementViewController {
 
 
         chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
-            chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
+            // TODO if null do loading sign
+            if (newValue == null){
+                chartStockData.setPrefWidth(0);
+            }else {
+                chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
+            }
 
         });
 
@@ -362,37 +365,78 @@ public class InvestmentManagementViewController {
 
     // ===================================== USER DETAILS METHODS ========================================
 
-        private void updateUserDetails(){
-            updateUsername();
-            updateBalance();
+    private void updateUserDetails(){
+        updateUsername();
+        updateBalance();
+        updateInvestmentsHeld();
+    }
+
+    private void updateInvestmentsHeld() {
+        ObservableList<InvestmentHeld> listCells = FXCollections.observableArrayList();
+
+        InvestmentHeld test1 = new InvestmentHeld(1L, new BigDecimal("5.234"), "GOOG", 5L, new Timestamp(System.currentTimeMillis()));
+        InvestmentHeld test2 = new InvestmentHeld(2L, new BigDecimal("6.000"), "AAPL", 5L, new Timestamp(System.currentTimeMillis()));
+
+
+        // setup cell factory to create my custom cell and use its overridden updateItem() method
+        ListViewInvestmentHeld.setCellFactory(param -> new InvestmentHeldListCell());
+
+        // bind service here
+        //ListViewInvestmentHeld.itemsProperty().bind();
+
+        listCells.addListener((ListChangeListener<InvestmentHeld>) c -> {
+
+            ListViewInvestmentHeld.getItems().setAll(c.getList());
+        });
+
+        // only allow user to select a single investment at a time
+        ListViewInvestmentHeld.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+
+        //on selecting an investment
+        ListViewInvestmentHeld.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            System.out.println(newValue.getStockSymbol() + "was selected");
+
+            // cancel the current service
+            chartUpdater.cancel();
+
+            // update the stock to search for
+            StockDataLogic.setStockSymbol(newValue.getStockSymbol());
+
+            //restart the service
+            chartUpdater.restart();
+        });
+
+        listCells.addAll(test1, test2);
+    }
+
+    private void updateUsername(){
+        labelUsername.setText(getUsername());
+    }
+
+    private String getUsername(){
+        return UserDetailsLogic.getUsername();
+    }
+
+    private void updateBalance(){
+        // TODO format balance to two Decimal places
+        labelAccountBalance.setText("$" + getBalance());
+    }
+
+    public BigDecimal getBalance(){
+        return UserDetailsLogic.getBalalance();
+    }
+
+    private void modifyBalance(BigDecimal amount){
+        try {
+            UserDetailsLogic.updateBalance(amount);
+        }catch (SQLException e){
+            // TODO diaplay an error message
         }
 
-        private void updateUsername(){
-            labelUsername.setText(getUsername());
-        }
 
-        private String getUsername(){
-            return UserDetailsLogic.getUsername();
-        }
-
-        private void updateBalance(){
-            // TODO format balance to two Decimal places
-            labelAccountBalance.setText("$" + getBalance());
-        }
-
-        public BigDecimal getBalance(){
-            return UserDetailsLogic.getBalalance();
-        }
-
-        private void modifyBalance(BigDecimal amount){
-            try {
-                UserDetailsLogic.updateBalance(amount);
-            }catch (SQLException e){
-                // TODO diaplay an error message
-            }
-
-
-        }
+    }
 
 
 

@@ -38,6 +38,7 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
 
     InvestmentHeldListCell() {
+        super();
 
         // load fxml when creating cell
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/InvestmentHeldCell.fxml"));
@@ -47,12 +48,9 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             fxmlLoader.load();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("whoops");
+            System.out.println("unable to load FXMl when creating a List Cell");
         }
         System.out.println("create list cell");
-        setGraphic(grid);
-        //setGraphic(null);
-        setText(null);
 
     }
 
@@ -68,19 +66,14 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             setText(null);
         }else{
             // update the cell here
-            setText("test1");
+            //setText("test1");
 
-            labelCurrentPriceValue.setText("123354");
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/InvestmentHeldCell.fxml"));
-
-
-            //grid = fxmlLoader.load();
-
+            labelStockSymbol.setText(investmentHeld.getStockSymbol());
 
             // finally set graphic as grid
 
             setGraphic(grid);
-            setText("testing");
+            setText(null);
 
         }
 

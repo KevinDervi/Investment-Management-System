@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="grid" hgap="3.0" maxWidth="Infinity" stylesheets="@../css_styles/blue_mode.css" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" >
+<GridPane fx:id="grid" hgap="3.0" maxWidth="Infinity" stylesheets="@../css_styles/blue_mode.css" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS"/>
+      <ColumnConstraints hgrow="ALWAYS" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -19,7 +19,7 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Label fx:id="labelStockSymbol" style="-fx-background-color: black;" text="Stock Symbol" />
+      <Label fx:id="labelStockSymbol" text="Stock Symbol" />
       <Label text="Current Price:" GridPane.columnIndex="1" />
       <Label fx:id="labelCurrentPriceValue" text="value" GridPane.columnIndex="2" />
       <Label text="Price Bought:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
