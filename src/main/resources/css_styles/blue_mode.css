@@ -190,7 +190,6 @@
 
 .list-view{
     -fx-background-color: transparent;
-    -fx-label-padding: 10px;
 }
 
 .list-cell:filled{
@@ -200,6 +199,9 @@
     -fx-background-radius: 5px;
 
     -fx-border-width: 4px;
+
+    /* inset on top level only required for separating the list view cells */
+    -fx-border-insets: 3px, 0px, 0px, 0px;
 }
 
 .list-cell:filled:hover{
