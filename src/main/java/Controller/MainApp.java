@@ -8,13 +8,13 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
     public static void main(String[] args){launch(args);}
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/SignInView.fxml"));
         Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("Investment Management System");
-        stage.setScene(new Scene(root));
-        stage.show();
+        primaryStage.setTitle("Investment Management System");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
 }

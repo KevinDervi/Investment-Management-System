@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane fx:id="grid" hgap="3.0" maxWidth="Infinity" stylesheets="@../css_styles/blue_mode.css" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <columnConstraints>
+      <ColumnConstraints hgrow="ALWAYS" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <Label fx:id="labelStockSymbol" text="Stock Symbol" />
+      <Label text="Current Price:" GridPane.columnIndex="1" />
+      <Label fx:id="labelCurrentPriceValue" text="value" GridPane.columnIndex="2" />
+      <Label text="Price Bought:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label text="Price Difference:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="labelPriceBoughtValue" text="value" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Label fx:id="labelPriceDifferenceValue" text="value" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Label text="Quantity Owned:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label fx:id="labelQuantityownedValue" text="value" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <ImageView fx:id="imageArrow" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
+   </children>
+</GridPane>

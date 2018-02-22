@@ -84,6 +84,7 @@ public class SignUpViewController {
 
         if(firstNameMessage != null){
             firstNameErrorMessage.setText(firstNameMessage);
+            firstNameErrorMessage.setVisible(true);
             validInputs = false;
         }
 
@@ -92,6 +93,7 @@ public class SignUpViewController {
 
         if(surnameMessage != null){
             surnameErrorMessage.setText(surnameMessage);
+            surnameErrorMessage.setVisible(true);
             validInputs = false;
         }
 
@@ -100,6 +102,7 @@ public class SignUpViewController {
 
         if(emailMessage != null){
             emailErrorMessage.setText(emailMessage);
+            emailErrorMessage.setVisible(true);
             validInputs = false;
         }
 
@@ -108,6 +111,7 @@ public class SignUpViewController {
 
         if(usernameMessage != null){
             usernameErrorMessage.setText(usernameMessage);
+            usernameErrorMessage.setVisible(true);
             validInputs = false;
 
         }
@@ -117,6 +121,7 @@ public class SignUpViewController {
 
         if(passwordMessage != null){
             passwordErrorMessage.setText(passwordMessage);
+            passwordErrorMessage.setVisible(true);
             validInputs = false;
         }
 
@@ -126,6 +131,7 @@ public class SignUpViewController {
 
         if(reTypedPasswordMessage != null){
             reTypedPasswordErrorMessage.setText(reTypedPasswordMessage);
+            reTypedPasswordErrorMessage.setVisible(true);
             validInputs = false;
 
         }
@@ -169,11 +175,22 @@ public class SignUpViewController {
 
     private void resetErrorMessages(){
         firstNameErrorMessage.setText("");
+        firstNameErrorMessage.setVisible(false);
+
         surnameErrorMessage.setText("");
+        surnameErrorMessage.setVisible(false);
+
         emailErrorMessage.setText("");
+        emailErrorMessage.setVisible(false);
+
         usernameErrorMessage.setText("");
+        usernameErrorMessage.setVisible(false);
+
         passwordErrorMessage.setText("");
+        passwordErrorMessage.setVisible(false);
+
         reTypedPasswordErrorMessage.setText("");
+        reTypedPasswordErrorMessage.setVisible(false);
     }
 
 }

@@ -220,7 +220,7 @@ public class UserDAO {
      * will modify the user balance by a specific value
      * @param value
      */
-    public static void modifyBalanceBy(BigDecimal value){
+    public static void modifyBalanceBy(BigDecimal value) throws SQLException{
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
@@ -238,6 +238,7 @@ public class UserDAO {
         } catch (SQLException e){
             System.out.println("error with updating user balance");
             e.printStackTrace();
+            throw new SQLException();
         }finally {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }

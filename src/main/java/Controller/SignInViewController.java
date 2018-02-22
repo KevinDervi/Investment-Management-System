@@ -29,13 +29,15 @@ public class SignInViewController {
     private GridPane grid;
 
     @FXML
-    private Text errorMessage;
+    private Label errorMessage;
 
     @FXML
     private TextField usernameTextField;
 
     @FXML
     void HandleSignIn(ActionEvent event) throws Exception{
+        errorMessage.setVisible(false);
+
         String usernameInput = usernameTextField.getText();
         String passwordInput = passwordTextField.getText();
 
@@ -57,6 +59,7 @@ public class SignInViewController {
         }
         else{
             errorMessage.setText("Wrong Username or Password");
+            errorMessage.setVisible(true);
         }
 
         // TODO get main investment management system controller from FXML Loader and call its initialise method to load properly

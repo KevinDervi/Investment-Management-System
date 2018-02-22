@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller.SignUpViewController">
+<GridPane alignment="CENTER" hgap="10.0" styleClass="background" stylesheets="@../css_styles/blue_mode.css" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller.SignUpViewController">
     <columnConstraints>
         <ColumnConstraints />
         <ColumnConstraints />
@@ -58,17 +58,17 @@
                 <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" text="Back" />
             </children>
         </VBox>
-      <Label fx:id="firstNameErrorMessage" textFill="#d30000" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Label fx:id="surnameErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Label fx:id="emailErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <Label fx:id="usernameErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-      <Label fx:id="passwordErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-      <Label fx:id="reTypedPasswordErrorMessage" textFill="#d30000" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+      <Label fx:id="firstNameErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+      <Label fx:id="surnameErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+      <Label fx:id="emailErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+      <Label fx:id="usernameErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" />
+      <Label fx:id="passwordErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="10" />
+      <Label fx:id="reTypedPasswordErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="12" />
       <Label contentDisplay="GRAPHIC_ONLY" GridPane.columnIndex="2" GridPane.rowIndex="7">
          <graphic>
               <ImageView fx:id="usernameInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@../images/Information_Icon.png" />
+                      <Image url="@/main/resources/images/Information_Icon_grey.png" />
                   </image>
               </ImageView>
          </graphic>
@@ -81,7 +81,7 @@
          <graphic>
               <ImageView fx:id="passwordInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@../images/Information_Icon.png" />
+                      <Image url="@/main/resources/images/Information_Icon_grey.png" />
                   </image>
               </ImageView>
          </graphic>
