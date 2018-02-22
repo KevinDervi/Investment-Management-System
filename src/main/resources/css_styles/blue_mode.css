@@ -1,0 +1,217 @@
+
+/*
+    * implies for all elements
+*/
+* {
+    -fx-font-family: "Segoe UI";
+}
+
+.background {
+    -fx-background-color: #757575;
+}
+
+.button {
+    -fx-background-color:  #00bcd4;
+    -fx-border-color: #00BCD4;
+    -fx-text-fill: white;
+
+}
+
+.button:hover{
+    -fx-background-color: #4DD0E1;
+}
+
+.button-buy{
+    -fx-background-color: lightgreen;
+}
+
+.button-buy:hover{
+    -fx-background-color: green;
+
+}
+
+.button-sell{
+    -fx-background-color: red;
+}
+
+.button-sell:hover{
+    -fx-background-color: #ff4f4c;
+    -fx-fill-width: true;
+}
+
+.button-search-text-removal{
+    -fx-background-color: transparent;
+    -fx-border-color: null;
+}
+
+.button-search-text-removal:hover{
+    -fx-background-color: transparent;
+}
+
+.toggle-button{
+    -fx-background-color: #00bcd4;
+    -fx-border-color: #FB8C00;
+    -fx-text-fill: white;
+    -fx-background-insets: 0;
+}
+
+.toggle-button:hover{
+    -fx-background-color: #4DD0E1;
+}
+
+.toggle-button:selected{
+    -fx-background-color: #FB8C00;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.label-data{
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+
+.label-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+}
+
+.label-error-message {
+    -fx-text-fill: white;
+    -fx-background-color: red;
+    -fx-background-radius: 10px;
+    -fx-font-size:  14px;
+    -fx-alignment: center;
+
+}
+
+.label-colour-change{
+    -fx-text-fill: purple;
+}
+
+.text-field {
+    -fx-border-color:  #00bcd4;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.menu-bar {
+    -fx-background-color: #00bcd4;
+    -fx-text-fill: white;
+}
+
+.chart {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.axis {
+    -fx-tick-label-fill: white;
+    -fx-text-fill: null;
+    -fx-font-color: null;
+    -fx-font-family: null;
+    -fx-font-size: null;
+    -fx-tick-label-font: null;
+    -fx-tick-label-font-size: null;
+}
+
+.axis-tick-mark {
+    -fx-stroke: #00bcd4;
+}
+
+/* removes minor tick marks from chart */
+.axis-minor-tick-mark{
+    -fx-stroke: transparent;
+}
+
+.axis-label {
+    -fx-text-fill: white;
+}
+
+.combo-box{
+    -fx-text-fill: white;
+    -fx-background-color: #00bcd4;
+}
+
+.combo-box:hover{
+    -fx-background-color: #4DD0E1;
+}
+
+.combo-box-popup{
+    -fx-text-fill: white;
+    -fx-background-color: #00bcd4;
+}
+
+.combo-box-popup:hover{
+    -fx-background-color: #4DD0E1;
+}
+
+.scroll-pane{
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+
+    /* this is required to stop the chart tick labels from changing size */
+    -fx-font: null;
+    -fx-font-size: null;
+}
+
+.scroll-pane > .corner{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar .thumb{
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .track{
+    -fx-background-color: #00bcd4;
+    -fx-background-radius: 5px;
+}
+
+.increment-button, .decrement-button{
+    -fx-background-color: transparent;
+}
+
+.increment-arrow, .decrement-arrow {
+    -fx-background-color: white;
+}
+
+.list-view{
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled{
+    -fx-background-color: transparent;
+    -fx-border-color: #00bcd4;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+
+    -fx-border-width: 4px;
+
+    /* inset on top level only required for separating the list view cells */
+    -fx-border-insets: 3px, 0px, 0px, 0px;
+}
+
+.list-cell:filled:hover{
+    -fx-border-color: #4DD0E1;
+}
+
+.list-cell:filled:selected{
+    -fx-border-color: #FB8C00;
+}
+
+.list-cell:empty{
+    -fx-background-color: transparent;
+}
