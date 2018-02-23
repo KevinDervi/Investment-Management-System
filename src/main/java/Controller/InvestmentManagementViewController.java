@@ -2,23 +2,14 @@ package main.java.Controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
-import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.ScheduledService;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Pane;
-import javafx.util.Callback;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
 import main.java.util.*;
@@ -27,7 +18,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -79,40 +69,40 @@ public class InvestmentManagementViewController {
     private Label labelVolumeValue;
 
     @FXML
-    private ToggleButton ToggleButton1Min;
+    private RadioButton radioButton1Min;
 
     @FXML
-    private ToggleGroup IntervalToggleGroup;
+    private ToggleGroup toggleGroupInterval;
 
     @FXML
-    private ToggleButton ToggleButton5Min;
+    private RadioButton radioButton5Min;
 
     @FXML
-    private ToggleButton ToggleButton15Min;
+    private RadioButton radioButton15Min;
 
     @FXML
-    private ToggleButton ToggleButton30Min;
+    private RadioButton radioButton30Min;
 
     @FXML
-    private ToggleButton ToggleButton60Min;
+    private RadioButton radioButton60Min;
 
     @FXML
-    private ToggleButton ToggleButtonDaily;
+    private RadioButton radioButtonDaily;
 
     @FXML
-    private ToggleButton ToggleButtonWeekly;
+    private RadioButton radioButtonWeekly;
 
     @FXML
-    private ToggleButton ToggleButtonMonthly;
+    private RadioButton radioButtonMonthly;
 
     @FXML
-    private ToggleButton ToggleButtonRealTime;
+    private ToggleGroup toggleGroupOutputType;
 
     @FXML
-    private ToggleGroup outputSizeToggleGroup;
+    private RadioButton radioButtonRealTime;
 
     @FXML
-    private ToggleButton ToggleButtonFullHistory;
+    private RadioButton radioButtonFullHistory;
 
     @FXML
     private ComboBox<String> comboBoxGraphType;
@@ -180,13 +170,6 @@ public class InvestmentManagementViewController {
         // TODO populate stock data views initially with S&P 500 or dow jones
         setupGraph();
 
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //test - how to restart a service
-        System.out.println(chartUpdater.cancel());
         //createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
         //chartUpdater.setChartTypeToReturn(ChartType.LINE);
         chartUpdater.restart();
@@ -229,24 +212,51 @@ public class InvestmentManagementViewController {
         // make toggle group always have at least 1 value selected by consuming the mouse event if that button is already selected
 
         // setup onclick functionality
-        IntervalToggleGroup.selectedToggleProperty().addListener(this::onIntervalToggleGroupChanged);
+        toggleGroupInterval.selectedToggleProperty().addListener(this::onIntervalToggleGroupChanged);
     }
 
     private void onIntervalToggleGroupChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
 
-        // attempt at making the button un-selectable
-        if (oldValue.isSelected()) {
-            IntervalToggleGroup.selectToggle(oldValue);
-            return;
+        chartUpdater.cancel();
+        RadioButton selectedButton = (RadioButton) (toggleGroupInterval.getSelectedToggle());
+        String selectedValue = selectedButton.getText();
+        System.out.println("interval button selected: " + selectedValue);
+
+        // update the
+        if (selectedValue.contains("min")) {
+            setIntradayGraph(selectedValue);
+        }else{
+            setOtherGraph(selectedValue);
         }
 
+        chartUpdater.restart();
+    }
 
-        chartUpdater.cancel();
-        String selected = newValue.toString();
-        System.out.println("interval button selected: " + selected);
-        System.out.println("old interval buttong selected: " + oldValue.toString());
-        if (true) {
+    private void setOtherGraph(String selectedValue) {
+        switch (selectedValue) {
+            case "Daily":
 
+                StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_DAILY);
+                break;
+
+            case "Weekly":
+
+                StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_WEEKLY);
+                break;
+
+            case "Monthly":
+
+                StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_MONTHLY);
+                break;
+
+            default:
+
+                try {
+                    throw new Exception("interval selected is not Daily/Weekly/Monthly");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
@@ -256,35 +266,42 @@ public class InvestmentManagementViewController {
         //remove dash from string
         interval = interval.replace("-", "");
 
+        StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_INTRADAY);
 
-        if (interval == "1min") {
+        switch (interval) {
+            case "1min":
 
-            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1);
+                StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1);
+                break;
 
-        } else if (interval == "5min") {
+            case "5min":
+                StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T5);
+                break;
 
-            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T5);
+            case "15min":
 
-        } else if (interval == "15min") {
+                StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T15);
+                break;
 
-            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T15);
+            case "30min":
 
-        } else if (interval == "30min") {
+                StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T30);
+                break;
 
-            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T30);
+            case "60min":
 
-        } else if (interval == "60min") {
+                StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T60);
+                break;
 
-            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T60);
+            default:
 
-        } else {
-
-            // else throw an exception if an invalid toggle button is sent to this method
-            try {
-                throw new Exception("wrong toggle button selected for intraday time series");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                // else throw an exception if an invalid toggle button is sent to this method
+                try {
+                    throw new Exception("wrong toggle button selected for intraday time series");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
@@ -292,6 +309,8 @@ public class InvestmentManagementViewController {
         // add graph types
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
+
+        // TODO on click listener
     }
 
     // TODO disable sell button if user does not hold any investments in that stock
@@ -409,6 +428,10 @@ public class InvestmentManagementViewController {
     private void styleChart(XYChart<String, Number> chartStockData) {
 
         chartStockData.setLegendVisible(false);
+
+        chartStockData.setAnimated(false);
+
+        chartStockData.setCache(true);
 
         chartStockData.getStylesheets().add(getClass().getResource("/main/resources//css_styles/blue_mode.css").toExternalForm());
     }

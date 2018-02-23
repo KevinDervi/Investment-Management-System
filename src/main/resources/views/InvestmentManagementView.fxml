@@ -9,9 +9,9 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -164,34 +164,35 @@
                <children>
                   <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                      <children>
-                        <VBox alignment="CENTER">
+                        <VBox alignment="CENTER" spacing="5.0">
                            <children>
                               <Label alignment="CENTER" styleClass="label-data" text="Interval" />
                               <HBox alignment="CENTER_LEFT">
                                  <children>
-                                    <ToggleButton fx:id="ToggleButton1Min" mnemonicParsing="false" selected="true" text="1-min">
+                                    <RadioButton fx:id="radioButton1Min" mnemonicParsing="false" text="1-min">
                                        <toggleGroup>
-                                          <ToggleGroup fx:id="IntervalToggleGroup" />
+                                          <ToggleGroup fx:id="toggleGroupInterval" />
                                        </toggleGroup>
-                                    </ToggleButton>
-                                    <ToggleButton fx:id="ToggleButton5Min" mnemonicParsing="false" text="5-min" toggleGroup="$IntervalToggleGroup" />
-                                    <ToggleButton fx:id="ToggleButton15Min" mnemonicParsing="false" text="15-min" toggleGroup="$IntervalToggleGroup" />
-                                    <ToggleButton fx:id="ToggleButton30Min" mnemonicParsing="false" text="30-min" toggleGroup="$IntervalToggleGroup" />
-                                    <ToggleButton fx:id="ToggleButton60Min" mnemonicParsing="false" text="60-min" toggleGroup="$IntervalToggleGroup" />
-                                    <ToggleButton fx:id="ToggleButtonDaily" mnemonicParsing="false" text="daily" toggleGroup="$IntervalToggleGroup" />
-                                    <ToggleButton fx:id="ToggleButtonWeekly" mnemonicParsing="false" text="weekly" toggleGroup="$IntervalToggleGroup" />
-                                    <ToggleButton fx:id="ToggleButtonMonthly" mnemonicParsing="false" text="monthly" toggleGroup="$IntervalToggleGroup" />
+                                    </RadioButton>
+                                    <RadioButton fx:id="radioButton5Min" mnemonicParsing="false" text="5-min" toggleGroup="$toggleGroupInterval" />
+                                    <RadioButton fx:id="radioButton15Min" mnemonicParsing="false" text="15-min" toggleGroup="$toggleGroupInterval" />
+                                    <RadioButton fx:id="radioButton30Min" mnemonicParsing="false" text="30-min" toggleGroup="$toggleGroupInterval" />
+                                    <RadioButton fx:id="radioButton60Min" mnemonicParsing="false" text="60-min" toggleGroup="$toggleGroupInterval" />
+                                    <RadioButton fx:id="radioButtonDaily" mnemonicParsing="false" text="Daily" toggleGroup="$toggleGroupInterval" />
+                                    <RadioButton fx:id="radioButtonWeekly" mnemonicParsing="false" text="Weekly" toggleGroup="$toggleGroupInterval" />
+                                    <RadioButton fx:id="radioButtonMonthly" mnemonicParsing="false" text="Monthly" toggleGroup="$toggleGroupInterval" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                         <HBox alignment="BOTTOM_CENTER">
                            <children>
-                              <ToggleButton fx:id="ToggleButtonRealTime" mnemonicParsing="false" selected="true" text="Real-time">
+                              <RadioButton fx:id="radioButtonRealTime" mnemonicParsing="false" text="Real-time">
                                  <toggleGroup>
-                                    <ToggleGroup fx:id="outputSizeToggleGroup" />
-                                 </toggleGroup></ToggleButton>
-                              <ToggleButton fx:id="ToggleButtonFullHistory" mnemonicParsing="false" text="Full history" toggleGroup="$outputSizeToggleGroup" />
+                                    <ToggleGroup fx:id="toggleGroupOutputType" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="radioButtonFullHistory" mnemonicParsing="false" text="Full History" toggleGroup="$toggleGroupOutputType" />
                            </children>
                         </HBox>
                         <Label text="Graph Type:">
@@ -252,7 +253,7 @@
                   <ImageView fx:id="imageMonthlyStockChange" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <ImageView fx:id="imageYearlyStockChange" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <Label fx:id="labelWeeklyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <Label fx:id="labelWeeklyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Label fx:id="labelWeeklyStockChangePercentage" styleClass="label-colour-change" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <Label fx:id="labelMonthlyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <Label fx:id="labelYearlyStockChange" styleClass="label-colour-change" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                   <Label fx:id="labelMonthlyStockChangePercentage" styleClass="label-colour-change" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5" />
