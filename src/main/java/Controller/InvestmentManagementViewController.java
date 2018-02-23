@@ -205,30 +205,40 @@ public class InvestmentManagementViewController {
         setupGraphComboBoxType();
 
         setupIntervalToggleGroup();
+
+        setupOutputSizeToggleGroup();
+    }
+
+    private void setupOutputSizeToggleGroup() {
+        toggleGroupOutputType.selectToggle(radioButtonRealTime);
+
+        // TODO on click functionality
     }
 
     private void setupIntervalToggleGroup() {
 
         // make toggle group always have at least 1 value selected by consuming the mouse event if that button is already selected
-
+        toggleGroupInterval.selectToggle(radioButton1Min);
         // setup onclick functionality
         toggleGroupInterval.selectedToggleProperty().addListener(this::onIntervalToggleGroupChanged);
     }
 
     private void onIntervalToggleGroupChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-
+        // cancel current stock data service
         chartUpdater.cancel();
+
+        // get string of button selected
         RadioButton selectedButton = (RadioButton) (toggleGroupInterval.getSelectedToggle());
         String selectedValue = selectedButton.getText();
-        System.out.println("interval button selected: " + selectedValue);
 
-        // update the
+        // update the internal model
         if (selectedValue.contains("min")) {
             setIntradayGraph(selectedValue);
         }else{
             setOtherGraph(selectedValue);
         }
 
+        // restart service
         chartUpdater.restart();
     }
 
