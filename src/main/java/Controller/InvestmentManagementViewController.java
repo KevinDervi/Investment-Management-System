@@ -3,6 +3,7 @@ package main.java.Controller;
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
 import javafx.beans.Observable;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -217,6 +218,77 @@ public class InvestmentManagementViewController {
         chartUpdater.start();
 
 
+
+        setupGraphComboBoxType();
+
+        setupIntervalToggleGroup();
+    }
+
+    private void setupIntervalToggleGroup() {
+
+        // make toggle group always have at least 1 value selected by consuming the mouse event if that button is already selected
+
+        // setup onclick functionality
+        IntervalToggleGroup.selectedToggleProperty().addListener(this::onIntervalToggleGroupChanged);
+    }
+
+    private void onIntervalToggleGroupChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+
+        // attempt at making the button un-selectable
+        if (oldValue.isSelected()) {
+            IntervalToggleGroup.selectToggle(oldValue);
+            return;
+        }
+
+
+        chartUpdater.cancel();
+        String selected = newValue.toString();
+        System.out.println("interval button selected: " + selected);
+        System.out.println("old interval buttong selected: " + oldValue.toString());
+        if (true) {
+
+        }
+    }
+
+    private void setIntradayGraph(String interval) {
+        // convert interval to time series intraday interval enum
+
+        //remove dash from string
+        interval = interval.replace("-", "");
+
+
+        if (interval == "1min") {
+
+            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1);
+
+        } else if (interval == "5min") {
+
+            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T5);
+
+        } else if (interval == "15min") {
+
+            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T15);
+
+        } else if (interval == "30min") {
+
+            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T30);
+
+        } else if (interval == "60min") {
+
+            StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T60);
+
+        } else {
+
+            // else throw an exception if an invalid toggle button is sent to this method
+            try {
+                throw new Exception("wrong toggle button selected for intraday time series");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void setupGraphComboBoxType(){
         // add graph types
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
@@ -437,7 +509,6 @@ public class InvestmentManagementViewController {
 
 
     }
-
 
 
 
