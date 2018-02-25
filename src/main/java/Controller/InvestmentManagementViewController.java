@@ -172,7 +172,7 @@ public class InvestmentManagementViewController {
 
         //createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
         //chartUpdater.setChartTypeToReturn(ChartType.LINE);
-        chartUpdater.restart();
+        //chartUpdater.restart();
 
         // TODO make buying and selling a service in the logic layer and have it communicate with the database and when successfull it will return a value which will be binded to the listview
 
