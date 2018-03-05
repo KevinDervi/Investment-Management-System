@@ -168,7 +168,7 @@ public class InvestmentManagementViewController {
     public void initialize(){
         // TODO populate users investments held
         // TODO populate stock data views initially with S&P 500 or dow jones
-        setupGraph();
+        initialiseGraph();
 
         //createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
         //chartUpdater.setChartTypeToReturn(ChartType.LINE);
@@ -190,7 +190,7 @@ public class InvestmentManagementViewController {
         // TODO start initial threads here
     }
 
-    private void setupGraph() {
+    private void initialiseGraph() {
         // set initial values for chart updater
         chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
 
@@ -206,13 +206,34 @@ public class InvestmentManagementViewController {
 
         setupIntervalToggleGroup();
 
-        setupOutputSizeToggleGroup();
+        initialiseOutputSizeToggleGroup();
     }
 
-    private void setupOutputSizeToggleGroup() {
+    private void initialiseOutputSizeToggleGroup() {
         toggleGroupOutputType.selectToggle(radioButtonRealTime);
 
         // TODO on click functionality
+        toggleGroupOutputType.selectedToggleProperty().addListener(this::onOutputSizeToggleGroupChanged);
+    }
+
+    private void onOutputSizeToggleGroupChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+        chartUpdater.cancel();
+
+        // get string of button selected
+        RadioButton selectedButton = (RadioButton) (toggleGroupOutputType.getSelectedToggle());
+        String selectedValue = selectedButton.getText();
+        System.out.println("=================test=================");
+        System.out.println(selectedValue);
+        // update logic layer
+        if (selectedValue.equals("Real-time")){
+            System.out.println("================inside real time===================");
+            StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
+        }else{
+            StockDataLogic.setOutputSize(StockOutputSize.FULL_HISTORY);
+        }
+
+        // restart service
+        chartUpdater.restart();
     }
 
     private void setupIntervalToggleGroup() {
