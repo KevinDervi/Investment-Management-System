@@ -1,6 +1,9 @@
 package main.java.logic;
 
 import com.zoicapital.stockchartsfx.BarData;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
@@ -16,6 +19,18 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class StockDataLogic {
+
+    private static StockDataUpdaterService stockDataUpdaterService;
+
+    public static StockDataUpdaterService getStockDataUpdaterService() {
+        if (stockDataUpdaterService == null){
+            stockDataUpdaterService = new StockDataUpdaterService();
+
+        }
+
+
+        return stockDataUpdaterService;
+    }
 
     // TODO add conversion methods for candlestick chart and normal line chart
 
@@ -107,9 +122,9 @@ public class StockDataLogic {
         return barData;
     }
 
-    public static void updateChartData() throws Exception{
+    public static void updateCurrentStockViewedData() throws Exception{
 
-        CurrentStockInformation.getInstance().updateChartData();
+        CurrentStockInformation.getInstance().updateStockData();
     }
 
 
@@ -137,9 +152,37 @@ public class StockDataLogic {
     /**
      * updates the internal data and UI every set interval
      */
-    public class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
+    public static class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
 
-        ChartType chartTypeToReturn = null; // should be candlestick or line
+        private ChartType chartTypeToReturn = null; // should be candlestick or line
+
+        private final StringProperty currentStockValue = new SimpleStringProperty(); // returns the current value as a string to be displayed
+
+        private final  StringProperty currentStockSymbol = new SimpleStringProperty();
+
+        public String getCurrentStockSymbol() {
+            return currentStockSymbol.get();
+        }
+
+        void setCurrentStockSymbol(String value) {
+            currentStockSymbol.set(value);
+        }
+
+        public StringProperty currentStockSymbolProperty() {
+            return currentStockSymbol;
+        }
+
+        public String getCurrentStockValue() {
+            return currentStockValue.get();
+        }
+
+        void setCurrentStockValue(String value) {
+            currentStockValue.set(value);
+        }
+
+        public StringProperty currentStockValueProperty() {
+            return currentStockValue;
+        }
 
         public StockDataUpdaterService() {
             super();
@@ -168,8 +211,13 @@ public class StockDataLogic {
                     System.out.println("task was cancelled");
                     return null;
                 }
-                StockDataLogic.updateChartData();
+                StockDataLogic.updateCurrentStockViewedData();
 
+                // place updating of custom property in run later since UI cannot be updated from background thread
+                Platform.runLater(() -> {
+                    setCurrentStockValue(CurrentStockInformation.getInstance().getCurrentValue().toString());
+                    setCurrentStockSymbol(CurrentStockInformation.getInstance().getStockSymbol());
+                });
 
                 if(isCancelled()){
                     System.out.println("task was cancelled");

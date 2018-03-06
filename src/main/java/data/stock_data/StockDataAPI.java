@@ -74,7 +74,29 @@ public class StockDataAPI {
     }
 
 
-    public JSONObject getSingleLatestStockData(String symbol){
+    public static JSONObject getSingleLatestStockData(String symbol) throws Exception{
+        String url = "https://www.alphavantage.co/query?";
+        url += "function=BATCH_STOCK_QUOTES";
+        url += "&symbols=";
+        url += symbol;
+        url += "&apikey=" + API_KEY;
+
+
+        URL stockURL = new URL(url);
+        JSONTokener tokener = new JSONTokener(stockURL.openStream());
+
+        JSONObject json = new JSONObject(tokener);
+
+
+        // look for an error message if none is found then return the data
+        try{
+            json.getString("Error Message");
+
+            // TODO if error then return JSON data from a local file
+        }catch (Exception e){
+            System.out.println("stock data retrieval successful");
+            return json;
+        }
         return null;
     }
 

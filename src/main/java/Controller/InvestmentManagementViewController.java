@@ -158,7 +158,7 @@ public class InvestmentManagementViewController {
     private Button ButtonSellStock;
 
     // data
-    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
+    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic.StockDataUpdaterService();
 
 
     /**
@@ -180,6 +180,8 @@ public class InvestmentManagementViewController {
 
         // update user details
         updateUserDetails();
+
+        initialiseStockPricesChangeFields();
 
         // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
 
@@ -212,7 +214,6 @@ public class InvestmentManagementViewController {
     private void initialiseOutputSizeToggleGroup() {
         toggleGroupOutputType.selectToggle(radioButtonRealTime);
 
-        // TODO on click functionality
         toggleGroupOutputType.selectedToggleProperty().addListener(this::onOutputSizeToggleGroupChanged);
     }
 
@@ -222,11 +223,9 @@ public class InvestmentManagementViewController {
         // get string of button selected
         RadioButton selectedButton = (RadioButton) (toggleGroupOutputType.getSelectedToggle());
         String selectedValue = selectedButton.getText();
-        System.out.println("=================test=================");
-        System.out.println(selectedValue);
+
         // update logic layer
         if (selectedValue.equals("Real-time")){
-            System.out.println("================inside real time===================");
             StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
         }else{
             StockDataLogic.setOutputSize(StockOutputSize.FULL_HISTORY);
@@ -384,7 +383,7 @@ public class InvestmentManagementViewController {
 
     private void updateGraph(){
         try {
-            StockDataLogic.updateChartData();
+            StockDataLogic.updateCurrentStockViewedData();
         } catch (Exception e) {
             System.out.println("unable to update chart data");
             e.printStackTrace();
@@ -579,7 +578,19 @@ public class InvestmentManagementViewController {
 
 
     // ===================================== STOCK PRICES CHANGE METHODS =================================
+    // TODO remove stock prices changes and substitute for current investment held values
+    private void initialiseStockPricesChangeFields(){
+        initilaiseStockPriceLabel();
+        initialiseStockSymbolLabel();
+    }
 
+    private void initilaiseStockPriceLabel(){
+        labelCurrentStockPrice.textProperty().bind(chartUpdater.currentStockValueProperty());
+    }
+
+    private void initialiseStockSymbolLabel() {
+        labelStockSymbol.textProperty().bind(chartUpdater.currentStockSymbolProperty());
+    }
 
     // ===================================== BUY/SELL BUTTON METHODS =====================================
 

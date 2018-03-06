@@ -5,6 +5,7 @@ import main.java.util.StockData;
 import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesType;
 import main.java.util.StockTimeSeriesIntradayInterval;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,8 @@ public class CurrentStockInformation {
     // TODO holds all the information on the current stock that the user is viewing
 
     private boolean stockMarketsClosed = false;
+
+    private BigDecimal currentValue;
 
     private ArrayList<StockData> chartData;
 
@@ -45,6 +48,10 @@ public class CurrentStockInformation {
             interval = null;
         }
         this.function = function;
+    }
+
+    public BigDecimal getCurrentValue() {
+        return currentValue;
     }
 
     public void setStockSymbol(String stockSymbol) {
@@ -84,7 +91,7 @@ public class CurrentStockInformation {
     }
 
     // updates the internal model with the latest stock data
-    public void updateChartData() throws Exception {
+    public void updateStockData() throws Exception {
         // TODO handle IO Exception 503 (server busy) by trying again in a few seconds
         // TODO also update if the stock markets are closed and ensure the user in unable to buy and sell
         // ensure there are no null values before data is retrieved
@@ -96,6 +103,52 @@ public class CurrentStockInformation {
         }
         assert outputSize != null;
 
+        updateChartData();
+
+        // get the current value of the stock
+        updateCurrentValue();
+
+    }
+
+    private void updateCurrentValue() throws Exception {
+        // get json data
+        JSONObject JSONStockDataCurrentValue;
+        try {
+            if(Thread.interrupted()){
+                System.out.println("stopping update of internal model due to thread interruption");
+                return;
+            }
+
+            JSONStockDataCurrentValue = StockDataAPI.getSingleLatestStockData(stockSymbol);
+
+            // this method should be run in a background thread and is checked if the thread is not interrupted before updating the internal model
+            if(Thread.interrupted()){
+                System.out.println("stopping update of internal model due to thread interruption");
+                return;
+            }
+
+            // data returned as an array
+            JSONArray jsonArray = JSONStockDataCurrentValue.getJSONArray("Stock Quotes");
+
+            // value that we need is stored in the first index of the array
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+            // get price as string instead of double to avoid losing information
+            String value = jsonObject.getString("2. price");
+
+            //update our current value
+            currentValue = new BigDecimal(value);
+
+        } catch (IOException e){
+            // 503 response code, try again in 2 seconds
+            System.out.println("503 response code (batch stock quotes single value), waiting 2 seconds and trying again");
+            Thread.sleep(2000);
+            // TODO limit to 3 tries only or may be infinite
+            updateCurrentValue();
+        }
+    }
+
+    private void updateChartData() throws Exception{
         // get json data
         JSONObject JSONStockData;
         try {
@@ -126,13 +179,6 @@ public class CurrentStockInformation {
             // TODO limit to 3 tries only or may be infinite
             updateChartData();
         }
-
-
-
-
-
-        // convert json to arraylist
-
     }
 
     private ArrayList<StockData> toArrayList(JSONObject data) throws JSONException {
