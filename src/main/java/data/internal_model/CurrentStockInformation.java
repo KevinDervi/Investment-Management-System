@@ -104,10 +104,10 @@ public class CurrentStockInformation {
         assert outputSize != null;
 
         updateChartData();
-
+        System.out.println("chart updated line 107 currentstockinformation");
         // get the current value of the stock
         updateCurrentValue();
-
+        System.out.println("value updated line 110 currentstockinformation");
     }
 
     private void updateCurrentValue() throws Exception {
@@ -145,6 +145,11 @@ public class CurrentStockInformation {
             Thread.sleep(2000);
             // TODO limit to 3 tries only or may be infinite
             updateCurrentValue();
+
+        } catch (JSONException e) { // if the array for current is empty (which it appears to be for SPX (S&P 500)
+            System.out.println("empty single stock batch quotes");
+            // return a default value of 0
+            currentValue = null;
         }
     }
 

@@ -19,18 +19,18 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class StockDataLogic {
-
-    private static StockDataUpdaterService stockDataUpdaterService;
-
-    public static StockDataUpdaterService getStockDataUpdaterService() {
-        if (stockDataUpdaterService == null){
-            stockDataUpdaterService = new StockDataUpdaterService();
-
-        }
-
-
-        return stockDataUpdaterService;
-    }
+    // TODO attempt to make the service run in the logic layer and update the UI from here (potentially illtegalStateException so try with a dummy serivce first)
+//    private static StockDataUpdaterService stockDataUpdaterService;
+//
+//    public static StockDataUpdaterService getStockDataUpdaterService() {
+//        if (stockDataUpdaterService == null){
+//            stockDataUpdaterService = new StockDataUpdaterService();
+//
+//        }
+//
+//
+//        return stockDataUpdaterService;
+//    }
 
     // TODO add conversion methods for candlestick chart and normal line chart
 
@@ -152,7 +152,7 @@ public class StockDataLogic {
     /**
      * updates the internal data and UI every set interval
      */
-    public static class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
+    public class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
 
         private ChartType chartTypeToReturn = null; // should be candlestick or line
 
@@ -212,13 +212,21 @@ public class StockDataLogic {
                     return null;
                 }
                 StockDataLogic.updateCurrentStockViewedData();
+                System.out.println("=============================================test===============================");
 
                 // place updating of custom property in run later since UI cannot be updated from background thread
                 Platform.runLater(() -> {
-                    setCurrentStockValue(CurrentStockInformation.getInstance().getCurrentValue().toString());
+                    try {
+                        setCurrentStockValue(CurrentStockInformation.getInstance().getCurrentValue().toString());
+                    } catch (NullPointerException e){
+                        // current stock value == null
+                        setCurrentStockValue("N/A");
+                    }
+
+
                     setCurrentStockSymbol(CurrentStockInformation.getInstance().getStockSymbol());
                 });
-
+                System.out.println("=============================================test===============================");
                 if(isCancelled()){
                     System.out.println("task was cancelled");
                     return null;

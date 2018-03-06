@@ -158,7 +158,7 @@ public class InvestmentManagementViewController {
     private Button ButtonSellStock;
 
     // data
-    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic.StockDataUpdaterService();
+    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
 
 
     /**
