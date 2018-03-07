@@ -1,13 +1,17 @@
 package main.java.data.stock_data;
 
+import main.java.util.Company;
 import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesType;
 import main.java.util.StockTimeSeriesIntradayInterval;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.*;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class StockDataAPI {
 
@@ -100,7 +104,51 @@ public class StockDataAPI {
         return null;
     }
 
-    public JSONObject getmultipleLatestStockData(HashSet<String> symbols){
+    public static List<JSONObject> getmultipleLatestStockData(HashSet<String> symbols){
         return null;
     }
+
+    public static Set<Company> getStockMarketCompanyList(){
+
+        Set<Company> companies = new HashSet<>();
+        BufferedReader bufferedReader = null;
+
+        try {
+            String line;
+
+
+            bufferedReader = new BufferedReader(new InputStreamReader(StockDataAPI.class.getResourceAsStream("/main/resources/company_data/companylist.csv")));
+
+            //bufferedReader = new BufferedReader(new FileReader("main/resources/company_data/companylist.csv"));
+
+            // ignore first line
+            bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null) {
+
+                String[] companyLine = line.split(","); // separated by commas
+
+                String companySymbol = companyLine[0].replace("\"", "");
+                String companyName = companyLine[1].replace("\"", "");
+
+                Company company = new Company(companySymbol, companyName);
+
+                companies.add(company);
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return companies;
+    }
+
 }
