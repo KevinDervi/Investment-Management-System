@@ -36,6 +36,9 @@ public class InvestmentManagementViewController {
     private TextField TextFieldStockSearch;
 
     @FXML
+    private ContextMenu contextMenuStockSearch;
+
+    @FXML
     private Button ButtonDeleteSearchText;
 
     @FXML
