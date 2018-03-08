@@ -25,7 +25,7 @@ public class StockSearchTextField extends TextField {
     private ObservableSet<StockSearchMenuItem> filteredStockSearchMenuItems;
 
     private static final int CONTEXT_MENU_DISPLAY_LIMIT = 20;
-
+    // TODO make search text field a combo box instead since context menu cannot get selected item
     public StockSearchTextField() {
         super();
 
@@ -35,6 +35,10 @@ public class StockSearchTextField extends TextField {
 
         // filter context menu when typing
         textProperty().addListener(this::onTextChanged);
+        contextMenuStocks.onActionProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("context listener test ====");
+            System.out.println(newValue);
+        });
 
     }
 
