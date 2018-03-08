@@ -1,4 +1,4 @@
-package main.java.Controller;
+package main.java.controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import main.java.controller.customviews.InvestmentHeldListCell;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
 import main.java.util.*;
@@ -33,7 +34,7 @@ public class InvestmentManagementViewController {
     private Button ButtonDespositWirthdraw;
 
     @FXML
-    private TextField TextFieldStockSearch;
+    private TextField textFieldStockSearch;
 
     @FXML
     private ContextMenu contextMenuStockSearch;
@@ -185,6 +186,8 @@ public class InvestmentManagementViewController {
         updateUserDetails();
 
         initialiseStockPricesChangeFields();
+
+        initialiseSearchFeield();
 
         // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
 
@@ -570,7 +573,10 @@ public class InvestmentManagementViewController {
 
 
     // ===================================== SEARCH FIELD METHODS ========================================
+    private void initialiseSearchFeield(){
+        //textFieldStockSearch = new StockSearchTextField();
 
+    }
 
     // ===================================== INVESTMENTS HELD METHODS ====================================
 

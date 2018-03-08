@@ -109,33 +109,25 @@ public class StockDataAPI {
     }
 
     public static Set<Company> getStockMarketCompanyList(){
+        Set<Company> companies = new HashSet<>();
 
+        companies.addAll(getNASDAQCompanies());
+        companies.addAll(getNYSECompanies());
+
+        return companies;
+    }
+
+    private static Set<Company> getNASDAQCompanies(){
         Set<Company> companies = new HashSet<>();
         BufferedReader bufferedReader = null;
 
         try {
-            String line;
-
-
-            bufferedReader = new BufferedReader(new InputStreamReader(StockDataAPI.class.getResourceAsStream("/main/resources/company_data/companylist.csv")));
-
-            //bufferedReader = new BufferedReader(new FileReader("main/resources/company_data/companylist.csv"));
+            bufferedReader = new BufferedReader(new InputStreamReader(StockDataAPI.class.getResourceAsStream("/main/resources/company_data/companylist NASDAQ.csv")));
 
             // ignore first line
             bufferedReader.readLine();
 
-            while ((line = bufferedReader.readLine()) != null) {
-
-                String[] companyLine = line.split(","); // separated by commas
-
-                String companySymbol = companyLine[0].replace("\"", "");
-                String companyName = companyLine[1].replace("\"", "");
-
-                Company company = new Company(companySymbol, companyName);
-
-                companies.add(company);
-
-            }
+            companies = readFromCompanyListCSV(companies, bufferedReader);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,6 +140,50 @@ public class StockDataAPI {
                 }
             }
         }
+        return companies;
+    }
+
+    private static Set<Company> getNYSECompanies(){
+        Set<Company> companies = new HashSet<>();
+        BufferedReader bufferedReader = null;
+
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(StockDataAPI.class.getResourceAsStream("/main/resources/company_data/companylist NYSE.csv")));
+
+            // ignore first line
+            bufferedReader.readLine();
+
+            companies = readFromCompanyListCSV(companies, bufferedReader);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return companies;
+    }
+
+    private static Set<Company> readFromCompanyListCSV(Set<Company> companies, BufferedReader bufferedReader) throws IOException {
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+
+            String[] companyLine = line.split(","); // separated by commas
+
+            String companySymbol = companyLine[0].replace("\"", "");
+            String companyName = companyLine[1].replace("\"", "");
+
+            Company company = new Company(companySymbol, companyName);
+
+            companies.add(company);
+
+        }
+
         return companies;
     }
 

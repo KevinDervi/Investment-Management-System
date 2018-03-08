@@ -1,16 +1,12 @@
-package main.java.Controller;
+package main.java.controller.customviews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import main.java.util.InvestmentHeld;
-
-import java.io.IOException;
 
 public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
@@ -37,7 +33,7 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
     private GridPane grid;
 
 
-    InvestmentHeldListCell() {
+    public InvestmentHeldListCell() {
         super();
 
         // load fxml when creating cell
@@ -66,7 +62,6 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             setText(null);
         }else{
             // update the cell here
-            //setText("test1");
 
             labelStockSymbol.setText(investmentHeld.getStockSymbol());
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox fx:id="menuItemContainer" fillHeight="false" spacing="4.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="symbol" text="Symbol" />
+      <Label fx:id="companyName" text="Company Name" />
+   </children>
+</HBox>

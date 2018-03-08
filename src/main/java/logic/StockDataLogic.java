@@ -11,6 +11,7 @@ import javafx.concurrent.Task;
 import javafx.scene.chart.XYChart;
 import javafx.util.Duration;
 import main.java.data.internal_model.CurrentStockInformation;
+import main.java.data.stock_data.StockDataAPI;
 import main.java.util.*;
 
 import java.text.SimpleDateFormat;
@@ -248,5 +249,9 @@ public class StockDataLogic {
         }
 
 
+    }
+
+    public static Set<Company> getSetOfCompanies(){
+        return StockDataAPI.getStockMarketCompanyList();
     }
 }
