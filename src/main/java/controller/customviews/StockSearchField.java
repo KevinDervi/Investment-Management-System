@@ -6,6 +6,7 @@ import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import main.java.logic.StockDataLogic;
 import main.java.util.Company;
@@ -37,6 +38,16 @@ public class StockSearchField extends ComboBox<Company> {
 
         this.setCellFactory(param -> new CompanyCell());
 
+        initialiseCSS();
+
+    }
+
+    private void initialiseCSS() {
+        AnchorPane.setRightAnchor(this, 0.0);
+        AnchorPane.setLeftAnchor(this, 0.0);
+
+        this.getStyleClass().clear();
+        this.getStyleClass().add("search-combo-box");
 
     }
 
@@ -83,8 +94,13 @@ public class StockSearchField extends ComboBox<Company> {
             // hide before showing to graphically update dropdown menu
             this.hide();
             this.getItems().clear();
-            this.getItems().setAll(filteredStockSearchCells);
-            this.show();
+
+            // if there is at least 1 result then show dropdown otherwise keep it hidden
+            if(filteredStockSearchCells.size() > 0){
+                this.getItems().setAll(filteredStockSearchCells);
+                this.show();
+            }
+
         }
     }
 

@@ -249,3 +249,13 @@
 .list-view .list-cell:empty{
     -fx-background-color: transparent;
 }
+
+.search-combo-box{
+    -fx-border-color:  #00bcd4;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+
+    -fx-prompt-text-fill: "Search For Stock";
+    -fx-pref-width: 200;
+    -fx-max-width: 200;
+}
