@@ -10,7 +10,9 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import main.java.controller.customviews.InvestmentHeldListCell;
+import main.java.controller.customviews.StockSearchField;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
 import main.java.util.*;
@@ -32,6 +34,9 @@ public class InvestmentManagementViewController {
 
     @FXML
     private Button ButtonDespositWirthdraw;
+
+    @FXML
+    private AnchorPane anchorPaneSearchField;
 
     @FXML
     private ComboBox<Company> comboBoxStockSearch;
@@ -571,7 +576,11 @@ public class InvestmentManagementViewController {
 
     // ===================================== SEARCH FIELD METHODS ========================================
     private void initialiseSearchFeield(){
-        //textFieldStockSearch = new StockSearchTextField();
+
+        // replace the default combo box with our own custom combo box
+        comboBoxStockSearch = new StockSearchField();
+        anchorPaneSearchField.getChildren().set(0, comboBoxStockSearch);
+
 
     }
 
