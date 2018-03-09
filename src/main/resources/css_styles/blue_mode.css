@@ -255,7 +255,6 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 
-    -fx-prompt-text-fill: "Search For Stock";
     -fx-pref-width: 200;
     -fx-max-width: 200;
 
@@ -264,6 +263,5 @@
 .search-combo-box .list-view .list-cell{
     -fx-max-width: 200;
     -fx-pref-width: 200;
-    -fx-text-alignment: Left;
-    -fx-content-display: Left;
+
 }

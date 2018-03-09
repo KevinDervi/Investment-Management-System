@@ -590,24 +590,21 @@ public class InvestmentManagementViewController {
     private void onStockSelected(ObservableValue<? extends Company> observable, Company oldValue, Company newValue) {
 
         // if null was selected then do nothing
-        if(oldValue == null){
+        if(newValue == null){
             return;
         }
-        System.out.println(oldValue.getSymbol() + " was selected");
+        System.out.println(newValue.getSymbol() + " was selected");
 
         // cancel the current service
         chartUpdater.cancel();
 
         // update the stock to search for
-        StockDataLogic.setStockSymbol(oldValue.getSymbol());
+        StockDataLogic.setStockSymbol(newValue.getSymbol());
 
         //restart the service
         chartUpdater.restart();
 
-        // remove the text that was entered after use selects item
-        //comboBoxStockSearch.setValue(null);
-        //comboBoxStockSearch.getSelectionModel().clearSelection();
-        //comboBoxStockSearch.getEditor().setText("");
+        // TODO deselect an investment held currently selected
     }
 
     // ===================================== INVESTMENTS HELD METHODS ====================================

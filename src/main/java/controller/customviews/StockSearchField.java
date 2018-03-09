@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 
 public class StockSearchField extends ComboBox<Company> {
     private HashSet<Company> stockSearchMenuItemSet = new HashSet<>();
+    ObservableSet<Company> filteredStockSearchCells = FXCollections.observableSet();
 
     private static final int LIST_DISPLAY_LIMIT = 20;
 
@@ -33,14 +34,16 @@ public class StockSearchField extends ComboBox<Company> {
         // allow the user to type text
         setEditable(true);
 
+        setPromptText("Search For Stock");
+
         // filter context menu when typing
         this.getEditor().textProperty().addListener(this::onTextChanged);
 
-        this.setConverter(new StringConverter<Company>() {
+        this.setConverter(new StringConverter<>() {
             @Override
             public String toString(Company object) {
                 if (object == null) return null;
-                return object.getSymbol();
+                return null;//object.getSymbol();
             }
 
             @Override
@@ -48,6 +51,7 @@ public class StockSearchField extends ComboBox<Company> {
                 return null;
             }
         });
+
         this.setCellFactory(param -> new CompanyCell());
 
         initialiseCSS();
@@ -69,15 +73,19 @@ public class StockSearchField extends ComboBox<Company> {
     }
 
     private void onTextChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if (newValue.length() == 0) {
-            this.hide();
-        } else {
+        // hide before showing to graphically update dropdown menu
+        this.hide();
 
+
+        // if there is a non null value that is greater than 0 then update dropdown menu
+        if (newValue != null && newValue.length() > 0) {
+            this.getItems().clear();
             // deep copy required otherwise original set is passed by reference
             Set<Company> deepCopy = new HashSet<>(stockSearchMenuItemSet);
 
             // observable set that will be filtered for display
-            ObservableSet<Company> filteredStockSearchCells = FXCollections.observableSet(deepCopy);
+            filteredStockSearchCells.clear();
+            filteredStockSearchCells.addAll(deepCopy);
 
             // filter list
             filteredStockSearchCells.removeIf(stockSearchCompany -> {
@@ -103,16 +111,13 @@ public class StockSearchField extends ComboBox<Company> {
                 filteredStockSearchCells.addAll(temp);
             }
 
-            // hide before showing to graphically update dropdown menu
-            this.hide();
-            this.getItems().clear();
+
 
             // if there is at least 1 result then show dropdown otherwise keep it hidden
             if(filteredStockSearchCells.size() > 0){
                 this.getItems().addAll(filteredStockSearchCells);
                 this.show();
             }
-
         }
     }
 
