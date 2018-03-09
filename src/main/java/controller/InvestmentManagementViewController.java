@@ -581,7 +581,33 @@ public class InvestmentManagementViewController {
         comboBoxStockSearch = new StockSearchField();
         anchorPaneSearchField.getChildren().set(0, comboBoxStockSearch);
 
+        // on click functionality
+        //comboBoxStockSearch.valueProperty().addListener(this::onStockSelected);
+        comboBoxStockSearch.selectionModelProperty().getValue().selectedItemProperty().addListener(this::onStockSelected);
 
+    }
+
+    private void onStockSelected(ObservableValue<? extends Company> observable, Company oldValue, Company newValue) {
+
+        // if null was selected then do nothing
+        if(newValue == null){
+            return;
+        }
+        System.out.println(newValue + " was selected");
+
+        // cancel the current service
+        chartUpdater.cancel();
+
+        // update the stock to search for
+        StockDataLogic.setStockSymbol(newValue.getSymbol());
+
+        //restart the service
+        chartUpdater.restart();
+
+        // remove the text that was entered after use selects item
+        //comboBoxStockSearch.setValue(null);
+        comboBoxStockSearch.getSelectionModel().clearSelection();
+        //comboBoxStockSearch.getEditor().setText("");
     }
 
     // ===================================== INVESTMENTS HELD METHODS ====================================

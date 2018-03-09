@@ -162,5 +162,10 @@ public class StockSearchField extends ComboBox<Company> {
         public String getCompanyName() {
             return companyName.getText();
         }
+
+        @Override
+        public String toString() {
+            return "Company with Symbol: " + getSymbol();
+        }
     }
 }
