@@ -34,10 +34,7 @@ public class InvestmentManagementViewController {
     private Button ButtonDespositWirthdraw;
 
     @FXML
-    private TextField textFieldStockSearch;
-
-    @FXML
-    private ContextMenu contextMenuStockSearch;
+    private ComboBox<Company> comboBoxStockSearch;
 
     @FXML
     private Button ButtonDeleteSearchText;
