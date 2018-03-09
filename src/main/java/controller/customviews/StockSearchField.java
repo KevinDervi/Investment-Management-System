@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
 import main.java.logic.StockDataLogic;
 import main.java.util.Company;
 
@@ -35,7 +36,18 @@ public class StockSearchField extends ComboBox<Company> {
         // filter context menu when typing
         this.getEditor().textProperty().addListener(this::onTextChanged);
 
+        this.setConverter(new StringConverter<Company>() {
+            @Override
+            public String toString(Company object) {
+                if (object == null) return null;
+                return object.getSymbol();
+            }
 
+            @Override
+            public Company fromString(String string) {
+                return null;
+            }
+        });
         this.setCellFactory(param -> new CompanyCell());
 
         initialiseCSS();
@@ -97,7 +109,7 @@ public class StockSearchField extends ComboBox<Company> {
 
             // if there is at least 1 result then show dropdown otherwise keep it hidden
             if(filteredStockSearchCells.size() > 0){
-                this.getItems().setAll(filteredStockSearchCells);
+                this.getItems().addAll(filteredStockSearchCells);
                 this.show();
             }
 

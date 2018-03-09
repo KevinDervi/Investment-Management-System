@@ -24,8 +24,9 @@ public final class Company {
         return companyName;
     }
 
-    @Override
-    public String toString() {
-        return "Company Symbol: " + symbol + ", Company Name: " + companyName;
-    }
+//    @Override
+//    public String toString() {
+//        // to be compatible with stock search combo box
+//        return ""; //return "Company Symbol: " + symbol + ", Company Name: " + companyName;
+//    }
 }
