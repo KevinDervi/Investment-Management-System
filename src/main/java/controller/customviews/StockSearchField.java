@@ -19,10 +19,8 @@ import javafx.scene.control.Label;
 
 public class StockSearchField extends ComboBox<Company> {
     private HashSet<Company> stockSearchMenuItemSet = new HashSet<>();
-    private ObservableSet<Company> stockSearchCells = FXCollections.observableSet();
-    private ObservableSet<Company> filteredStockSearchCells;
 
-    private static final int CONTEXT_MENU_DISPLAY_LIMIT = 20;
+    private static final int LIST_DISPLAY_LIMIT = 20;
 
     // TODO make search text field a combo box instead since context menu cannot get selected item
     public StockSearchField() {
@@ -43,26 +41,20 @@ public class StockSearchField extends ComboBox<Company> {
     }
 
     private void initialiseCompanyList() {
-//        HashSet<Company> set = new HashSet<>();
-//
-//        for (Company c : StockDataLogic.getSetOfCompanies()) {
-//            set.add(new CompanyCell(c));
-//        }
-//      // TODO call Stock data logic only once
+        // store whole list of companies and
         stockSearchMenuItemSet = new HashSet<>(StockDataLogic.getSetOfCompanies());
-
-        // add set of companies for filtering and displaying
-        stockSearchCells.addAll(StockDataLogic.getSetOfCompanies());
     }
 
     private void onTextChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if (newValue.length() == 0) {
-            System.out.println("context menu hidden ==================================");
+            this.hide();
         } else {
 
             // deep copy required otherwise original set is passed by reference
             Set<Company> deepCopy = new HashSet<>(stockSearchMenuItemSet);
-            filteredStockSearchCells = FXCollections.observableSet(deepCopy);
+
+            // observable set that will be filtered for display
+            ObservableSet<Company> filteredStockSearchCells = FXCollections.observableSet(deepCopy);
 
             // filter list
             filteredStockSearchCells.removeIf(stockSearchCompany -> {
@@ -76,10 +68,10 @@ public class StockSearchField extends ComboBox<Company> {
             });
 
             // limit size to display
-            if (filteredStockSearchCells.size() > CONTEXT_MENU_DISPLAY_LIMIT) {
+            if (filteredStockSearchCells.size() > LIST_DISPLAY_LIMIT) {
                 ObservableSet<Company> temp = FXCollections.observableSet();
                 Iterator iterator = filteredStockSearchCells.iterator();
-                for (int i = 0; i < CONTEXT_MENU_DISPLAY_LIMIT; i++) {
+                for (int i = 0; i < LIST_DISPLAY_LIMIT; i++) {
                     temp.add((Company) iterator.next());
                 }
 
@@ -87,11 +79,12 @@ public class StockSearchField extends ComboBox<Company> {
                 filteredStockSearchCells.clear();
                 filteredStockSearchCells.addAll(temp);
             }
+
+            // hide before showing to graphically update dropdown menu
+            this.hide();
             this.getItems().clear();
             this.getItems().setAll(filteredStockSearchCells);
-
-            System.out.println("context menu shown =========================== " + filteredStockSearchCells.size());
-
+            this.show();
         }
     }
 
@@ -122,11 +115,6 @@ public class StockSearchField extends ComboBox<Company> {
                 System.out.println("unable to load FXMl when creating a Stock Search Menu Item");
             }
 
-//            symbol.setText(company.getSymbol());
-//            companyName.setText(company.getCompanyName());
-
-//            setText(null);
-//            setGraphic(menuItemContainer);
         }
 
         @Override
@@ -134,9 +122,8 @@ public class StockSearchField extends ComboBox<Company> {
 
             super.updateItem(company, empty);
 
-            System.out.println("update stock search item");
             // standard required for the cell
-            if(empty){
+            if(empty || company == null){
                 setGraphic(null);
                 setText(null);
             }else{
