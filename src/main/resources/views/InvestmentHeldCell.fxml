@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -28,6 +29,9 @@
       <Label fx:id="labelPriceDifferenceValue" text="value" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <Label text="Quantity Owned:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Label fx:id="labelQuantityownedValue" text="value" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <ImageView fx:id="imageArrow" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
+      <ImageView fx:id="imageArrow" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets right="15.0" />
+         </GridPane.margin></ImageView>
    </children>
 </GridPane>

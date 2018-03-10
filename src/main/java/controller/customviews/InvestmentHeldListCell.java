@@ -4,12 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.java.logic.InvestmentsHeldLogic;
 import main.java.util.InvestmentHeld;
 
+import java.io.File;
 import java.math.BigDecimal;
 
 public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
@@ -81,12 +83,14 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             BigDecimal priceDifference = currentPrice.subtract(priceBought);
 
             // if value is positive then colour will be green otherwise red
-            labelPriceDifferenceValue.getStyleClass().toString();
             if (priceDifference.compareTo(BigDecimal.ZERO) > 0){
                 labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-green");
+                Image positiveIndicator = new Image("file:src/main/resources/images/green_up_triangle.png");
+                imageArrow.setImage(positiveIndicator);
             }else{
                 labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-red");
-
+                Image negativeIndicator = new Image("file:src/main/resources/images/red_down_triangle.png");
+                imageArrow.setImage(negativeIndicator);
             }
             labelPriceDifferenceValue.setText(priceDifference.toString());
 
