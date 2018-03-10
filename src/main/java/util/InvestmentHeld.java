@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 /**
  * similar to stockBuy object but quantity bought is quantity left and broker fee is not stored
  */
-public class InvestmentHeld {
+public class InvestmentHeld { // TODO make an equals method that compares based on transactionId
     private Long transactionId;
     private BigDecimal individualPriceBought;
     private String stockSymbol;
