@@ -13,13 +13,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import main.java.controller.customviews.InvestmentHeldListCell;
 import main.java.controller.customviews.StockSearchField;
+import main.java.logic.InvestmentsHeldLogic;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
 import main.java.util.*;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -190,6 +190,8 @@ public class InvestmentManagementViewController {
         initialiseStockPricesChangeFields();
 
         initialiseSearchFeield();
+
+        initialiseInvestmentsHeldList();
 
         // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
 
@@ -501,47 +503,6 @@ public class InvestmentManagementViewController {
     private void updateUserDetails(){
         updateUsername();
         updateBalance();
-        updateInvestmentsHeld();
-    }
-
-    private void updateInvestmentsHeld() {
-        ObservableList<InvestmentHeld> listCells = FXCollections.observableArrayList();
-
-        InvestmentHeld test1 = new InvestmentHeld(1L, new BigDecimal("5.234"), "GOOG", 5L, new Timestamp(System.currentTimeMillis()));
-        InvestmentHeld test2 = new InvestmentHeld(2L, new BigDecimal("6.000"), "AAPL", 5L, new Timestamp(System.currentTimeMillis()));
-
-
-        // setup cell factory to create my custom cell and use its overridden updateItem() method
-        ListViewInvestmentHeld.setCellFactory(param -> new InvestmentHeldListCell());
-
-        // bind service here
-        //ListViewInvestmentHeld.itemsProperty().bind();
-
-        listCells.addListener((ListChangeListener<InvestmentHeld>) c -> {
-
-            ListViewInvestmentHeld.getItems().setAll(c.getList());
-        });
-
-        // only allow user to select a single investment at a time
-        ListViewInvestmentHeld.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-
-        //on selecting an investment
-        ListViewInvestmentHeld.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            System.out.println(newValue.getStockSymbol() + "was selected");
-
-            // cancel the current service
-            chartUpdater.cancel();
-
-            // update the stock to search for
-            StockDataLogic.setStockSymbol(newValue.getStockSymbol());
-
-            //restart the service
-            chartUpdater.restart();
-        });
-
-        listCells.addAll(test1, test2);
     }
 
     private void updateUsername(){
@@ -609,6 +570,42 @@ public class InvestmentManagementViewController {
 
     // ===================================== INVESTMENTS HELD METHODS ====================================
 
+    private void initialiseInvestmentsHeldList(){
+        // setup cell factory to create my custom cell and use its overridden updateItem() method
+        ListViewInvestmentHeld.setCellFactory(param -> new InvestmentHeldListCell());
+
+        // bind service here
+        //ListViewInvestmentHeld.itemsProperty().bind();
+
+        InvestmentsHeldLogic.addListenerToInvestmentsHeld((ListChangeListener<InvestmentHeld>) c -> {
+            System.out.println("listview updated");
+            ListViewInvestmentHeld.getItems().setAll(c.getList());
+        });
+
+        // only allow user to select a single investment at a time
+        ListViewInvestmentHeld.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+
+        //on selecting an investment
+        ListViewInvestmentHeld.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            System.out.println(newValue.getStockSymbol() + "was selected");
+
+            // cancel the current service
+            chartUpdater.cancel();
+
+            // update the stock to search for
+            StockDataLogic.setStockSymbol(newValue.getStockSymbol());
+
+            //restart the service
+            chartUpdater.restart();
+        });
+    }
+
+    private void updateInvestmentsHeld() {
+        // TODO get list from logic layer and add here
+
+    }
     // ===================================== TECHNICAL INDICATORS METHODS ================================
 
 

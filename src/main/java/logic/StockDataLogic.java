@@ -154,7 +154,7 @@ public class StockDataLogic {
      * updates the internal data and UI every set interval
      */
     public class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
-
+        // TODO add listener for Investments Held and update
         private ChartType chartTypeToReturn = null; // should be candlestick or line
 
         private final StringProperty currentStockValue = new SimpleStringProperty(); // returns the current value as a string to be displayed
@@ -213,7 +213,9 @@ public class StockDataLogic {
                     return null;
                 }
                 StockDataLogic.updateCurrentStockViewedData();
-                System.out.println("=============================================test===============================");
+
+                // update investment values
+                InvestmentsHeldLogic.updateInvestmentsHeld();
 
                 // place updating of custom property in run later since UI cannot be updated from background thread
                 Platform.runLater(() -> {

@@ -3,11 +3,10 @@ package main.java.data.database;
 import main.java.data.internal_model.UserDetails;
 import main.java.util.InvestmentHeld;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class InvestmentsHeldDAO {
@@ -129,6 +128,57 @@ public class InvestmentsHeldDAO {
     }
 
     public static ArrayList<InvestmentHeld> getAllInvestments(){
-        return null;
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement statement = null;
+
+        ArrayList<InvestmentHeld> investments = new ArrayList<>();
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
+
+            statement = conn.createStatement();
+            String query = "SELECT transactionId, individualPrice, stockSymbol, quantityLeft, timeOfTransaction " +
+                    "FROM ((InvestmentsHeld " +
+                    "INNER JOIN StockBuy ON stockBuyId = transactionId )" +
+                    "INNER JOIN Transaction ON transactionId = id) " +
+                    "WHERE " +
+                    "InvestmentsHeld.userId = " + UserDetails.getInstance().getId()
+                    ;
+
+
+            System.out.println(query);
+            rs = statement.executeQuery(query);
+
+            investments = convertToArrayListInvestmentHeld(rs);
+
+        } catch (SQLException e) {
+            System.out.println("error inserting investment held");
+            e.printStackTrace();
+        }finally {
+            PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
+        }
+
+        return investments;
+    }
+
+    private static ArrayList<InvestmentHeld> convertToArrayListInvestmentHeld(ResultSet rs) throws SQLException{
+        ArrayList<InvestmentHeld> data = new ArrayList<>();
+
+        ResultSetMetaData resultSetMetaData = rs.getMetaData();
+        int noOfColumns = resultSetMetaData.getColumnCount();
+
+        while(rs.next()){
+
+            long transactionId = rs.getLong("transactionId");
+            BigDecimal individualPrice = rs.getBigDecimal("individualPrice");
+            String stockSymbol = rs.getString("stockSymbol");
+            long quantityLeft = rs.getLong("quantityLeft");
+            Timestamp timeOfTransaction = rs.getTimestamp("timeOfTransaction");
+
+            data.add(new InvestmentHeld(transactionId,individualPrice,stockSymbol,quantityLeft,timeOfTransaction));
+        }
+
+        return data;
+
     }
 }

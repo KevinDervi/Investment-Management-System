@@ -38,7 +38,11 @@ public class StockBuyDAO {
 
             // insert what was just bought into investments held
             InvestmentsHeldDAO.addInvesntment(transactionId, quantity);
-            // TODO remove amount invested (individual price x quantitity) from user balance
+
+            // total paid by user = (individual price * quantity) + transaction fee
+            BigDecimal totalPaid = individualPrice.multiply(new BigDecimal(quantity)).add(BrokerFee.getTransactionFee().negate());
+            System.out.println("total paid by user: " + totalPaid);
+            UserDAO.modifyBalanceBy(totalPaid);
 
 
         } catch (SQLException e) {

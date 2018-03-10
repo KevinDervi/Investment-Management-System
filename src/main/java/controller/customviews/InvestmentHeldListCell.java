@@ -6,7 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import main.java.logic.InvestmentsHeldLogic;
 import main.java.util.InvestmentHeld;
+
+import java.math.BigDecimal;
 
 public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
@@ -64,6 +68,27 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             // update the cell here
 
             labelStockSymbol.setText(investmentHeld.getStockSymbol());
+
+            BigDecimal currentPrice = InvestmentsHeldLogic.getCurrentPrice(investmentHeld.getStockSymbol());
+            labelCurrentPriceValue.setText(currentPrice.toString());
+
+            BigDecimal priceBought = investmentHeld.getIndividualPriceBought();
+            labelPriceBoughtValue.setText(priceBought.toString());
+
+            BigDecimal priceDifference = currentPrice.subtract(priceBought);
+
+            // if value is positive then colour will be green otherwise red
+            if (priceDifference.compareTo(BigDecimal.ZERO) > 0){
+                //labelPriceDifferenceValue.setTextFill(Color.GREEN);
+                labelPriceDifferenceValue.getStyleClass().add("label-colour-green");
+            }else{
+                labelPriceDifferenceValue.setTextFill(Color.RED);
+                labelPriceDifferenceValue.getStyleClass().add("label-colour-red");
+
+            }
+            labelPriceDifferenceValue.setText(priceDifference.toString());
+
+            labelQuantityownedValue.setText(investmentHeld.getQuantityLeft().toString());
 
             // finally set graphic as grid
 

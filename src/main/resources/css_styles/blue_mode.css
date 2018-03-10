@@ -110,6 +110,14 @@
     -fx-text-fill: purple;
 }
 
+.label-colour-green{
+    -fx-text-fill: lightgreen;
+}
+
+.label-colour-red{
+    -fx-text-fill: red;
+}
+
 .text-field {
     -fx-border-color:  #00bcd4;
     -fx-border-radius: 10px;

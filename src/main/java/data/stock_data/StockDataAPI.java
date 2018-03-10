@@ -4,6 +4,7 @@ import main.java.util.Company;
 import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesType;
 import main.java.util.StockTimeSeriesIntradayInterval;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -104,7 +105,37 @@ public class StockDataAPI {
         return null;
     }
 
-    public static List<JSONObject> getmultipleLatestStockData(HashSet<String> symbols){
+    public static JSONArray getmultipleLatestStockData(HashSet<String> symbols) throws Exception{
+        StringBuilder url = new StringBuilder("https://www.alphavantage.co/query?");
+        url.append("function=BATCH_STOCK_QUOTES");
+        url.append("&symbols=");
+
+        for (String symbol: symbols) {
+            url.append(symbol + ",");
+        }
+
+        // delete the last ","
+        url.deleteCharAt(url.length() - 1);
+
+        url.append("&apikey=" + API_KEY);
+
+
+        URL stockURL = new URL(url.toString());
+        System.out.println(stockURL);
+        JSONTokener tokener = new JSONTokener(stockURL.openStream());
+
+        JSONObject json = new JSONObject(tokener);
+
+
+        // look for an error message if none is found then return the data
+        try{
+            json.getString("Error Message");
+
+            // TODO if error then return JSON data from a local file
+        }catch (Exception e){
+            System.out.println("stock data retrieval successful");
+            return json.getJSONArray("Stock Quotes");
+        }
         return null;
     }
 
