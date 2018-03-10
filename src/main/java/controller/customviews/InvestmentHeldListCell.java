@@ -52,6 +52,9 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
         }
         System.out.println("create list cell");
 
+        // add placeholder at index 1 so style class can be modified later
+        labelPriceDifferenceValue.getStyleClass().add("empty");
+
     }
 
     @Override
@@ -78,12 +81,11 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             BigDecimal priceDifference = currentPrice.subtract(priceBought);
 
             // if value is positive then colour will be green otherwise red
+            labelPriceDifferenceValue.getStyleClass().toString();
             if (priceDifference.compareTo(BigDecimal.ZERO) > 0){
-                //labelPriceDifferenceValue.setTextFill(Color.GREEN);
-                labelPriceDifferenceValue.getStyleClass().add("label-colour-green");
+                labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-green");
             }else{
-                labelPriceDifferenceValue.setTextFill(Color.RED);
-                labelPriceDifferenceValue.getStyleClass().add("label-colour-red");
+                labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-red");
 
             }
             labelPriceDifferenceValue.setText(priceDifference.toString());
