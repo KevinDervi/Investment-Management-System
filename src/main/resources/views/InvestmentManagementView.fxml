@@ -135,14 +135,14 @@
                               <Label styleClass="label-data" text="Low" textFill="WHITE" GridPane.columnIndex="2" />
                               <Label styleClass="label-data" text="Close" textFill="WHITE" GridPane.columnIndex="3" />
                               <Label styleClass="label-data" text="Volume" textFill="WHITE" GridPane.columnIndex="4" />
-                              <Label fx:id="labelOpenValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.rowIndex="1" />
-                              <Label fx:id="labelHighValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label fx:id="labelLowValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label fx:id="labelCloseValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                              <Label fx:id="labelOpenValue" styleClass="label-data" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label fx:id="labelHighValue" styleClass="label-data" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="labelLowValue" styleClass="label-data" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label fx:id="labelCloseValue" styleClass="label-data" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font></Label>
-                              <Label fx:id="labelVolumeValue" styleClass="label-data" text="1234" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                              <Label fx:id="labelVolumeValue" styleClass="label-data" textFill="WHITE" GridPane.columnIndex="4" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font></Label>

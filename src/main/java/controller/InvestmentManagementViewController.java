@@ -445,19 +445,35 @@ public class InvestmentManagementViewController {
         chartStockData.dataProperty().unbind();
         chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
 
-
         chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
             // TODO if null do loading sign
+
+            // define the space between data points
             if (newValue == null){
                 chartStockData.setPrefWidth(0);
             }else {
                 chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
             }
-
         });
 
-        //chartUpdater.stateProperty().addListener((observable, oldValue, newValue) -> System.out.println("change listener state: " + oldValue + " -> " + newValue));
-        //chartUpdater.messageProperty().addListener((observable, oldValue, newValue) -> System.out.println("message: " + newValue));
+        //update the technical details
+        chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null){
+                // TODO reset technical details
+                return;
+            }
+
+            int latestValue = newValue.get(0).getData().size();
+
+            BarData dataPoint = (BarData) newValue.get(0).getData().get(latestValue - 1).getExtraValue();
+
+            labelOpenValue.setText(Double.toString(dataPoint.getOpen()));
+            labelHighValue.setText(Double.toString(dataPoint.getHigh()));
+            labelLowValue.setText(Double.toString(dataPoint.getLow()));
+            labelCloseValue.setText(Double.toString(dataPoint.getClose()));
+            labelVolumeValue.setText(Long.toString(dataPoint.getVolume()));
+        });
+
     }
 
     /**
@@ -488,7 +504,6 @@ public class InvestmentManagementViewController {
         chartStockData = new LineChart<>(new CategoryAxis(), new NumberAxis(), emptyDataSet);
 
         // TODO make stock line chart its own object and style it as such
-        chartStockData.setAnimated(false);
 
         styleChart(chartStockData);
 

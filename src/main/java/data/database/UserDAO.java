@@ -224,7 +224,7 @@ public class UserDAO {
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
-
+        System.out.println("account balance modified by: " + value);
         try {
             conn = PooledDBConnection.getInstance().getConnection();
 

@@ -40,8 +40,8 @@ public class StockBuyDAO {
             InvestmentsHeldDAO.addInvesntment(transactionId, quantity);
 
             // total paid by user = (individual price * quantity) + transaction fee
-            BigDecimal totalPaid = individualPrice.multiply(new BigDecimal(quantity)).add(BrokerFee.getTransactionFee().negate());
-            System.out.println("total paid by user: " + totalPaid);
+            BigDecimal totalPaid = individualPrice.multiply(new BigDecimal(quantity)).add(BrokerFee.getTransactionFee()).negate();
+            System.out.println("total paid by user (amount withdrawn from account): " + totalPaid);
             UserDAO.modifyBalanceBy(totalPaid);
 
 
