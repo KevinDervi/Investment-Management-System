@@ -2,6 +2,8 @@ package main.java.controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -581,6 +583,7 @@ public class InvestmentManagementViewController {
         chartUpdater.restart();
 
         // TODO deselect an investment held currently selected
+        ListViewInvestmentHeld.getSelectionModel().clearSelection();
     }
 
     // ===================================== INVESTMENTS HELD METHODS ====================================
@@ -592,10 +595,21 @@ public class InvestmentManagementViewController {
         // bind service here
         //ListViewInvestmentHeld.itemsProperty().bind();
 
-        InvestmentsHeldLogic.addListenerToInvestmentsHeld((ListChangeListener<InvestmentHeld>) c -> {
-            System.out.println("listview updated");
-            ListViewInvestmentHeld.getItems().setAll(c.getList());
-        });
+//        InvestmentsHeldLogic.addListenerToInvestmentsHeld((ListChangeListener<InvestmentHeld>) c -> {
+//            System.out.println("listview updated");
+//            ListViewInvestmentHeld.getItems().setAll(c.getList());
+//        });
+
+        ListViewInvestmentHeld.itemsProperty().bind(InvestmentsHeldLogic.getObservableInvestmentHeldList());
+
+        // testing
+
+        //SimpleListProperty test = new SimpleListProperty();
+        //ListViewInvestmentHeld.itemsProperty().bind(test);
+        /// testing over
+
+
+
 
         // only allow user to select a single investment at a time
         ListViewInvestmentHeld.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -603,7 +617,9 @@ public class InvestmentManagementViewController {
 
         //on selecting an investment
         ListViewInvestmentHeld.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
+            if (newValue == null) {
+                return;
+            }
             System.out.println(newValue.getStockSymbol() + "was selected");
 
             // cancel the current service

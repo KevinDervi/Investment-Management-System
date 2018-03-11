@@ -66,7 +66,7 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
         System.out.println("update item");
         // standard required for the cell
-        if(empty){
+        if(empty || investmentHeld == null){
             setGraphic(null);
             setText(null);
         }else{

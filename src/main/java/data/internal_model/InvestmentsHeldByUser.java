@@ -1,9 +1,9 @@
 package main.java.data.internal_model;
 
 
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import main.java.data.database.InvestmentsHeldDAO;
 import main.java.data.database.StockBuyDAO;
 import main.java.data.database.StockSellDAO;
@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,9 +21,10 @@ import java.util.List;
 public class InvestmentsHeldByUser {
     // TODO holds all information regarding the values held by the user
     
-    private ObservableList<InvestmentHeld> InvestmentsHeld = FXCollections.observableArrayList();
+    //private ObservableList<InvestmentHeld> InvestmentsHeld = FXCollections.observableArrayList();
+    private SimpleListProperty<InvestmentHeld> InvestmentsHeld = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-    private HashMap<String, BigDecimal> InvestmentsHeldCurrentValues = new HashMap<>();
+    private HashMap<String, BigDecimal> investmentsHeldCurrentValues = new HashMap<>();
     
     private static InvestmentsHeldByUser instance;
 
@@ -38,19 +40,40 @@ public class InvestmentsHeldByUser {
         return instance;
     }
 
+    public SimpleListProperty<InvestmentHeld> getInvestmentsHeld() {
+        return InvestmentsHeld;
+    }
+
     public HashMap<String, BigDecimal> getInvestmentsHeldCurrentValues() {
-        return InvestmentsHeldCurrentValues;
+        return investmentsHeldCurrentValues;
     }
 
     public void updateInvestmentsHeld(){
         updateInvestmentsHeldCurrentvalues();
 
-        List<InvestmentHeld> userInvestments = InvestmentsHeldDAO.getAllInvestments();
+        ArrayList<InvestmentHeld> userInvestments = InvestmentsHeldDAO.getAllInvestments();
 
         if (userInvestments!= null){
             // TODO add and remove values based of difference do not just use set all as it will deselect the currently selected listview
-            InvestmentsHeld.setAll(userInvestments);
+            //InvestmentsHeld.setAll(userInvestments);
+            updateList(userInvestments);
         }
+    }
+
+    private void updateList(ArrayList<InvestmentHeld> userInvestments) {
+        // find differences between current list and list from database
+        // then remove all in the current list that are not in the database
+        // and add only those that are not in the current list from the database
+        // do not simply use setAll() as this will update the list with null values
+
+
+        // remove values that are not in the database
+        InvestmentsHeld.removeIf(investmentHeld -> !userInvestments.contains(investmentHeld));
+
+        // keep only new values that are not already locally stored
+        userInvestments.removeIf(i -> InvestmentsHeld.contains(i));
+
+        InvestmentsHeld.addAll(userInvestments);
     }
 
     private void updateInvestmentsHeldCurrentvalues() {
@@ -67,7 +90,7 @@ public class InvestmentsHeldByUser {
         }
 
         try {
-        InvestmentsHeldCurrentValues = toInvestmentsHeldValuesHashMap(StockDataAPI.getmultipleLatestStockData(setOfSymbols));
+        investmentsHeldCurrentValues = toInvestmentsHeldValuesHashMap(StockDataAPI.getmultipleLatestStockData(setOfSymbols));
         }catch (Exception e){
             e.printStackTrace();
         }

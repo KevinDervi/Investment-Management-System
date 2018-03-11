@@ -60,4 +60,17 @@ public class InvestmentHeld { // TODO make an equals method that compares based 
     public void setTimeBought(Timestamp timeBought) {
         this.timeBought = timeBought;
     }
+
+    // objects are the same if their transaction id and quantity left are the same
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null){
+            return false;
+        }
+        if(obj.getClass() != InvestmentHeld.class){
+            return false;
+        }
+        InvestmentHeld otherInvestmentHeld = (InvestmentHeld) obj;
+        return transactionId.equals(otherInvestmentHeld.transactionId) && quantityLeft.equals(otherInvestmentHeld.quantityLeft);
+    }
 }
