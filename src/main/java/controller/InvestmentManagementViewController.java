@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import main.java.controller.customviews.InvestmentHeldListCell;
+import main.java.controller.customviews.StockLineGraph;
 import main.java.controller.customviews.StockSearchField;
 import main.java.logic.InvestmentsHeldLogic;
 import main.java.logic.StockDataLogic;
@@ -458,10 +459,18 @@ public class InvestmentManagementViewController {
             }
         });
 
+
+        // bind title of chart to updater
+        chartUpdater.currentStockSymbolProperty().addListener((observable, oldValue, newValue) -> chartStockData.setTitle(newValue));
+
         //update the technical details
         chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue == null){
-                // TODO reset technical details
+                labelOpenValue.setText("");
+                labelHighValue.setText("");
+                labelLowValue.setText("");
+                labelCloseValue.setText("");
+                labelVolumeValue.setText("");
                 return;
             }
 
@@ -500,12 +509,8 @@ public class InvestmentManagementViewController {
     }
 
     private void createLineChart(String title){
-        // creates line chart with empty data set
-        ObservableList<XYChart.Series<String, Number>> emptyDataSet = FXCollections.observableArrayList(new XYChart.Series<>());
 
-        chartStockData = new LineChart<>(new CategoryAxis(), new NumberAxis(), emptyDataSet);
-
-        // TODO make stock line chart its own object and style it as such
+        chartStockData = new StockLineGraph();
 
         styleChart(chartStockData);
 
@@ -560,7 +565,6 @@ public class InvestmentManagementViewController {
         anchorPaneSearchField.getChildren().set(0, comboBoxStockSearch);
 
         // on click functionality
-        //comboBoxStockSearch.valueProperty().addListener(this::onStockSelected);
         comboBoxStockSearch.selectionModelProperty().getValue().selectedItemProperty().addListener(this::onStockSelected);
 
     }
@@ -592,24 +596,7 @@ public class InvestmentManagementViewController {
         // setup cell factory to create my custom cell and use its overridden updateItem() method
         ListViewInvestmentHeld.setCellFactory(param -> new InvestmentHeldListCell());
 
-        // bind service here
-        //ListViewInvestmentHeld.itemsProperty().bind();
-
-//        InvestmentsHeldLogic.addListenerToInvestmentsHeld((ListChangeListener<InvestmentHeld>) c -> {
-//            System.out.println("listview updated");
-//            ListViewInvestmentHeld.getItems().setAll(c.getList());
-//        });
-
         ListViewInvestmentHeld.itemsProperty().bind(InvestmentsHeldLogic.getObservableInvestmentHeldList());
-
-        // testing
-
-        //SimpleListProperty test = new SimpleListProperty();
-        //ListViewInvestmentHeld.itemsProperty().bind(test);
-        /// testing over
-
-
-
 
         // only allow user to select a single investment at a time
         ListViewInvestmentHeld.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
