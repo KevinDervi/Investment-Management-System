@@ -2,8 +2,8 @@ package main.java.controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -244,6 +244,10 @@ public class InvestmentManagementViewController {
 
         displaySAndP500();
 
+        initialiseListeners();
+
+
+
         // start service
         chartUpdater.start();
 
@@ -254,6 +258,30 @@ public class InvestmentManagementViewController {
         initialiseIntervalToggleGroup();
 
         initialiseOutputSizeToggleGroup();
+    }
+
+    private void initialiseListeners() {
+
+        chartStockData.dataProperty().addListener(this::updateGraphSize);
+
+        //update the technical details
+        chartStockData.dataProperty().addListener(this::updateTechnicalDetailsOnChanged);
+    }
+
+    private void setTechnicalDetails(BarData dataPoint) {
+        labelOpenValue.setText(Double.toString(dataPoint.getOpen()));
+        labelHighValue.setText(Double.toString(dataPoint.getHigh()));
+        labelLowValue.setText(Double.toString(dataPoint.getLow()));
+        labelCloseValue.setText(Double.toString(dataPoint.getClose()));
+        labelVolumeValue.setText(Long.toString(dataPoint.getVolume()));
+    }
+
+    private void resetTechnicalDetails() {
+        labelOpenValue.setText("");
+        labelHighValue.setText("");
+        labelLowValue.setText("");
+        labelCloseValue.setText("");
+        labelVolumeValue.setText("");
     }
 
     private void initialiseOutputSizeToggleGroup() {
@@ -422,54 +450,38 @@ public class InvestmentManagementViewController {
      * @param chartStockData
      */
     private void attachServiceToChart(XYChart<String, Number> chartStockData) {
-        int distanceBetweenValues = 20;
-        // TODO maybe change value distanceBetweenValues depending on line graph or candlestick graph here
-
-
-        // TODO remove all listeners
-
         // attach service to the graph
         chartStockData.dataProperty().unbind();
         chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
-
-        chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
-            // TODO if null do loading sign
-
-            // define the space between data points
-            if (newValue == null){
-                chartStockData.setPrefWidth(0);
-            }else {
-                chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
-            }
-        });
-
 
         // bind title of chart to updater
         chartStockData.titleProperty().unbind();
         chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
 
-        //update the technical details
-        chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null){
-                labelOpenValue.setText("");
-                labelHighValue.setText("");
-                labelLowValue.setText("");
-                labelCloseValue.setText("");
-                labelVolumeValue.setText("");
-                return;
-            }
+    }
 
-            int latestValue = newValue.get(0).getData().size();
+    private void updateTechnicalDetailsOnChanged(ObservableValue<? extends ObservableList<XYChart.Series<String, Number>>> observable, ObservableList<XYChart.Series<String, Number>> oldValue, ObservableList<XYChart.Series<String, Number>> newValue) {
 
-            BarData dataPoint = (BarData) newValue.get(0).getData().get(latestValue - 1).getExtraValue();
+        if (newValue == null) {
+            resetTechnicalDetails();
+            return;
+        }
 
-            labelOpenValue.setText(Double.toString(dataPoint.getOpen()));
-            labelHighValue.setText(Double.toString(dataPoint.getHigh()));
-            labelLowValue.setText(Double.toString(dataPoint.getLow()));
-            labelCloseValue.setText(Double.toString(dataPoint.getClose()));
-            labelVolumeValue.setText(Long.toString(dataPoint.getVolume()));
-        });
+        int latestValue = newValue.get(0).getData().size();
 
+        BarData dataPoint = (BarData) newValue.get(0).getData().get(latestValue - 1).getExtraValue();
+
+        setTechnicalDetails(dataPoint);
+    }
+
+    private void updateGraphSize(ObservableValue<? extends ObservableList<XYChart.Series<String, Number>>> observable, ObservableList<XYChart.Series<String, Number>> oldValue, ObservableList<XYChart.Series<String, Number>> newValue) {
+        int distanceBetweenValues = 20;
+
+        if (newValue == null) {
+            chartStockData.setPrefWidth(0);
+        } else {
+            chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
+        }
     }
 
     /**
@@ -631,6 +643,8 @@ public class InvestmentManagementViewController {
     private void initialiseStockSymbolLabel() {
         labelStockSymbol.textProperty().bind(chartUpdater.currentStockSymbolProperty());
     }
+
+
 
     // ===================================== BUY/SELL BUTTON METHODS =====================================
 
