@@ -2,6 +2,11 @@
 /*
     * implies for all elements
 */
+
+/*
+    TODO add colour vairables here using
+    e.g. style-1-color: white;
+ */
 * {
     -fx-font-family: "Segoe UI";
 }
@@ -132,6 +137,14 @@
 .chart {
     -fx-text-fill: white;
     -fx-background-color: transparent;
+}
+
+.chart-title{
+    -fx-font-size: 20;
+}
+
+.chart-series-line{
+    -fx-stroke: white;
 }
 
 .chart-plot-background {

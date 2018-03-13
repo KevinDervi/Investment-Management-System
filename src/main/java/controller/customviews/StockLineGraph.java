@@ -34,7 +34,7 @@ public class StockLineGraph extends LineChart<String, Number> {
 
     private void formatYAxis() {
         yAxis.autoRangingProperty().setValue(true);
-        yAxis.forceZeroInRangeProperty().setValue(true);
+        yAxis.forceZeroInRangeProperty().setValue(false);
         yAxis.setAnimated(false);
 
 

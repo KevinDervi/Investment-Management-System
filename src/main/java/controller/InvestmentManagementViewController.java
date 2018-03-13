@@ -2,12 +2,8 @@ package main.java.controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -205,6 +201,42 @@ public class InvestmentManagementViewController {
         // TODO start initial threads here
     }
 
+
+
+    // TODO disable sell button if user does not hold any investments in that stock
+    // TODO disable buy and sell buttons if market has closed
+    // TODO drop down menu on text change in search bar
+    // TODO delete all text when "X" button is pressed
+    // TODO add stock analysis with KNN
+    // TODO add card functionality (withdraw add remove view deposit)
+
+    // TODO execute transactions (or anything that involves multiple tables at once) as batch statements or use
+
+    /**
+     * dbConnection.setAutoCommit(false); to start a transaction block.
+     * dbConnection.commit(); to end a transaction block
+     *
+     * this means that all executions between these two statements will either all happen successfully or none will happen
+     */
+
+
+    // TODO maybe use stack pane for pop ups to make the background dark and force user input
+
+    private void displaySAndP500(){
+
+        // set initial values for stock data
+        StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_INTRADAY);
+        StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1);
+        StockDataLogic.setStockSymbol("SPX"); // SPX = S&P 500 index
+        StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
+
+        // create the graph
+        createCandleStickChart();
+
+    }
+
+    // ===================================== GRAPH METHODS ===============================================
+
     private void initialiseGraph() {
         // set initial values for chart updater
         chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
@@ -217,9 +249,9 @@ public class InvestmentManagementViewController {
 
 
 
-        setupGraphComboBoxType();
+        initialiseGraphComboBoxType();
 
-        setupIntervalToggleGroup();
+        initialiseIntervalToggleGroup();
 
         initialiseOutputSizeToggleGroup();
     }
@@ -248,7 +280,7 @@ public class InvestmentManagementViewController {
         chartUpdater.restart();
     }
 
-    private void setupIntervalToggleGroup() {
+    private void initialiseIntervalToggleGroup() {
 
         // make toggle group always have at least 1 value selected by consuming the mouse event if that button is already selected
         toggleGroupInterval.selectToggle(radioButton1Min);
@@ -348,85 +380,34 @@ public class InvestmentManagementViewController {
         }
     }
 
-    private void setupGraphComboBoxType(){
+    private void initialiseGraphComboBoxType(){
         // add graph types
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
 
         // TODO on click listener
+        comboBoxGraphType.selectionModelProperty().getValue().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            switch (newValue) {
+                case "CandleStick":
+                    createCandleStickChart();
+                    break;
+                case "Line":
+                    createLineChart();
+                    break;
+            }
+            chartUpdater.cancel();
+            chartUpdater.restart();
+        });
     }
 
-    // TODO disable sell button if user does not hold any investments in that stock
-    // TODO disable buy and sell buttons if market has closed
-    // TODO drop down menu on text change in search bar
-    // TODO delete all text when "X" button is pressed
-    // TODO add stock analysis with KNN
-    // TODO add card functionality (withdraw add remove view deposit)
-
-    // TODO execute transactions (or anything that involves multiple tables at once) as batch statements or use
-
-    /**
-     * dbConnection.setAutoCommit(false); to start a transaction block.
-     * dbConnection.commit(); to end a transaction block
-     *
-     * this means that all executions between these two statements will either all happen successfully or none will happen
-     */
-
-
-    // TODO maybe use stack pane for pop ups to make the background dark and force user input
-
-    private void displaySAndP500(){
-
-        // set initial values for stock data
-        StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_INTRADAY);
-        StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1);
-        StockDataLogic.setStockSymbol("SPX"); // SPX = S&P 500 index
-        StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
-
-        // create the graph
-        createCandleStickChart("SFC");
-        // add chart to the graph pane
-        //addChartToPane(chartStockData);
-
-
-
-    }
-
-    // ===================================== GRAPH METHODS ===============================================
-
-    private void updateGraph(){
-        try {
-            StockDataLogic.updateCurrentStockViewedData();
-        } catch (Exception e) {
-            System.out.println("unable to update chart data");
-            e.printStackTrace();
-        }
-        String currentSymbol = StockDataLogic.getCurrentSymbol();
-
-        // TODO check what type of chart it is (candlestick or line)
-
-        createCandleStickChart(currentSymbol);
-
-    }
-
-    private void updateCandleStickChart() {
-        ObservableList<XYChart.Series<String, Number>> data = StockDataLogic.getCandleStickChartData();
-        chartStockData.setData(data);
-
-    }
-
-    private void updateLineChart(){
-        ObservableList<XYChart.Series<String, Number>> data = StockDataLogic.getLineChartData();
-        chartStockData.setData(data);
-    }
-
-    private void createCandleStickChart(String title){
+    private void createCandleStickChart(){
         // creates candlestick chart with an empty data set
         List<BarData> emptyDataSet = new ArrayList<>();
         BarData dummyData = new BarData(new GregorianCalendar(), 0.0,0.0,0.0,0.0,0L);
         emptyDataSet.add(dummyData);
 
-        chartStockData = new CandleStickChart(title, emptyDataSet);
+        chartStockData = new CandleStickChart(StockDataLogic.getCurrentSymbol(), emptyDataSet);
 
         styleChart(chartStockData);
 
@@ -442,7 +423,10 @@ public class InvestmentManagementViewController {
      */
     private void attachServiceToChart(XYChart<String, Number> chartStockData) {
         int distanceBetweenValues = 20;
-        // TODO maybe change value if line graph or candlestick graph here
+        // TODO maybe change value distanceBetweenValues depending on line graph or candlestick graph here
+
+
+        // TODO remove all listeners
 
         // attach service to the graph
         chartStockData.dataProperty().unbind();
@@ -461,7 +445,8 @@ public class InvestmentManagementViewController {
 
 
         // bind title of chart to updater
-        chartUpdater.currentStockSymbolProperty().addListener((observable, oldValue, newValue) -> chartStockData.setTitle(newValue));
+        chartStockData.titleProperty().unbind();
+        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
 
         //update the technical details
         chartStockData.dataProperty().addListener((observable, oldValue, newValue) -> {
@@ -508,9 +493,11 @@ public class InvestmentManagementViewController {
         paneChart.setContent(chartStockData); // add to the chart pane
     }
 
-    private void createLineChart(String title){
+    private void createLineChart(){
 
         chartStockData = new StockLineGraph();
+
+        chartStockData.setTitle(StockDataLogic.getCurrentSymbol());
 
         styleChart(chartStockData);
 
