@@ -630,6 +630,8 @@ public class InvestmentManagementViewController {
 
         removePopUp();
 
+        ButtonSellStock.setDisable(true);
+
         System.out.println(newValue.getSymbol() + " was selected");
 
         // cancel the current service
@@ -710,6 +712,10 @@ public class InvestmentManagementViewController {
 
     // ===================================== BUY/SELL BUTTON METHODS =====================================
     private void intialiseButtons(){
+        // initially disable stock sell button
+        ButtonSellStock.setDisable(true);
+
+        // disable buy button if current stock has no value
         labelCurrentStockPrice.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("N/A")){
                 ButtonBuyStock.setDisable(true);
@@ -718,6 +724,7 @@ public class InvestmentManagementViewController {
             }
         });
     }
+
     @FXML
     void handleBuyButton(ActionEvent event) throws Exception{
 
@@ -727,6 +734,21 @@ public class InvestmentManagementViewController {
         controller.setMainWindowController(this);
 
         stackPaneStockDetailsArea.getChildren().add(stockBuyView);
+    }
+
+    @FXML
+    void handleSellButton(ActionEvent event) throws Exception{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/StockSellView.fxml"));
+
+        Parent stockSellView = (Parent) fxmlLoader.load();
+
+        StockSellViewController controller = fxmlLoader.getController();
+        controller.setMainController(this);
+        controller.setInvestmentSelected(ListViewInvestmentHeld.getSelectionModel().getSelectedItem());
+
+
+
+        stackPaneStockDetailsArea.getChildren().add(stockSellView);
     }
 
 

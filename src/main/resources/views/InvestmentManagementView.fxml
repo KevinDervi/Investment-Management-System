@@ -275,7 +275,7 @@
                                     <Font name="Segoe UI" size="25.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="ButtonSellStock" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
+                              <Button fx:id="ButtonSellStock" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSellButton" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="Segoe UI" size="25.0" />
                                  </font>
