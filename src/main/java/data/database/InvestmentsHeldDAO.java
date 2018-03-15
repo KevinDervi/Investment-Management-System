@@ -103,20 +103,18 @@ public class InvestmentsHeldDAO {
             statement = conn.createStatement();
             String update = "UPDATE InvestmentsHeld" +
                     " set quantityLeft = quantityLeft - " + amountToRemove +
-                    " WHERE id = '" + UserDetails.getInstance().getId() + "'";
+                    " WHERE stockBuyId = '" + investmentId + "'";
 
             statement.executeUpdate(update);
 
             //if stock has been reduced to 0 then delete the row from InvestmentsHeld table
-            /**
-             * maybe have this logic in the internal model only and not in the data access
-             */
-//            long quantityLeft = (Long) getInvestment(investmentId).get("quantityLeft");
-//
-//            if (quantityLeft == 0){
-//                removeInvestment(investmentId);
-//                System.out.println("user has sold all of a particular stock");
-//            }
+
+            long quantityLeft = (Long) getInvestment(investmentId).get("quantityLeft");
+
+            if (quantityLeft == 0){
+                removeInvestment(investmentId);
+                System.out.println("user has sold all of a particular stock");
+            }
 
         } catch (SQLException e){
             System.out.println("error with reducing amount of invesntment currently held");

@@ -687,6 +687,10 @@ public class InvestmentManagementViewController {
         chartUpdater.restart();
     }
 
+    public void selectLastInvestmentHeld() {
+        ListViewInvestmentHeld.getSelectionModel().selectLast();
+    }
+
     // ===================================== TECHNICAL INDICATORS METHODS ================================
 
 

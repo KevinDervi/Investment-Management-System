@@ -68,13 +68,15 @@ public class InvestmentsHeldByUser {
         // do not simply use setAll() as this will update the list with null values
 
 
-        // remove values that are not in the database
-        InvestmentsHeld.removeIf(investmentHeld -> !userInvestments.contains(investmentHeld));
+        Platform.runLater(() -> {
+            // remove values that are not in the database
+            InvestmentsHeld.removeIf(investmentHeld -> !userInvestments.contains(investmentHeld));
 
-        // keep only new values that are not already locally stored
-        userInvestments.removeIf(i -> InvestmentsHeld.contains(i));
+            // keep only new values that are not already locally stored
+            userInvestments.removeIf(i -> InvestmentsHeld.contains(i));
 
-        Platform.runLater(() -> InvestmentsHeld.addAll(userInvestments));
+            InvestmentsHeld.addAll(userInvestments);
+        });
     }
 
     private void updateInvestmentsHeldCurrentvalues() {
@@ -137,6 +139,7 @@ public class InvestmentsHeldByUser {
     public void sellStock(long id, BigDecimal individualPrice, long quantitySold){
         StockSellDAO.sellStock(id, individualPrice, quantitySold);
         updateInvestmentsHeld();
+        UserDetails.getInstance().updateBalance();
     }
 
 }

@@ -129,7 +129,7 @@ public class StockSellViewController {
             labelProfitLoss.setText("+$" + profitLoss.toString());
         }else {
             labelProfitLoss.getStyleClass().set(1, "label-colour-red");
-            labelProfitLoss.setText("-$" + profitLoss.toString());
+            labelProfitLoss.setText("-$" + profitLoss.negate().toString());
         }
 
     }
@@ -143,6 +143,8 @@ public class StockSellViewController {
     void handleSellButton(ActionEvent event) {
         if (quantityIsValid){
             StockSellLogic.sellStock(investmentSelected.getTransactionId(), StockDataLogic.getCurrentValueProperty().getValue(), quantity);
+
+            mainController.selectLastInvestmentHeld();
             mainController.removePopUp();
         }
     }
