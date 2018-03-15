@@ -112,10 +112,8 @@ public class CurrentStockInformation {
         assert outputSize != null;
 
         updateChartData();
-        System.out.println("chart updated line 107 currentstockinformation");
         // get the current value of the stock
         updateCurrentValue();
-        System.out.println("value updated line 110 currentstockinformation");
     }
 
     private void updateCurrentValue() throws Exception {

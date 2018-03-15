@@ -235,6 +235,13 @@ public class UserDAO {
 
             statement.executeUpdate(update);
 
+            if (value.compareTo(BigDecimal.ZERO) > 0){
+                MoneyTransferDAO.despoitToAccount(value);
+            }else {
+                MoneyTransferDAO.withdrawFromAccount(value.negate());
+            }
+
+
         } catch (SQLException e){
             System.out.println("error with updating user balance");
             e.printStackTrace();

@@ -27,7 +27,8 @@ public class MoneyTransferDAO {
 
             String insert = "INSERT INTO MoneyTransfer " +
                     "VALUES( " +
-                    transactionId + " , '" + // id
+                    transactionId + " , " + // id
+                    null + " , '" +// keep as null since cards are not being used
                     MoneyTransferType.DEPOSIT + "', " + // transfer Type
                     amountToAdd + ")"; // amount to deposit
 
@@ -56,7 +57,8 @@ public class MoneyTransferDAO {
 
             String insert = "INSERT INTO MoneyTransfer " +
                     "VALUES( " +
-                    transactionId + " , '" + // id
+                    transactionId + " , " + // id
+                    null + " , '" + // keep as null since cards are not being used
                     MoneyTransferType.WITHDRAW + "', " + // transfer Type
                     amountToWithdraw + ")"; // amount to deposit
 

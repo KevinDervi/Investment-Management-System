@@ -463,7 +463,6 @@ public class InvestmentManagementViewController {
         comboBoxGraphType.getItems().addAll("CandleStick", "Line");
         comboBoxGraphType.getSelectionModel().selectFirst();
 
-        // TODO on click listener
         comboBoxGraphType.selectionModelProperty().getValue().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
             switch (newValue) {
@@ -671,29 +670,33 @@ public class InvestmentManagementViewController {
 
 
         //on selecting an investment
-        ListViewInvestmentHeld.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            removePopUp();
+        ListViewInvestmentHeld.getSelectionModel().selectedItemProperty().addListener(this::onInvestmentSelected);
 
-            System.out.println(newValue.getStockSymbol() + "was selected");
-
-            // cancel the current service
-            chartUpdater.cancel();
-
-            // update the stock to search for
-            StockDataLogic.setStockSymbol(newValue.getStockSymbol());
-
-            //restart the service
-            chartUpdater.restart();
-        });
-    }
-
-    private void updateInvestmentsHeld() {
-        // TODO get list from logic layer and add here
+        // update the view when we get a new latest value
+        labelCurrentStockPrice.textProperty().addListener((observable, oldValue, newValue) -> ListViewInvestmentHeld.refresh());
 
     }
+
+    private void onInvestmentSelected(ObservableValue<? extends InvestmentHeld> observable, InvestmentHeld oldValue, InvestmentHeld newValue) {
+        if (newValue == null) {
+            return;
+        }
+        removePopUp();
+
+        ButtonSellStock.setDisable(false);
+
+        System.out.println(newValue.getStockSymbol() + "was selected");
+
+        // cancel the current service
+        chartUpdater.cancel();
+
+        // update the stock to search for
+        StockDataLogic.setStockSymbol(newValue.getStockSymbol());
+
+        //restart the service
+        chartUpdater.restart();
+    }
+
     // ===================================== TECHNICAL INDICATORS METHODS ================================
 
 
@@ -752,6 +755,7 @@ public class InvestmentManagementViewController {
 
         }
     }
+
 
 
 }
