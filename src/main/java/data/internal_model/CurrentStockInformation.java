@@ -157,7 +157,7 @@ public class CurrentStockInformation {
         } catch (JSONException e) { // if the array for current is empty (which it appears to be for SPX (S&P 500)
             System.out.println("empty single stock batch quotes");
             // return a default value of 0
-            currentValue = null;
+            currentValue.setValue(null);
         }
     }
 

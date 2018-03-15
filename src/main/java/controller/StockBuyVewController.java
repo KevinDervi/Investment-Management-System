@@ -51,6 +51,8 @@ public class StockBuyVewController {
     public void initialize() {
         labelStockSymbol.setText(CurrentStockInformation.getInstance().getStockSymbol());
 
+        labelCurrentPrice.setText("$" + StockDataLogic.getCurrentValueProperty().getValue().toString());
+
         // update current price
         StockDataLogic.getCurrentValueProperty().addListener(this::onCurrentValueChanged);
 
@@ -98,7 +100,7 @@ public class StockBuyVewController {
 
     private void onQuantityChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         // if non 0 positive integer
-        if (newValue.matches("[0-9]+") || !newValue.equals("0")) {
+        if (newValue.matches("[0-9]+") && !newValue.equals("0")) {
             labelErrorMessage.setVisible(false);
 
             long quantity = Long.valueOf(newValue);
@@ -106,6 +108,7 @@ public class StockBuyVewController {
             quantityIsValid(quantity);
 
         } else {
+            resetCosts();
             labelErrorMessage.setText("Please enter a valid amount");
             labelErrorMessage.setVisible(true);
         }
@@ -120,6 +123,9 @@ public class StockBuyVewController {
     void handlePurchaseButton(ActionEvent event){
         if (validQuantity){
             StockBuyLogic.BuyStock(quantity);
+            textFieldQuantity.setText("0");
+            validQuantity = false;
+            quantity = null;
         }
     }
 }

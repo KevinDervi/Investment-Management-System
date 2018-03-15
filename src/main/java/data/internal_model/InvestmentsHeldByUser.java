@@ -1,6 +1,7 @@
 package main.java.data.internal_model;
 
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -73,7 +74,7 @@ public class InvestmentsHeldByUser {
         // keep only new values that are not already locally stored
         userInvestments.removeIf(i -> InvestmentsHeld.contains(i));
 
-        InvestmentsHeld.addAll(userInvestments);
+        Platform.runLater(() -> InvestmentsHeld.addAll(userInvestments));
     }
 
     private void updateInvestmentsHeldCurrentvalues() {
@@ -128,6 +129,8 @@ public class InvestmentsHeldByUser {
         BigDecimal individualPrice = CurrentStockInformation.getInstance().getCurrentValue();
 
         StockBuyDAO.BuyStock(stockSymbol, individualPrice, quantity);
+        UserDetails.getInstance().updateBalance();
+
         updateInvestmentsHeld();
     }
 

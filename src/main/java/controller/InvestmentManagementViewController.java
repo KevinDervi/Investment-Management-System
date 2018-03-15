@@ -4,11 +4,15 @@ import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import main.java.controller.customviews.InvestmentHeldListCell;
 import main.java.controller.customviews.StockLineGraph;
 import main.java.controller.customviews.StockSearchField;
@@ -162,6 +166,9 @@ public class InvestmentManagementViewController {
     @FXML
     private Button ButtonSellStock;
 
+    @FXML
+    private StackPane stackPaneStockDetailsArea;
+
     // data
     private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
 
@@ -184,13 +191,15 @@ public class InvestmentManagementViewController {
 
 
         // update user details
-        updateUserDetails();
+        initialiseUserDetails();
 
         initialiseStockPricesChangeFields();
 
         initialiseSearchFeield();
 
         initialiseInvestmentsHeldList();
+
+        intialiseButtons();
 
         // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
 
@@ -521,9 +530,9 @@ public class InvestmentManagementViewController {
 
     // ===================================== USER DETAILS METHODS ========================================
 
-    private void updateUserDetails(){
+    private void initialiseUserDetails(){
         updateUsername();
-        updateBalance();
+        initialiseBalance();
     }
 
     private void updateUsername(){
@@ -534,13 +543,17 @@ public class InvestmentManagementViewController {
         return UserDetailsLogic.getUsername();
     }
 
-    private void updateBalance(){
+    private void initialiseBalance(){
         // TODO format balance to two Decimal places
         labelAccountBalance.setText("$" + getBalance());
+        UserDetailsLogic.getBalanceProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("balance updated: " + newValue.toString());
+            labelAccountBalance.setText("$" + newValue.toString());
+        });
     }
 
     public BigDecimal getBalance(){
-        return UserDetailsLogic.getBalalance();
+        return UserDetailsLogic.getBalance();
     }
 
     private void modifyBalance(BigDecimal amount){
@@ -647,14 +660,35 @@ public class InvestmentManagementViewController {
 
 
     // ===================================== BUY/SELL BUTTON METHODS =====================================
+    private void intialiseButtons(){
+        labelCurrentStockPrice.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("N/A")){
+                ButtonBuyStock.setDisable(true);
+            }else{
+                ButtonBuyStock.setDisable(false);
+            }
+        });
+    }
+    @FXML
+    void handleBuyButton(ActionEvent event) throws Exception{
 
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/StockBuyView.fxml"));
+        Parent stockBuyView = (Parent) fxmlLoader.load();
+        StockBuyVewController controller = fxmlLoader.getController();
+        controller.setMainWindowController(this);
 
+        stackPaneStockDetailsArea.getChildren().add(stockBuyView);
+    }
 
 
     // ===================================== UTILITY METHODS ==============================================
 
-    public void removePopUp(){
+    public void removePopUp() {
+        try {
+            stackPaneStockDetailsArea.getChildren().remove(1);
 
+        } catch (Exception ignored) {
+
+        }
     }
-
 }
