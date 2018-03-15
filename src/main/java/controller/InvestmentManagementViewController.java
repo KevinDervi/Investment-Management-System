@@ -621,6 +621,11 @@ public class InvestmentManagementViewController {
 
     }
 
+    @FXML
+    void handleButtonDeleteSearchText(ActionEvent event){
+        comboBoxStockSearch.getEditor().setText(null);
+    }
+
     private void onStockSelected(ObservableValue<? extends Company> observable, Company oldValue, Company newValue) {
 
         // if null was selected then do nothing
@@ -669,6 +674,7 @@ public class InvestmentManagementViewController {
 
     private void onInvestmentSelected(ObservableValue<? extends InvestmentHeld> observable, InvestmentHeld oldValue, InvestmentHeld newValue) {
         if (newValue == null) {
+            ButtonSellStock.setDisable(true);
             return;
         }
         removePopUp();

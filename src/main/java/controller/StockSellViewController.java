@@ -142,9 +142,9 @@ public class StockSellViewController {
     @FXML
     void handleSellButton(ActionEvent event) {
         if (quantityIsValid){
+
             StockSellLogic.sellStock(investmentSelected.getTransactionId(), StockDataLogic.getCurrentValueProperty().getValue(), quantity);
 
-            mainController.selectLastInvestmentHeld();
             mainController.removePopUp();
         }
     }
