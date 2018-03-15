@@ -38,7 +38,7 @@
                   <Label fx:id="labelAccountBalance" styleClass="label-data" text="£1234" textFill="WHITE" />
                </children>
             </HBox>
-            <Button fx:id="ButtonDespositWirthdraw" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Deposit / Withdraw" textFill="WHITE" />
+            <Button fx:id="ButtonDespositWirthdraw" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleDepositWithdrawButton" text="Deposit / Withdraw" textFill="WHITE" />
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="label-title" text="Portfolio" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="16.0" />

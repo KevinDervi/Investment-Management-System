@@ -576,6 +576,18 @@ public class InvestmentManagementViewController {
         initialiseBalance();
     }
 
+    @FXML
+    void handleDepositWithdrawButton(ActionEvent event)throws Exception {
+        removePopUp();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/BalanceModificationView.fxml"));
+        Parent BalanceModification = (Parent) fxmlLoader.load();
+        BalanceModificationController controller = fxmlLoader.getController();
+        controller.setMainController(this);
+
+        stackPaneStockDetailsArea.getChildren().add(BalanceModification);
+    }
+
     private void updateUsername(){
         labelUsername.setText(getUsername());
     }
@@ -642,7 +654,7 @@ public class InvestmentManagementViewController {
         //restart the service
         chartUpdater.restart();
 
-        // TODO deselect an investment held currently selected
+        // clear any investment currently selected
         ListViewInvestmentHeld.getSelectionModel().clearSelection();
     }
 
