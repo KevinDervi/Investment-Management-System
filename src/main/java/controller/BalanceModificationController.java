@@ -98,11 +98,14 @@ public class BalanceModificationController {
 
             // if withdrawing funds then negate the amount to remove it from the account
             if (typeSelected.equals("Withdraw")){
-                amount = amount.negate();
+
+                UserDetailsLogic.withdraw(amount);
+            }else {
+                UserDetailsLogic.deposit(amount);
             }
 
-            UserDetailsLogic.updateBalance(amount);
-
+            validAmount = false;
+            mainController.removePopUp();
         }
     }
 

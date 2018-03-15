@@ -34,6 +34,8 @@ public class MoneyTransferDAO {
 
             statement.executeUpdate(insert);
 
+            UserDAO.modifyBalanceBy(amountToAdd);
+
         }catch (SQLException e){
             System.out.println("error depositing into account");
             e.printStackTrace();
@@ -63,6 +65,8 @@ public class MoneyTransferDAO {
                     amountToWithdraw + ")"; // amount to deposit
 
             statement.executeUpdate(insert);
+
+            UserDAO.modifyBalanceBy(amountToWithdraw.negate());
 
         }catch (SQLException e){
             System.out.println("error depositing into account");

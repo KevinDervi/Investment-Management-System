@@ -2,6 +2,7 @@ package main.java.data.internal_model;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
+import main.java.data.database.MoneyTransferDAO;
 import main.java.data.database.UserDAO;
 import main.java.util.CardDetails;
 
@@ -164,6 +165,16 @@ public class UserDetails {
         UserDAO.modifyBalanceBy(byAmount);
 
         // if error is thrown and the database was unable to update then the internal model will not update
+        setBalance((BigDecimal) UserDAO.getUser(username).get("balance"));
+    }
+
+    public void desposit(BigDecimal amount){
+        MoneyTransferDAO.despoitToAccount(amount);
+        setBalance((BigDecimal) UserDAO.getUser(username).get("balance"));
+    }
+
+    public void withdraw(BigDecimal amount){
+        MoneyTransferDAO.withdrawFromAccount(amount);
         setBalance((BigDecimal) UserDAO.getUser(username).get("balance"));
     }
 

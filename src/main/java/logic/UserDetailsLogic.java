@@ -20,4 +20,11 @@ public class UserDetailsLogic {
     public static void updateBalance(BigDecimal amount) throws SQLException {
         UserDetails.getInstance().updateBalance(amount);
     }
-}
+
+    public static void deposit(BigDecimal amount){
+        UserDetails.getInstance().desposit(amount);
+    }
+
+    public static void withdraw(BigDecimal amount){
+        UserDetails.getInstance().withdraw(amount);
+    }}

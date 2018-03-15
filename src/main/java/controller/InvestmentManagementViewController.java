@@ -608,18 +608,6 @@ public class InvestmentManagementViewController {
         return UserDetailsLogic.getBalance();
     }
 
-    private void modifyBalance(BigDecimal amount){
-        try {
-            UserDetailsLogic.updateBalance(amount);
-        }catch (SQLException e){
-            // TODO diaplay an error message
-        }
-
-
-    }
-
-
-
 
     // ===================================== SEARCH FIELD METHODS ========================================
     private void initialiseSearchFeield(){
