@@ -126,6 +126,7 @@ public class StockBuyVewController {
             textFieldQuantity.setText("0");
             validQuantity = false;
             quantity = null;
+            mainWindowController.removePopUp();
         }
     }
 }

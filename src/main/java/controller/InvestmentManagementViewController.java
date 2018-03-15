@@ -180,11 +180,9 @@ public class InvestmentManagementViewController {
     public void initialize(){
         // TODO populate users investments held
         // TODO populate stock data views initially with S&P 500 or dow jones
-        initialiseGraph();
 
-        //createLineChart("line chart test"); // TODO remove title as paramenter and get title from internal model
-        //chartUpdater.setChartTypeToReturn(ChartType.LINE);
-        //chartUpdater.restart();
+        showInitialLoadingScreen();
+        initialiseGraph();
 
         // TODO make buying and selling a service in the logic layer and have it communicate with the database and when successfull it will return a value which will be binded to the listview
 
@@ -210,6 +208,16 @@ public class InvestmentManagementViewController {
         // TODO start initial threads here
     }
 
+    private void showInitialLoadingScreen() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/LoadingIndicator.fxml"));
+            Parent loadingIcon = (Parent) fxmlLoader.load();
+            loadingIcon.setId("loadingIcon");
+
+            stackPaneStockDetailsArea.getChildren().add(loadingIcon);
+        }catch (Exception ignored){}
+
+    }
 
 
     // TODO disable sell button if user does not hold any investments in that stock
@@ -275,6 +283,39 @@ public class InvestmentManagementViewController {
 
         //update the technical details
         chartStockData.dataProperty().addListener(this::updateTechnicalDetailsOnChanged);
+
+        chartStockData.dataProperty().addListener(this::showLoadingIconWhenUpdating);
+    }
+
+    private void showLoadingIconWhenUpdating(ObservableValue<? extends ObservableList<XYChart.Series<String, Number>>> observable, ObservableList<XYChart.Series<String, Number>> oldValue, ObservableList<XYChart.Series<String, Number>> newValue) {
+        if (newValue == null) {
+            try {
+                if(stackPaneStockDetailsArea.getChildren().get(1).getId().equals("loadingIcon")){
+                    removePopUp();
+                }
+            }catch (Exception ignored){}
+
+            try {
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/LoadingIndicator.fxml"));
+                Parent loadingIcon = (Parent) fxmlLoader.load();
+
+
+                stackPaneStockDetailsArea.getChildren().add(loadingIcon);
+                loadingIcon.setId("loadingIcon");
+                System.out.println("loading icon ID: " + stackPaneStockDetailsArea.getChildren().get(1).getId());
+            }catch (Exception ignored){ }
+
+        } else {
+            // only remove loading icon when there is one present
+            try {
+                if(stackPaneStockDetailsArea.getChildren().get(1).getId().equals("loadingIcon")){
+                    removePopUp();
+                }
+            }catch (Exception ignored){}
+
+
+        }
     }
 
     private void setTechnicalDetails(BarData dataPoint) {
@@ -587,6 +628,9 @@ public class InvestmentManagementViewController {
         if(newValue == null){
             return;
         }
+
+        removePopUp();
+
         System.out.println(newValue.getSymbol() + " was selected");
 
         // cancel the current service
@@ -619,6 +663,8 @@ public class InvestmentManagementViewController {
             if (newValue == null) {
                 return;
             }
+            removePopUp();
+
             System.out.println(newValue.getStockSymbol() + "was selected");
 
             // cancel the current service
@@ -685,10 +731,15 @@ public class InvestmentManagementViewController {
 
     public void removePopUp() {
         try {
-            stackPaneStockDetailsArea.getChildren().remove(1);
+            //stackPaneStockDetailsArea.getChildren().remove(1);
+
+            // remove all popups
+            stackPaneStockDetailsArea.getChildren().remove(1, stackPaneStockDetailsArea.getChildren().size());
 
         } catch (Exception ignored) {
 
         }
     }
+
+
 }
