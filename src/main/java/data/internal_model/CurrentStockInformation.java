@@ -1,5 +1,7 @@
 package main.java.data.internal_model;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import main.java.data.stock_data.StockDataAPI;
 import main.java.util.StockData;
 import main.java.util.StockOutputSize;
@@ -21,7 +23,7 @@ public class CurrentStockInformation {
 
     private boolean stockMarketsClosed = false;
 
-    private BigDecimal currentValue;
+    private SimpleObjectProperty<BigDecimal> currentValue;
 
     private ArrayList<StockData> chartData;
 
@@ -33,7 +35,9 @@ public class CurrentStockInformation {
 
     private static CurrentStockInformation Instance;
 
-    private CurrentStockInformation(){}
+    private CurrentStockInformation(){
+        currentValue = new SimpleObjectProperty<>();
+    }
 
     public static CurrentStockInformation getInstance() {
         if(Instance == null){
@@ -51,6 +55,10 @@ public class CurrentStockInformation {
     }
 
     public BigDecimal getCurrentValue() {
+        return currentValue.getValue();
+    }
+
+    public SimpleObjectProperty<BigDecimal> currentValueProperty() {
         return currentValue;
     }
 
@@ -137,7 +145,7 @@ public class CurrentStockInformation {
             String value = jsonObject.getString("2. price");
 
             //update our current value
-            currentValue = new BigDecimal(value);
+            currentValue.setValue(new BigDecimal(value));
 
         } catch (IOException e){
             // 503 response code, try again in 2 seconds

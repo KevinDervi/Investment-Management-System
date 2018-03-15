@@ -2,6 +2,7 @@ package main.java.logic;
 
 import com.zoicapital.stockchartsfx.BarData;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -14,6 +15,7 @@ import main.java.data.internal_model.CurrentStockInformation;
 import main.java.data.stock_data.StockDataAPI;
 import main.java.util.*;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -21,17 +23,6 @@ import java.util.*;
 
 public class StockDataLogic {
     // TODO attempt to make the service run in the logic layer and update the UI from here (potentially illtegalStateException so try with a dummy serivce first)
-//    private static StockDataUpdaterService stockDataUpdaterService;
-//
-//    public static StockDataUpdaterService getStockDataUpdaterService() {
-//        if (stockDataUpdaterService == null){
-//            stockDataUpdaterService = new StockDataUpdaterService();
-//
-//        }
-//
-//
-//        return stockDataUpdaterService;
-//    }
 
     // TODO add conversion methods for candlestick chart and normal line chart
 
@@ -149,6 +140,9 @@ public class StockDataLogic {
         return CurrentStockInformation.getInstance().getStockSymbol();
     }
 
+    public static SimpleObjectProperty<BigDecimal> getCurrentValueProperty(){
+        return CurrentStockInformation.getInstance().currentValueProperty();
+    }
 
     /**
      * updates the internal data and UI every set interval

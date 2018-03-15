@@ -123,8 +123,11 @@ public class InvestmentsHeldByUser {
         InvestmentsHeld.addListener(listener);
     }
 
-    public void buyStock(String symbol, BigDecimal individualPrice, long quantity){
-        StockBuyDAO.BuyStock(symbol, individualPrice, quantity);
+    public void buyStock(long quantity){
+        String stockSymbol = CurrentStockInformation.getInstance().getStockSymbol();
+        BigDecimal individualPrice = CurrentStockInformation.getInstance().getCurrentValue();
+
+        StockBuyDAO.BuyStock(stockSymbol, individualPrice, quantity);
         updateInvestmentsHeld();
     }
 

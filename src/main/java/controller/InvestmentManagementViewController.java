@@ -648,4 +648,13 @@ public class InvestmentManagementViewController {
 
     // ===================================== BUY/SELL BUTTON METHODS =====================================
 
+
+
+
+    // ===================================== UTILITY METHODS ==============================================
+
+    public void removePopUp(){
+
+    }
+
 }

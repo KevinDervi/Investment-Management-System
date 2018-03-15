@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background" stylesheets="@../css_styles/blue_mode.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.InvestmentManagementViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="background" stylesheets="@../css_styles/blue_mode.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.InvestmentManagementViewController">
    <left>
       <VBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
