@@ -546,6 +546,7 @@ public class InvestmentManagementViewController {
 
         chartStockData.setCache(true);
 
+        chartStockData.getStylesheets().clear();
         chartStockData.getStylesheets().add(getClass().getResource("/main/resources/css_styles/blue_mode.css").toExternalForm());
     }
 
