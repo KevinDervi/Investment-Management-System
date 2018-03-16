@@ -1,4 +1,4 @@
-package main.java.Controller;
+package main.java.controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,5 +16,6 @@ public class MainApp extends Application {
         primaryStage.setTitle("Investment Management System");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 }

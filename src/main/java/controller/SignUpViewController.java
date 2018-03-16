@@ -1,4 +1,4 @@
-package main.java.Controller;
+package main.java.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -171,6 +171,7 @@ public class SignUpViewController {
         Parent root = (Parent) fxmlLoader.load();
 
         stage.setScene(new Scene(root));
+        stage.sizeToScene();
     }
 
     private void resetErrorMessages(){

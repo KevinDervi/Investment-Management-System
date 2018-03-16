@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10.0" styleClass="background" stylesheets="@../css_styles/blue_mode.css" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller.SignUpViewController">
+<GridPane alignment="CENTER" hgap="10.0" styleClass="background" stylesheets="@../css_styles/blue_mode.css" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SignUpViewController">
     <columnConstraints>
         <ColumnConstraints />
         <ColumnConstraints />
@@ -55,7 +55,7 @@
         <VBox alignment="CENTER" spacing="10.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="13">
             <children>
                 <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" text="Back" />
+                <Button fx:id="backButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleBack" prefWidth="60.0" text="Back" />
             </children>
         </VBox>
       <Label fx:id="firstNameErrorMessage" maxWidth="1.7976931348623157E308" styleClass="label-error-message" textFill="#d30000" visible="false" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
@@ -68,7 +68,7 @@
          <graphic>
               <ImageView fx:id="usernameInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@/main/resources/images/Information_Icon_grey.png" />
+                      <Image url="@/main/resources/images/Information_Icon_teal.png" />
                   </image>
               </ImageView>
          </graphic>
@@ -81,7 +81,7 @@
          <graphic>
               <ImageView fx:id="passwordInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@/main/resources/images/Information_Icon_grey.png" />
+                      <Image url="@/main/resources/images/Information_Icon_white.png" />
                   </image>
               </ImageView>
          </graphic>
