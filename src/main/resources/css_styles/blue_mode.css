@@ -27,21 +27,19 @@
 }
 
 .button-buy{
-    -fx-background-color: lightgreen;
+    -fx-font-size: 18pt;
 }
 
 .button-buy:hover{
-    -fx-background-color: green;
-
+    -fx-background-color: lightgreen;
 }
 
 .button-sell{
-    -fx-background-color: red;
+    -fx-font-size: 18pt;
 }
 
 .button-sell:hover{
     -fx-background-color: #ff4f4c;
-    -fx-fill-width: true;
 }
 
 .button-search-text-removal{

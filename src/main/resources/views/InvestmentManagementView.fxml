@@ -113,7 +113,7 @@
          <children>
             <BorderPane>
                <center>
-                  <VBox maxHeight="1.7976931348623157E308" spacing="10.0">
+                  <VBox maxHeight="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="BOTTOM_CENTER">
                      <children>
                         <HBox spacing="10.0">
                            <children>
@@ -169,7 +169,7 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308">
+                        <VBox alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308">
                            <children>
                               <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                                  <children>
@@ -212,7 +212,7 @@
                                     <ComboBox fx:id="comboBoxGraphType" prefWidth="150.0" />
                                  </children>
                               </HBox>
-                              <ScrollPane fx:id="paneChart" focusTraversable="false" maxHeight="1.7976931348623157E308" pannable="true" prefViewportWidth="100.0" VBox.vgrow="ALWAYS">
+                              <ScrollPane fx:id="paneChart" fitToHeight="true" focusTraversable="false" maxHeight="1.7976931348623157E308" pannable="true" prefViewportWidth="100.0" VBox.vgrow="ALWAYS">
                                  <cursor>
                                     <Cursor fx:constant="OPEN_HAND" />
                                  </cursor>
@@ -273,12 +273,12 @@
                         </GridPane>
                         <HBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
                            <children>
-                              <Button fx:id="ButtonBuyStock" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBuyButton" styleClass="button-buy" text="Buy" HBox.hgrow="ALWAYS">
+                              <Button fx:id="ButtonBuyStock" alignment="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleBuyButton" prefHeight="50.0" styleClass="button-buy" text="Buy" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="Segoe UI" size="25.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="ButtonSellStock" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSellButton" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
+                              <Button fx:id="ButtonSellStock" alignment="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleSellButton" prefHeight="50.0" styleClass="button-sell" text="Sell" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="Segoe UI" size="25.0" />
                                  </font>
