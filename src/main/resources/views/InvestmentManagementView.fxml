@@ -169,7 +169,7 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox alignment="BASELINE_CENTER" maxHeight="1.7976931348623157E308">
+                        <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                                  <children>
@@ -212,11 +212,15 @@
                                     <ComboBox fx:id="comboBoxGraphType" prefWidth="150.0" />
                                  </children>
                               </HBox>
-                              <ScrollPane fx:id="paneChart" fitToHeight="true" focusTraversable="false" maxHeight="1.7976931348623157E308" pannable="true" prefViewportWidth="100.0" VBox.vgrow="ALWAYS">
-                                 <cursor>
-                                    <Cursor fx:constant="OPEN_HAND" />
-                                 </cursor>
-                              </ScrollPane>
+                              <HBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ScrollPane fx:id="paneChart" fitToHeight="true" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" prefViewportWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <cursor>
+                                          <Cursor fx:constant="OPEN_HAND" />
+                                       </cursor>
+                                    </ScrollPane>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                      </children>
