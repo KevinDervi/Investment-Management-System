@@ -1,5 +1,8 @@
 package main.java.data.internal_model;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
+import main.java.data.database.MoneyTransferDAO;
 import main.java.data.database.UserDAO;
 import main.java.util.CardDetails;
 
@@ -20,14 +23,16 @@ public class UserDetails {
     private String firstname;
     private String surname;
     private String email;
-    private BigDecimal balance;
+    private SimpleObjectProperty<BigDecimal> balance;
 
     private CardDetails cardBeingUsed;
     private ArrayList<CardDetails> cards;
 
     private static UserDetails instance;
 
-    private UserDetails(){}
+    private UserDetails() {
+        balance = new SimpleObjectProperty<>();
+    }
 
     public static UserDetails getInstance() {
         if (instance == null) {
@@ -44,7 +49,7 @@ public class UserDetails {
         firstname = (String) details.get("firstname");
         surname = (String) details.get("surname");
         email = (String) details.get("email");
-        balance = (BigDecimal) details.get("balance");
+        balance.setValue((BigDecimal) details.get("balance"));
 
         // TODO add cards being used
 
@@ -61,7 +66,7 @@ public class UserDetails {
         firstname = null;
         surname = null;
         email = null;
-        balance = null;
+        balance.setValue(null);
         cardBeingUsed = null;
         cards = null;
     }
@@ -119,11 +124,15 @@ public class UserDetails {
     }
 
     public BigDecimal getBalance() {
-        return balance;
+        return balance.getValue();
     }
 
     private void setBalance(BigDecimal balance) {
-        this.balance = balance;
+        this.balance.setValue(balance);
+    }
+
+    public SimpleObjectProperty<BigDecimal> balanceProperty() {
+        return balance;
     }
 
     public CardDetails getCardBeingUsed() {
@@ -156,7 +165,26 @@ public class UserDetails {
         UserDAO.modifyBalanceBy(byAmount);
 
         // if error is thrown and the database was unable to update then the internal model will not update
-        setBalance(balance.add(byAmount));
+        setBalance((BigDecimal) UserDAO.getUser(username).get("balance"));
+    }
+
+    public void desposit(BigDecimal amount){
+        MoneyTransferDAO.despoitToAccount(amount);
+        setBalance((BigDecimal) UserDAO.getUser(username).get("balance"));
+    }
+
+    public void withdraw(BigDecimal amount){
+        MoneyTransferDAO.withdrawFromAccount(amount);
+        setBalance((BigDecimal) UserDAO.getUser(username).get("balance"));
+    }
+
+    public void updateBalance(){
+        System.out.println("updating balance");
+        BigDecimal newBalance = (BigDecimal) UserDAO.getUser(username).get("balance");
+
+        // run later required to update UI
+        Platform.runLater(() -> setBalance(newBalance));
+
     }
 
 }

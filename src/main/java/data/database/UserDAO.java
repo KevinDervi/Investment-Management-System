@@ -224,7 +224,7 @@ public class UserDAO {
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;
-
+        System.out.println("account balance modified by: " + value);
         try {
             conn = PooledDBConnection.getInstance().getConnection();
 
@@ -234,6 +234,7 @@ public class UserDAO {
                     " WHERE id = " + UserDetails.getInstance().getId();
 
             statement.executeUpdate(update);
+
 
         } catch (SQLException e){
             System.out.println("error with updating user balance");

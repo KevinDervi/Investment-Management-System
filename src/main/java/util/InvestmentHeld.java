@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 /**
  * similar to stockBuy object but quantity bought is quantity left and broker fee is not stored
  */
-public class InvestmentHeld {
+public class InvestmentHeld { // TODO make an equals method that compares based on transactionId
     private Long transactionId;
     private BigDecimal individualPriceBought;
     private String stockSymbol;
@@ -59,5 +59,17 @@ public class InvestmentHeld {
 
     public void setTimeBought(Timestamp timeBought) {
         this.timeBought = timeBought;
+    }
+
+    // objects are the same if their transaction id and quantity left are the same
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null || !(obj instanceof InvestmentHeld)){
+            return false;
+        }
+
+        InvestmentHeld otherInvestmentHeld = (InvestmentHeld) obj;
+        return transactionId.equals(otherInvestmentHeld.transactionId) && quantityLeft.equals(otherInvestmentHeld.quantityLeft);
     }
 }

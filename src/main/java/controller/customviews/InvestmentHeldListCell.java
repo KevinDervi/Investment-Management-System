@@ -1,16 +1,18 @@
-package main.java.Controller;
+package main.java.controller.customviews;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import main.java.logic.InvestmentsHeldLogic;
 import main.java.util.InvestmentHeld;
 
-import java.io.IOException;
+import java.io.File;
+import java.math.BigDecimal;
 
 public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
@@ -37,7 +39,7 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
     private GridPane grid;
 
 
-    InvestmentHeldListCell() {
+    public InvestmentHeldListCell() {
         super();
 
         // load fxml when creating cell
@@ -52,6 +54,9 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
         }
         System.out.println("create list cell");
 
+        // add placeholder at index 1 so style class can be modified later
+        labelPriceDifferenceValue.getStyleClass().add("empty");
+
     }
 
     @Override
@@ -61,14 +66,35 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
         System.out.println("update item");
         // standard required for the cell
-        if(empty){
+        if(empty || investmentHeld == null){
             setGraphic(null);
             setText(null);
         }else{
             // update the cell here
-            //setText("test1");
 
             labelStockSymbol.setText(investmentHeld.getStockSymbol());
+
+            BigDecimal currentPrice = InvestmentsHeldLogic.getCurrentPrice(investmentHeld.getStockSymbol());
+            labelCurrentPriceValue.setText(currentPrice.toString());
+
+            BigDecimal priceBought = investmentHeld.getIndividualPriceBought();
+            labelPriceBoughtValue.setText(priceBought.toString());
+
+            BigDecimal priceDifference = currentPrice.subtract(priceBought);
+
+            // if value is positive then colour will be green otherwise red
+            if (priceDifference.compareTo(BigDecimal.ZERO) > 0){
+                labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-green");
+                Image positiveIndicator = new Image("file:src/main/resources/images/green_up_triangle.png");
+                imageArrow.setImage(positiveIndicator);
+            }else{
+                labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-red");
+                Image negativeIndicator = new Image("file:src/main/resources/images/red_down_triangle.png");
+                imageArrow.setImage(negativeIndicator);
+            }
+            labelPriceDifferenceValue.setText(priceDifference.toString());
+
+            labelQuantityownedValue.setText(investmentHeld.getQuantityLeft().toString());
 
             // finally set graphic as grid
 

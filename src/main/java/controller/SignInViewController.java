@@ -1,4 +1,4 @@
-package main.java.Controller;
+package main.java.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.logic.SignInLogic;
 
@@ -52,6 +51,11 @@ public class SignInViewController {
             newStage.setScene(new Scene(root));
             newStage.show();
 
+            // set minimum size of main Investment management window
+            newStage.setMinWidth(newStage.getWidth());
+            newStage.setMinHeight(newStage.getHeight());
+
+
             // close the current window
             Stage currentStage = (Stage) signInButton.getScene().getWindow();
             currentStage.close();
@@ -61,14 +65,6 @@ public class SignInViewController {
             errorMessage.setText("Wrong Username or Password");
             errorMessage.setVisible(true);
         }
-
-        // TODO get main investment management system controller from FXML Loader and call its initialise method to load properly
-        // no need can populate automatically using this method in the controller and nothing has to be called
-//        @FXML
-//        public void initialize() {
-//            System.out.println("second");
-//        }
-
 
     }
 
@@ -80,6 +76,7 @@ public class SignInViewController {
         Parent root = (Parent) fxmlLoader.load();
 
         stage.setScene(new Scene(root));
+        stage.sizeToScene();
     }
 
 }

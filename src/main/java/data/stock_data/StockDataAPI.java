@@ -1,13 +1,18 @@
 package main.java.data.stock_data;
 
+import main.java.util.Company;
 import main.java.util.StockOutputSize;
 import main.java.util.StockTimeSeriesType;
 import main.java.util.StockTimeSeriesIntradayInterval;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.*;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class StockDataAPI {
 
@@ -74,11 +79,143 @@ public class StockDataAPI {
     }
 
 
-    public JSONObject getSingleLatestStockData(String symbol){
+    public static JSONObject getSingleLatestStockData(String symbol) throws Exception{
+        String url = "https://www.alphavantage.co/query?";
+        url += "function=BATCH_STOCK_QUOTES";
+        url += "&symbols=";
+        url += symbol;
+        url += "&apikey=" + API_KEY;
+
+
+        URL stockURL = new URL(url);
+        JSONTokener tokener = new JSONTokener(stockURL.openStream());
+
+        JSONObject json = new JSONObject(tokener);
+
+
+        // look for an error message if none is found then return the data
+        try{
+            json.getString("Error Message");
+
+            // TODO if error then return JSON data from a local file
+        }catch (Exception e){
+            System.out.println("stock data retrieval successful");
+            return json;
+        }
         return null;
     }
 
-    public JSONObject getmultipleLatestStockData(HashSet<String> symbols){
+    public static JSONArray getmultipleLatestStockData(HashSet<String> symbols) throws Exception{
+        StringBuilder url = new StringBuilder("https://www.alphavantage.co/query?");
+        url.append("function=BATCH_STOCK_QUOTES");
+        url.append("&symbols=");
+
+        for (String symbol: symbols) {
+            url.append(symbol + ",");
+        }
+
+        // delete the last ","
+        url.deleteCharAt(url.length() - 1);
+
+        url.append("&apikey=" + API_KEY);
+
+
+        URL stockURL = new URL(url.toString());
+        System.out.println(stockURL);
+        JSONTokener tokener = new JSONTokener(stockURL.openStream());
+
+        JSONObject json = new JSONObject(tokener);
+
+
+        // look for an error message if none is found then return the data
+        try{
+            json.getString("Error Message");
+
+            // TODO if error then return JSON data from a local file
+        }catch (Exception e){
+            System.out.println("stock data retrieval successful");
+            return json.getJSONArray("Stock Quotes");
+        }
         return null;
     }
+
+    public static Set<Company> getStockMarketCompanyList(){
+        Set<Company> companies = new HashSet<>();
+
+        companies.addAll(getNASDAQCompanies());
+        companies.addAll(getNYSECompanies());
+
+        return companies;
+    }
+
+    private static Set<Company> getNASDAQCompanies(){
+        Set<Company> companies = new HashSet<>();
+        BufferedReader bufferedReader = null;
+
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(StockDataAPI.class.getResourceAsStream("/main/resources/company_data/companylist NASDAQ.csv")));
+
+            // ignore first line
+            bufferedReader.readLine();
+
+            companies = readFromCompanyListCSV(companies, bufferedReader);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return companies;
+    }
+
+    private static Set<Company> getNYSECompanies(){
+        Set<Company> companies = new HashSet<>();
+        BufferedReader bufferedReader = null;
+
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(StockDataAPI.class.getResourceAsStream("/main/resources/company_data/companylist NYSE.csv")));
+
+            // ignore first line
+            bufferedReader.readLine();
+
+            companies = readFromCompanyListCSV(companies, bufferedReader);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return companies;
+    }
+
+    private static Set<Company> readFromCompanyListCSV(Set<Company> companies, BufferedReader bufferedReader) throws IOException {
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+
+            String[] companyLine = line.split(","); // separated by commas
+
+            String companySymbol = companyLine[0].replace("\"", "");
+            String companyName = companyLine[1].replace("\"", "");
+
+            Company company = new Company(companySymbol, companyName);
+
+            companies.add(company);
+
+        }
+
+        return companies;
+    }
+
 }
