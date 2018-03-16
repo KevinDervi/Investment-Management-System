@@ -546,7 +546,7 @@ public class InvestmentManagementViewController {
 
         chartStockData.setCache(true);
 
-        chartStockData.getStylesheets().add(getClass().getResource("/main/resources//css_styles/blue_mode.css").toExternalForm());
+        chartStockData.getStylesheets().add(getClass().getResource("/main/resources/css_styles/blue_mode.css").toExternalForm());
     }
 
     private void addChartToPane(XYChart<String, Number> chartStockData) {
