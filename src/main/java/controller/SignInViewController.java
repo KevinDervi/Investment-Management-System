@@ -51,6 +51,11 @@ public class SignInViewController {
             newStage.setScene(new Scene(root));
             newStage.show();
 
+            // set minimum size of main Investment management window
+            newStage.setMinWidth(newStage.getWidth());
+            newStage.setMinHeight(newStage.getHeight());
+
+
             // close the current window
             Stage currentStage = (Stage) signInButton.getScene().getWindow();
             currentStage.close();
@@ -71,6 +76,7 @@ public class SignInViewController {
         Parent root = (Parent) fxmlLoader.load();
 
         stage.setScene(new Scene(root));
+        stage.sizeToScene();
     }
 
 }

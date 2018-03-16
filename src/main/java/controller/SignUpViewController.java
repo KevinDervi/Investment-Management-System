@@ -171,6 +171,7 @@ public class SignUpViewController {
         Parent root = (Parent) fxmlLoader.load();
 
         stage.setScene(new Scene(root));
+        stage.sizeToScene();
     }
 
     private void resetErrorMessages(){

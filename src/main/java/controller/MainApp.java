@@ -16,5 +16,6 @@ public class MainApp extends Application {
         primaryStage.setTitle("Investment Management System");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 }
