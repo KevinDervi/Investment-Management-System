@@ -139,6 +139,11 @@ public class SignUpViewController {
         // if all inputs have been validated
         if(validInputs){
             SignUpLogic.createUser(username, password, firstName, surname, email);
+            try {
+                handleBack(null);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             // TODO give message for successful sign up and send to sign in screen
         }
 
