@@ -27,21 +27,19 @@
 }
 
 .button-buy{
-    -fx-background-color: lightgreen;
+    -fx-font-size: 18pt;
 }
 
 .button-buy:hover{
-    -fx-background-color: green;
-
+    -fx-background-color: lightgreen;
 }
 
 .button-sell{
-    -fx-background-color: red;
+    -fx-font-size: 18pt;
 }
 
 .button-sell:hover{
     -fx-background-color: #ff4f4c;
-    -fx-fill-width: true;
 }
 
 .button-search-text-removal{
@@ -159,11 +157,13 @@
     -fx-font-family: null;
     -fx-font-size: null;
     -fx-tick-label-font: null;
-    -fx-tick-label-font-size: null;
+    -fx-tick-label-font-size: 9pt;
+    -fx-tick-length: 15px;
 }
 
 .axis-tick-mark {
     -fx-stroke: #00bcd4;
+    -fx-stroke-width: 3px;
 }
 
 /* removes minor tick marks from chart */
@@ -285,4 +285,63 @@
     -fx-max-width: 200;
     -fx-pref-width: 200;
 
+}
+
+
+/* copyrighted code below */
+
+
+/*
+Copyright 2014 Zoi Capital, LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+.candlestick-tooltip-label {
+    -fx-font-size: 0.75em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #666666;
+    -fx-padding: 2 5 2 0;
+}
+
+.candlestick-average-line {
+    -fx-stroke: #106ece;
+    -fx-stroke-width: 2px;
+}
+
+.candlestick-candle {
+    -fx-background-color: rgba(255,34,34,1.00);
+}
+
+.candlestick-line {
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-width: 1px;
+}
+
+
+.candlestick-bar.close-above-open {
+    -fx-background-color: rgba(25,225,25,1.00);
+    -fx-border-width: 1, 1,1,1;
+    -fx-border-color: #e2e2e2;
+}
+
+.candlestick-bar.open-above-close {
+    -fx-background-color: rgba(255,34,34,1.00);
+    -fx-border-width: 1, 1,1,1;
+    -fx-font-weight: bold;
+    -fx-border-color: #e2e2e2;
+}
+
+
+.label-gray {
+    -fx-background-color: rgba(25,25,25,0.70);
 }
