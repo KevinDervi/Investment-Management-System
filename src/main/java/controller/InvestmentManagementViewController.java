@@ -727,7 +727,7 @@ public class InvestmentManagementViewController {
                 labelResult.setTextFill(Color.LIGHTGREEN);
             }else {
                 result = "Sell";
-                labelResult.setTextFill(Color.rgb(255, 100, 100));
+                labelResult.setTextFill(Color.rgb(255, 100, 100)); // light red
             }
 
             labelResult.setText(result);

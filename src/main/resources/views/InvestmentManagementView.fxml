@@ -165,7 +165,6 @@
                                  <children>
                                     <Button mnemonicParsing="false" text="Add to watchlist" />
                                     <Button mnemonicParsing="false" text="Set notification" textFill="WHITE" />
-                                    <Button mnemonicParsing="false" text="Stock Analysis" textFill="WHITE" />
                                  </children>
                               </VBox>
                            </children>
