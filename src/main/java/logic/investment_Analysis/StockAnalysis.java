@@ -1,9 +1,14 @@
 package main.java.logic.investment_Analysis;
 
+import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
 import main.java.data.internal_model.CurrentStockInformation;
 import main.java.data.stock_data.StockDataAPI;
@@ -13,35 +18,271 @@ import main.java.util.StockTimeSeriesType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class StockAnalysis {
 
-    private ArrayList<StockDataPoint> dataSet = new ArrayList<>();
+    private final ArrayList<StockDataPoint> dataSet = new ArrayList<>();
+    private final StockTimeSeriesType function;
+    private final String stockSymbol;
+
+    // pick the last n values to be in the prediction
+    private int lastNValues = 3;
+
+    private StockDataPoint predictionPoint;
+    private Boolean predictionClassification;
+    private Double accuracy;
+
+    private int truePositives;
+    private int trueNegatives;
+    private int falsePositives;
+    private int falseNegatives;
 
     public StockAnalysis(String predictionType) {
 
-        StockTimeSeriesType function = getFunction(predictionType);
-        String stockSymbol = CurrentStockInformation.getInstance().getStockSymbol();
-
+        function = getFunction(predictionType);
+        stockSymbol = CurrentStockInformation.getInstance().getStockSymbol();
+        //stockSymbol = "AAPL";
 
         JSONObject stockData = null;
-        try { // TODO make sure "GOOG" is not in the stock symbol area
-            stockData = StockDataAPI.getStockData(function, "AAPL", null, StockOutputSize.FULL_HISTORY);
+        try {
+            stockData = StockDataAPI.getStockData(function, stockSymbol, null, StockOutputSize.FULL_HISTORY);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        createDataSetVolumeDifference(stockData, function);
-        showChartData();
+        createDataSetVolumeDifference(stockData);
+        //createDataSetVolume(stockData);
 
-        createDataSetVolume(stockData, function);
         showChartData();
+    }
+
+    public Service<AnalysisResult> getStockAnalysisService() {
+        return new StockAnalysisService();
+    }
+
+    public void performKNN(int kValue){
+
+        resetResults();
+
+        predictionPoint = getPrediction();
+        System.out.println("================================================");
+        System.out.println("for K Value: " + kValue);
+        // KNN performed on training data
+        for (int i = lastNValues; i < dataSet.size(); ++i) {
+            // get the location to be categorised
+            performKNNOnDataSetPoint(i, kValue);
+
+        }
+
+        // perform KNN on our actual prediction of the next stock
+        PredictionClassification(kValue);
+
+        printStatistics();
+
+    }
+
+    private void resetResults() {
+        predictionPoint = null;
+        predictionClassification = null;
+        accuracy = null;
+
+        truePositives = 0;
+        trueNegatives = 0;
+        falsePositives = 0;
+        falseNegatives = 0;
+    }
+
+    private void printStatistics() {
+        System.out.println();
+
+
+        System.out.println("prediction Point: " + predictionPoint.getxValue() + ", " + predictionPoint.getyValue());
+        System.out.println("predictionClassification = " + predictionClassification);
+
+        System.out.println();
+
+        System.out.println("total dataset size: " + dataSet.size());
+        System.out.println("truePositives = " + truePositives);
+        System.out.println("trueNegatives = " + trueNegatives);
+        System.out.println("falsePositives = " + falsePositives);
+        System.out.println("falseNegatives = " + falseNegatives);
+
+        System.out.println();
+        System.out.println("accuracy = " + accuracy);
+
+        System.out.println();
+    }
+
+    /**
+     * get the classification of our prediction
+     * @param kValue
+     * @return
+     */
+    private void PredictionClassification(int kValue) {
+        // sort the data based on manhattan distance
+        ArrayList<StockDataPoint> sortedDataSet = sortByDistance(predictionPoint);
+
+        // get the KNN for our prediction
+        List<StockDataPoint> kNNList= sortedDataSet.subList(sortedDataSet.size()-2-kValue, sortedDataSet.size()-2);
+
+        // set the classification for our prediction
+        predictionClassification = getClassificationPrediction(kNNList);
+
+        // set the accuracy for our prediction
+        accuracy = (( (double) truePositives + trueNegatives) / (truePositives + trueNegatives + falseNegatives + falsePositives)) * 100.0;
+    }
+
+    /**
+     * get classification when iterating through training data
+     * @param pointLocation
+     * @param kValue
+     */
+    private void performKNNOnDataSetPoint(int pointLocation, int kValue) {
+        // get our prediction for the training data
+        StockDataPoint s = getPredictionForDataSetPoint(pointLocation);
+
+        // sort the data based on manhattan distance
+        ArrayList<StockDataPoint> sortedDataSet = sortByDistance(s);
+
+
+        // get the KNN for s
+        List<StockDataPoint> kNNList= sortedDataSet.subList(1, 1 + kValue);
+
+        // get the prediction for s
+        boolean tempPredictionClassification = getClassificationPrediction(kNNList);
+
+        // record prediction
+        recordPrediction(s, tempPredictionClassification);
+    }
+
+    /**
+     * records if the prediction is correct
+     * @param s
+     * @param predictionClassification
+     */
+    private void recordPrediction(StockDataPoint s, boolean predictionClassification) {
+        boolean actualclassification = s.shouldBuy();
+
+        // adds values based on true/false positives/negatives
+        if(actualclassification){
+            if (predictionClassification){
+                truePositives += 1;
+            } else {
+                falsePositives += 1;
+            }
+        }else{
+            if (predictionClassification){
+                falseNegatives += 1;
+            }else {
+                trueNegatives += 1;
+            }
+        }
+    }
+
+    private boolean getClassificationPrediction(List<StockDataPoint> kNNList) {
+
+        int buyCount = 0;
+        int sellCount = 0;
+
+        // count each classification and return the highest one
+        for (StockDataPoint s : kNNList) {
+            if (s.shouldBuy()){
+                buyCount += 1;
+            } else{
+                sellCount +=1;
+            }
+        }
+
+        return buyCount > sellCount;
+    }
+
+    private ArrayList<StockDataPoint> sortByDistance(StockDataPoint s) {
+        // create a temporary list to sort by distance from point s
+
+        ArrayList<StockDataPoint> tempList = new ArrayList<>(dataSet);
+
+        // sort the list based on comparator
+        tempList.sort(stockDataPointComparatorManhattan(s));
+
+        // return sortedList
+        return tempList;
+    }
+
+    private Comparator<StockDataPoint> stockDataPointComparatorManhattan(StockDataPoint s)
+    {
+        final StockDataPoint finalP = new StockDataPoint(s.getxValue(), s.getyValue(), s.shouldBuy());
+        return (s1, s2) -> {
+            BigDecimal s1Compared = s1.getManhattanDistance(finalP);
+            BigDecimal s2Compared = s2.getManhattanDistance(finalP);
+            return s1Compared.compareTo(s2Compared);
+        };
+    }
+
+    /**
+     * gets a prediction based on the mean of the latest 3 values from the dataset
+     * @return
+     */
+    private StockDataPoint getPrediction() {
+
+
+        int nthValueLocation = dataSet.size() - 1 - lastNValues;
+
+
+        BigDecimal totalVolume = BigDecimal.ZERO;
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        // iterate through the last n values and add to total
+        for (int i = dataSet.size()- 1; i > nthValueLocation; --i){
+            StockDataPoint currentPoint = dataSet.get(i);
+
+            totalVolume = currentPoint.getyValue().add(totalVolume);
+            totalPrice = currentPoint.getxValue().add(totalPrice);
+        }
+
+        BigDecimal meanValue = BigDecimal.valueOf(lastNValues);
+
+        // find the mean of both x and y axis of the last n values
+        BigDecimal meanVolume = totalVolume.divide(meanValue, 5, RoundingMode.HALF_DOWN);
+        BigDecimal meanPrice = totalPrice.divide(meanValue, 5, RoundingMode.HALF_DOWN);
+
+        // return the mean prediction
+        return new StockDataPoint(meanPrice, meanVolume, null);
+
+    }
+
+    private StockDataPoint getPredictionForDataSetPoint(int predictionLocation){
+
+        BigDecimal totalVolume = BigDecimal.ZERO;
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        // iterate through the last n values and add to total
+        for (int i = predictionLocation - lastNValues; i < predictionLocation; ++i){
+            StockDataPoint currentPoint = dataSet.get(i);
+
+            totalVolume = currentPoint.getyValue().add(totalVolume);
+            totalPrice = currentPoint.getxValue().add(totalPrice);
+        }
+
+        BigDecimal meanValue = BigDecimal.valueOf(lastNValues);
+
+        // find the mean of both x and y axis of the last n values
+        BigDecimal meanVolume = totalVolume.divide(meanValue, 5, RoundingMode.HALF_DOWN);
+        BigDecimal meanPrice = totalPrice.divide(meanValue, 5, RoundingMode.HALF_DOWN);
+
+        // actual classification (classification of the next value)
+        boolean actualClassification = dataSet.get(predictionLocation).shouldBuy();
+
+        // return the mean prediction
+        return new StockDataPoint(meanPrice, meanVolume, actualClassification);
     }
 
     private void showChartData(){
@@ -52,37 +293,58 @@ public class StockAnalysis {
 
         // convert data to a javafx chart readable format
         for (StockDataPoint s : dataSet) {
-            if(s.isShouldBuy()){
+            if(s.shouldBuy()){
                 seriesBuy.getData().add(new XYChart.Data<>(s.getxValue(), s.getyValue()));
 
             }else {
                 seriesSell.getData().add(new XYChart.Data<>(s.getxValue(), s.getyValue()));
             }
         }
+
         seriesBuy.setName("Buy");
         seriesSell.setName("Sell");
+        chart.setTitle(stockSymbol + " " + function);
+        chart.getXAxis().setLabel("Price");
+
+        chart.getYAxis().setLabel("Volume difference from previous value");
+
+
+        chart.getStylesheets().add(getClass().getResource("/main/resources/css_styles/stock_analysis_graph.css").toExternalForm());
+
+
         chart.getData().addAll(seriesBuy, seriesSell);
-        System.out.println("seriesBuy size: " + seriesBuy.getData().size());
-        System.out.println("seriesSell size: " + seriesSell.getData().size());
+        chart.setAnimated(false);
+
         Stage stage = new Stage();
         Scene scene  = new Scene(chart);
+
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
 
+
+        // save the graph as an image file
+        WritableImage snapShot = scene.snapshot(null);
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", new File(stockSymbol + "_" + function + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void createDataSetVolumeDifference(JSONObject JSONstockData, StockTimeSeriesType function) {
+
+    private void createDataSetVolumeDifference(JSONObject JSONstockData) {
 
         // retrieve data and convert to array list
-        ArrayList<StockDataPoint> stockDataArrayList = convertJSONToListWithVolumeDifferences(JSONstockData, function);
+        ArrayList<StockDataPoint> stockDataArrayList = convertJSONToListWithVolumeDifferences(JSONstockData);
 
         // normalise the values
         //dataSet = normaliseData(stockDataArrayList);
-        dataSet = stockDataArrayList;
+        dataSet.addAll(stockDataArrayList);
     }
 
-    private void createDataSetVolume(JSONObject JSONstockData, StockTimeSeriesType function) {
-        dataSet = convertJSONToListWithVolume(JSONstockData, function);
+    private void createDataSetVolume(JSONObject JSONstockData) {
+        dataSet.addAll(convertJSONToListWithVolume(JSONstockData));
     }
 
 
@@ -182,7 +444,7 @@ public class StockAnalysis {
         return maxValue;
     }
 
-    private ArrayList<StockDataPoint> convertJSONToListWithVolumeDifferences(JSONObject JSONstockData, StockTimeSeriesType function) {
+    private ArrayList<StockDataPoint> convertJSONToListWithVolumeDifferences(JSONObject JSONstockData) {
         ArrayList<StockData> orderedData = new ArrayList<>();
 
         try {
@@ -204,11 +466,6 @@ public class StockAnalysis {
             // y value
             BigDecimal changeInVolume = volume.subtract(lastVolume);
 
-            System.out.println("volume = " + volume);
-            System.out.println("lastVolume = " + lastVolume);
-            System.out.println("changeInVolume = " + changeInVolume);
-            System.out.println();
-
             lastVolume = volume;
 
             boolean classificationShouldBuy;
@@ -223,69 +480,11 @@ public class StockAnalysis {
             arrayList.add(dataPoint);
         }
 
-//
-//        String StockDataTitle = getStockDataJSONTitle(function);
-//        try {
-//            // gets JSONObject of stock data from the API
-//            JSONObject stockData = JSONstockData.getJSONObject(StockDataTitle);
-//
-//            // gets json keys
-//            Iterator stockDataKeys = stockData.keys();
-//
-//            // ignore the first data point since we cannot determine the change in volume
-//            // only extract the volume from it
-//            String firstPointStringDate = (String) stockDataKeys.next();
-//
-//            JSONObject firstPointIndividualData = stockData.getJSONObject(firstPointStringDate);
-//
-//            String firstPointVolumeString = firstPointIndividualData.getString("5. volume");
-//
-//            // for the KNN classification to determine the change in volume for each
-//            BigDecimal lastVolume = new BigDecimal(firstPointVolumeString);
-//
-//            // iterate through keys and add the information to an ArrayList
-//            while(stockDataKeys.hasNext()){
-//                String stringDate = (String) stockDataKeys.next();
-//
-//                JSONObject individualData = stockData.getJSONObject(stringDate);
-//
-//                String openString = individualData.getString("1. open");
-//                String closeString = individualData.getString("4. close");
-//                String volumeString = individualData.getString("5. volume");
-//
-//                // convert data to StockData suitable format
-//                BigDecimal open = new BigDecimal(openString);
-//                BigDecimal close = new BigDecimal(closeString);
-//                BigDecimal volume = new BigDecimal(volumeString);
-//
-//                // y value
-//                BigDecimal changeInVolume = volume.subtract(lastVolume);
-//                System.out.println("volume = " + volume);
-//                System.out.println("lastVolume = " + lastVolume);
-//                System.out.println("changeInVolume = " + changeInVolume);
-//                System.out.println();
-//                lastVolume = volume;
-//
-//                boolean classificationShouldBuy;
-//
-//                BigDecimal priceChange = close.subtract(open);
-//
-//                // true if stock has increased in price and false if fallen or unchanged
-//                classificationShouldBuy = priceChange.compareTo(BigDecimal.ZERO) > 0;
-//
-//                StockDataPoint dataPoint = new StockDataPoint(close, changeInVolume, classificationShouldBuy);
-//
-//                arrayList.add(dataPoint);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-
 
         return arrayList;
     }
 
-    private ArrayList<StockDataPoint> convertJSONToListWithVolume(JSONObject JSONstockData, StockTimeSeriesType function) {
+    private ArrayList<StockDataPoint> convertJSONToListWithVolume(JSONObject JSONstockData) {
         ArrayList<StockDataPoint> arrayList = new ArrayList<>();
 
 
@@ -441,7 +640,7 @@ public class StockAnalysis {
         private BigDecimal yValue; // volume / change in volume
 
 
-        private boolean shouldBuy; // if the stock data point has increased in value (i.e. the user should buy)
+        private Boolean shouldBuy; // if the stock data point has increased in value (i.e. the user should buy)
 
         /**
          * Creates a point on the graph for KNN stock analysis
@@ -449,7 +648,7 @@ public class StockAnalysis {
          * @param xValue   the price of the stock at a given point
          * @param yValue the change in volume compared to the last point
          */
-        StockDataPoint(BigDecimal xValue, BigDecimal yValue, boolean shouldBuy) {
+        StockDataPoint(BigDecimal xValue, BigDecimal yValue, Boolean shouldBuy) {
             this.xValue = xValue;
             this.yValue = yValue;
             this.shouldBuy = shouldBuy;
@@ -463,7 +662,7 @@ public class StockAnalysis {
             return yValue;
         }
 
-        boolean isShouldBuy() {
+        Boolean shouldBuy() {
             return shouldBuy;
         }
 
@@ -473,6 +672,87 @@ public class StockAnalysis {
 
         void setyValue(BigDecimal yValue) {
             this.yValue = yValue;
+        }
+
+        BigDecimal getManhattanDistance(StockDataPoint s){
+            BigDecimal xDifference = xValue.subtract(s.getxValue()).abs();
+            BigDecimal yDifference = yValue.subtract(s.getyValue()).abs();
+
+            return xDifference.add(yDifference);
+        }
+
+        BigDecimal getEuclideanDistance(StockDataPoint s){
+            // return sqrt((x - x2)^2 + (y - y2)^2)
+            BigDecimal xDifference = xValue.subtract(s.getxValue());
+            BigDecimal yDifference = yValue.subtract(s.getyValue());
+
+            BigDecimal xDifferenceSquared = xDifference.pow(2);
+            BigDecimal yDifferenceSquared = yDifference.pow(2);
+
+            BigDecimal xSquaredPlusYSquared = xDifferenceSquared.add(yDifferenceSquared);
+
+
+            return xSquaredPlusYSquared.sqrt(MathContext.DECIMAL64);
+        }
+    }
+
+
+    public class StockAnalysisService extends Service<AnalysisResult> {
+
+        @Override
+        protected Task<AnalysisResult> createTask() {
+            return new StockAnalysisTask();
+        }
+
+
+        private class StockAnalysisTask extends Task<AnalysisResult> {
+
+            @Override
+            protected AnalysisResult call() throws Exception {
+
+                // create initial best result of 0 accuracy
+                AnalysisResult bestResult = new AnalysisResult(false, 0.0);
+                int bestK = -1;
+
+                //record total time taken
+                long initialStartTime = System.currentTimeMillis();
+
+                updateProgress(0.0, 9);
+
+
+                // iterate in steps of 2 from 1 - 9 (inclusive) for the k value
+                for (int k = 1; k < 10; k+=2){
+
+
+
+                    long startTime = System.currentTimeMillis();
+
+                    performKNN(k);
+                    AnalysisResult result = new AnalysisResult(predictionClassification, accuracy);
+
+
+                    // if result is less tahn 50% then invert the higher accuracy
+                    if (accuracy < 50){
+                        result = result.invert();
+                    }
+
+                    if (result.getAccuracy() > bestResult.getAccuracy()){
+                        bestResult = result;
+                        bestK = k;
+                    }
+
+                    System.out.println("time taken for k = " + k + " : " + (System.currentTimeMillis() - startTime)/1000.0 + "s");
+
+
+                    updateProgress(k/9.0, 9);
+                }
+
+                System.out.println("total time taken: " + (System.currentTimeMillis() - initialStartTime)/1000.0 + "s");
+                System.out.println("bestResult = " + bestResult);
+                System.out.println("bestK = " + bestK);
+
+                return bestResult;
+            }
         }
     }
 }
