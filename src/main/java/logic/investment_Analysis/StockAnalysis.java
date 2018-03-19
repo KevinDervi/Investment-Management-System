@@ -50,19 +50,7 @@ public class StockAnalysis {
 
         function = getFunction(predictionType);
         stockSymbol = CurrentStockInformation.getInstance().getStockSymbol();
-        //stockSymbol = "AAPL";
 
-        JSONObject stockData = null;
-        try {
-            stockData = StockDataAPI.getStockData(function, stockSymbol, null, StockOutputSize.FULL_HISTORY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        createDataSetVolumeDifference(stockData);
-        //createDataSetVolume(stockData);
-
-        showChartData();
     }
 
     public Service<AnalysisResult> getStockAnalysisService() {
@@ -709,6 +697,19 @@ public class StockAnalysis {
 
             @Override
             protected AnalysisResult call() throws Exception {
+                updateProgress(0.0, 9);
+                //get and setup dataset for analysis
+                JSONObject stockData = null;
+                try {
+                    stockData = StockDataAPI.getStockData(function, stockSymbol, null, StockOutputSize.FULL_HISTORY);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                createDataSetVolumeDifference(stockData);
+                //createDataSetVolume(stockData);
+
+                //showChartData();
 
                 // create initial best result of 0 accuracy
                 AnalysisResult bestResult = new AnalysisResult(false, 0.0);
@@ -717,12 +718,14 @@ public class StockAnalysis {
                 //record total time taken
                 long initialStartTime = System.currentTimeMillis();
 
-                updateProgress(0.0, 9);
+
 
 
                 // iterate in steps of 2 from 1 - 9 (inclusive) for the k value
                 for (int k = 1; k < 10; k+=2){
-
+                    if(Thread.interrupted()){
+                        return null;
+                    }
 
 
                     long startTime = System.currentTimeMillis();
@@ -744,12 +747,16 @@ public class StockAnalysis {
                     System.out.println("time taken for k = " + k + " : " + (System.currentTimeMillis() - startTime)/1000.0 + "s");
 
 
-                    updateProgress(k/9.0, 9);
+                    updateProgress(k, 9);
                 }
 
                 System.out.println("total time taken: " + (System.currentTimeMillis() - initialStartTime)/1000.0 + "s");
                 System.out.println("bestResult = " + bestResult);
                 System.out.println("bestK = " + bestK);
+
+                if(Thread.interrupted()){
+                    return null;
+                }
 
                 return bestResult;
             }

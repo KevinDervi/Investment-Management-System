@@ -261,12 +261,12 @@
                               <Label styleClass="label-data" text="Stock Analysis:" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                               <Label styleClass="label-data" text="Prediction Type:  " GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                               <ComboBox fx:id="comboBoxPredictionType" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Button fx:id="ButtonStockAnalysis" mnemonicParsing="false" text="Perform Stock Analysis" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                              <ProgressBar prefWidth="200.0" progress="0.0" visible="false" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                              <Button fx:id="buttonStockAnalysis" mnemonicParsing="false" onAction="#handleStockAnalysisButton" text="Perform Stock Analysis" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <ProgressBar fx:id="progressBarStockAnalysis" prefWidth="200.0" progress="0.0" visible="false" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
                               <Label styleClass="label-data" text="Result:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
                               <Label styleClass="label-data" text="Accuracy:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                              <Label fx:id="labelResult" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                              <Label fx:id="labelAccuracy" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                              <Label fx:id="labelResult" styleClass="label-data" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <Label fx:id="labelAccuracy" styleClass="label-data" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                            </children>
                         </GridPane>
                         <HBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
