@@ -1,6 +1,5 @@
 package main.java.data.internal_model;
 
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import main.java.data.stock_data.StockDataAPI;
 import main.java.util.StockData;
@@ -33,17 +32,17 @@ public class CurrentStockInformation {
     private StockTimeSeriesIntradayInterval interval;
     private StockOutputSize outputSize;
 
-    private static CurrentStockInformation Instance;
+    private static CurrentStockInformation instance;
 
     private CurrentStockInformation(){
         currentValue = new SimpleObjectProperty<>();
     }
 
     public static CurrentStockInformation getInstance() {
-        if(Instance == null){
-            Instance = new CurrentStockInformation();
+        if(instance == null){
+            instance = new CurrentStockInformation();
         }
-        return Instance;
+        return instance;
     }
 
     public void setFunction(StockTimeSeriesType function) {
@@ -270,5 +269,9 @@ public class CurrentStockInformation {
         }else { // Monthly
             return  "Monthly Time Series";
         }
+    }
+
+    public void signOut() {
+        instance = null;
     }
 }

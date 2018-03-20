@@ -758,6 +758,9 @@ public class StockAnalysis {
                     return null;
                 }
 
+                // request garbage collection
+                System.gc();
+
                 return bestResult;
             }
         }

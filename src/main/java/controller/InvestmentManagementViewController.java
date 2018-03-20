@@ -10,15 +10,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import main.java.controller.customviews.InvestmentHeldListCell;
 import main.java.controller.customviews.StockLineGraph;
 import main.java.controller.customviews.StockSearchField;
 import main.java.logic.InvestmentsHeldLogic;
+import main.java.logic.SignOutLogic;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
 import main.java.logic.investment_Analysis.AnalysisResult;
@@ -54,7 +57,7 @@ public class InvestmentManagementViewController {
     private ListView<InvestmentHeld> ListViewInvestmentHeld;
 
     @FXML
-    private MenuBar menuHelp;
+    private MenuBar menuBarMain;
 
     @FXML
     private Menu menuAccount;
@@ -154,7 +157,10 @@ public class InvestmentManagementViewController {
     @FXML
     private StackPane stackPaneStockDetailsArea;
 
-    // data
+    @FXML
+    private MenuItem menuItemAccountSignOut;
+
+    // services
     private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
     private Service<AnalysisResult> analysisService;
 
@@ -854,6 +860,44 @@ public class InvestmentManagementViewController {
 
 
         stackPaneStockDetailsArea.getChildren().add(stockSellView);
+    }
+
+    // ===================================== SIGN OUT METHODS =============================================
+
+    @FXML
+    void handleSignOut(ActionEvent event) throws Exception{
+        SignOutLogic.signOut();
+
+        // try to cancel any current tasks
+        try {
+            chartUpdater.cancel();
+            analysisService.cancel();
+        }catch (Exception ignored){}
+
+        // then destroy the services
+        analysisService = null;
+        chartUpdater = null;
+
+        // close the current window
+        Stage stage = (Stage) menuBarMain.getScene().getWindow();
+        stage.close();
+
+
+        // create new window for Sign In Screen
+        Stage newStage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/SignInView.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+
+        newStage.setScene(new Scene(root));
+        newStage.setResizable(false);
+
+        // finally display the sign in screen
+        newStage.show();
+
+
+        // request garbage collection
+        System.gc();
     }
 
 
