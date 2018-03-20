@@ -151,6 +151,10 @@
 }
 
 .axis {
+    -fx-background-color: #757575;
+    -fx-background-insets: -10;
+
+
     -fx-tick-label-fill: white;
     -fx-text-fill: null;
     -fx-font-color: null;

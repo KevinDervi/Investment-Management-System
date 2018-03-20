@@ -2,6 +2,7 @@ package main.java.controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -271,6 +272,27 @@ public class InvestmentManagementViewController {
         chartStockData.dataProperty().addListener(this::updateTechnicalDetailsOnChanged);
 
         chartStockData.dataProperty().addListener(this::showLoadingIconWhenUpdating);
+
+        paneChart.hvalueProperty().addListener((observable, oldValue, newValue) -> {
+            int numberOfDatapoints;
+            try {
+                numberOfDatapoints = chartStockData.getData().get(0).getData().size();
+            } catch (Exception e){
+                numberOfDatapoints = 0;
+            }
+
+            double widthBetweenPoints = 20.0;
+
+            double valueToTranslate = newValue.doubleValue() * (numberOfDatapoints * widthBetweenPoints - paneChart.getWidth());
+
+            if (valueToTranslate < 0.0) {
+                valueToTranslate = 0.0;
+            }
+
+            valueToTranslate -= 10.0;
+
+            chartStockData.getYAxis().setTranslateX(valueToTranslate);
+        });
     }
 
     private void showLoadingIconWhenUpdating(ObservableValue<? extends ObservableList<XYChart.Series<String, Number>>> observable, ObservableList<XYChart.Series<String, Number>> oldValue, ObservableList<XYChart.Series<String, Number>> newValue) {
@@ -289,7 +311,7 @@ public class InvestmentManagementViewController {
 
                 stackPaneStockDetailsArea.getChildren().add(loadingIcon);
                 loadingIcon.setId("loadingIcon");
-                System.out.println("loading icon ID: " + stackPaneStockDetailsArea.getChildren().get(1).getId());
+
             }catch (Exception ignored){ }
 
         } else {
@@ -470,7 +492,7 @@ public class InvestmentManagementViewController {
         BarData dummyData = new BarData(new GregorianCalendar(), 0.0,0.0,0.0,0.0,0L);
         emptyDataSet.add(dummyData);
 
-        chartStockData = new CandleStickChart(StockDataLogic.getCurrentSymbol(), emptyDataSet);
+        chartStockData = new CandleStickChart(null, emptyDataSet);
 
         styleChart(chartStockData);
 
@@ -490,8 +512,8 @@ public class InvestmentManagementViewController {
         chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
 
         // bind title of chart to updater
-        chartStockData.titleProperty().unbind();
-        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
+//        chartStockData.titleProperty().unbind();
+//        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
 
     }
 
@@ -517,6 +539,13 @@ public class InvestmentManagementViewController {
         } else {
             chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
         }
+
+        if (oldValue == null){
+            Platform.runLater(() -> {
+                paneChart.hvalueProperty().setValue(1.0); // send the bar to the end of the screen
+            });
+        }
+
     }
 
     /**
@@ -539,13 +568,18 @@ public class InvestmentManagementViewController {
     private void addChartToPane(XYChart<String, Number> chartStockData) {
         // (might not be needed) paneChart.getChildren().clear();// remove any children currently attached to the pane
         paneChart.setContent(chartStockData); // add to the chart pane
+
+        //chartStockData.getYAxis().translateXProperty().bind(paneChart.hvalueProperty());
+        chartStockData.getXAxis().setTranslateY(10.0);
+
+
     }
 
     private void createLineChart(){
 
         chartStockData = new StockLineGraph();
 
-        chartStockData.setTitle(StockDataLogic.getCurrentSymbol());
+        //chartStockData.setTitle(StockDataLogic.getCurrentSymbol());
 
         styleChart(chartStockData);
 
