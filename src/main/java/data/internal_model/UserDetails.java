@@ -187,4 +187,7 @@ public class UserDetails {
 
     }
 
+    public void signOut() {
+        instance = null;
+    }
 }
