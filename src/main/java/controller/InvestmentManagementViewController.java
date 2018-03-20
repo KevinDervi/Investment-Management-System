@@ -2,27 +2,33 @@ package main.java.controller;
 
 import com.zoicapital.stockchartsfx.BarData;
 import com.zoicapital.stockchartsfx.CandleStickChart;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import main.java.controller.customviews.InvestmentHeldListCell;
 import main.java.controller.customviews.StockLineGraph;
 import main.java.controller.customviews.StockSearchField;
 import main.java.logic.InvestmentsHeldLogic;
+import main.java.logic.SignOutLogic;
 import main.java.logic.StockDataLogic;
 import main.java.logic.UserDetailsLogic;
+import main.java.logic.investment_Analysis.AnalysisResult;
+import main.java.logic.investment_Analysis.StockAnalysis;
 import main.java.util.*;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -51,7 +57,7 @@ public class InvestmentManagementViewController {
     private ListView<InvestmentHeld> ListViewInvestmentHeld;
 
     @FXML
-    private MenuBar menuHelp;
+    private MenuBar menuBarMain;
 
     @FXML
     private Menu menuAccount;
@@ -128,37 +134,19 @@ public class InvestmentManagementViewController {
     private Label labelCurrentStockPrice;
 
     @FXML
-    private Label labelDailyStockChange;
+    private ComboBox<String> comboBoxPredictionType;
 
     @FXML
-    private Label labelDailyStockChangePercentage;
+    private Button buttonStockAnalysis;
 
     @FXML
-    private ImageView imageDailyStockChange;
+    private ProgressBar progressBarStockAnalysis;
 
     @FXML
-    private ImageView imageWeeklyStockChange;
+    private Label labelResult;
 
     @FXML
-    private ImageView imageMonthlyStockChange;
-
-    @FXML
-    private ImageView imageYearlyStockChange;
-
-    @FXML
-    private Label labelWeeklyStockChange;
-
-    @FXML
-    private Label labelMonthlyStockChange;
-
-    @FXML
-    private Label labelYearlyStockChange;
-
-    @FXML
-    private Label labelMonthlyStockChangePercentage;
-
-    @FXML
-    private Label labelYearlyStockChangePercentage;
+    private Label labelAccuracy;
 
     @FXML
     private Button ButtonBuyStock;
@@ -169,9 +157,12 @@ public class InvestmentManagementViewController {
     @FXML
     private StackPane stackPaneStockDetailsArea;
 
-    // data
-    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
+    @FXML
+    private MenuItem menuItemAccountSignOut;
 
+    // services
+    private StockDataLogic.StockDataUpdaterService chartUpdater = new StockDataLogic().new StockDataUpdaterService();
+    private Service<AnalysisResult> analysisService;
 
     /**
      * the initialize method is run after the view is created and has access to the FXML widgets while the constructor does now
@@ -191,13 +182,15 @@ public class InvestmentManagementViewController {
         // update user details
         initialiseUserDetails();
 
-        initialiseStockPricesChangeFields();
+        initialiseStockPricesFields();
 
         initialiseSearchFeield();
 
         initialiseInvestmentsHeldList();
 
         intialiseButtons();
+
+        initialiseStockAnalysis();
 
         // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
 
@@ -285,6 +278,27 @@ public class InvestmentManagementViewController {
         chartStockData.dataProperty().addListener(this::updateTechnicalDetailsOnChanged);
 
         chartStockData.dataProperty().addListener(this::showLoadingIconWhenUpdating);
+
+        paneChart.hvalueProperty().addListener((observable, oldValue, newValue) -> {
+            int numberOfDatapoints;
+            try {
+                numberOfDatapoints = chartStockData.getData().get(0).getData().size();
+            } catch (Exception e){
+                numberOfDatapoints = 0;
+            }
+
+            double widthBetweenPoints = 20.0;
+
+            double valueToTranslate = newValue.doubleValue() * (numberOfDatapoints * widthBetweenPoints - paneChart.getWidth());
+
+            if (valueToTranslate < 0.0) {
+                valueToTranslate = 0.0;
+            }
+
+            valueToTranslate -= 10.0;
+
+            chartStockData.getYAxis().setTranslateX(valueToTranslate);
+        });
     }
 
     private void showLoadingIconWhenUpdating(ObservableValue<? extends ObservableList<XYChart.Series<String, Number>>> observable, ObservableList<XYChart.Series<String, Number>> oldValue, ObservableList<XYChart.Series<String, Number>> newValue) {
@@ -303,7 +317,7 @@ public class InvestmentManagementViewController {
 
                 stackPaneStockDetailsArea.getChildren().add(loadingIcon);
                 loadingIcon.setId("loadingIcon");
-                System.out.println("loading icon ID: " + stackPaneStockDetailsArea.getChildren().get(1).getId());
+
             }catch (Exception ignored){ }
 
         } else {
@@ -484,7 +498,7 @@ public class InvestmentManagementViewController {
         BarData dummyData = new BarData(new GregorianCalendar(), 0.0,0.0,0.0,0.0,0L);
         emptyDataSet.add(dummyData);
 
-        chartStockData = new CandleStickChart(StockDataLogic.getCurrentSymbol(), emptyDataSet);
+        chartStockData = new CandleStickChart(null, emptyDataSet);
 
         styleChart(chartStockData);
 
@@ -504,8 +518,8 @@ public class InvestmentManagementViewController {
         chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
 
         // bind title of chart to updater
-        chartStockData.titleProperty().unbind();
-        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
+//        chartStockData.titleProperty().unbind();
+//        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
 
     }
 
@@ -531,6 +545,13 @@ public class InvestmentManagementViewController {
         } else {
             chartStockData.setPrefWidth(newValue.get(0).getData().size() * distanceBetweenValues); // set size of data
         }
+
+        if (oldValue == null){
+            Platform.runLater(() -> {
+                paneChart.hvalueProperty().setValue(1.0); // send the bar to the end of the screen
+            });
+        }
+
     }
 
     /**
@@ -553,13 +574,18 @@ public class InvestmentManagementViewController {
     private void addChartToPane(XYChart<String, Number> chartStockData) {
         // (might not be needed) paneChart.getChildren().clear();// remove any children currently attached to the pane
         paneChart.setContent(chartStockData); // add to the chart pane
+
+        //chartStockData.getYAxis().translateXProperty().bind(paneChart.hvalueProperty());
+        chartStockData.getXAxis().setTranslateY(10.0);
+
+
     }
 
     private void createLineChart(){
 
         chartStockData = new StockLineGraph();
 
-        chartStockData.setTitle(StockDataLogic.getCurrentSymbol());
+        //chartStockData.setTitle(StockDataLogic.getCurrentSymbol());
 
         styleChart(chartStockData);
 
@@ -704,9 +730,83 @@ public class InvestmentManagementViewController {
     // ===================================== INVESTMENT ANALYSIS METHODS =================================
 
 
-    // ===================================== STOCK PRICES CHANGE METHODS =================================
-    // TODO remove stock prices changes and substitute for current investment held values
-    private void initialiseStockPricesChangeFields(){
+    private void initialiseStockAnalysis(){
+        initialisePredictionComboBox();
+
+        labelStockSymbol.textProperty().addListener(this::terminateStockAnalysisOnStockChange);
+    }
+
+
+    private void terminateStockAnalysisOnStockChange(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        if (analysisService != null) {
+            analysisService.cancel();
+        }
+        analysisService = null;
+
+        resetStockAnalysis();
+    }
+
+    private void resetStockAnalysis() {
+        labelResult.setText("");
+        labelAccuracy.setText("");
+    }
+
+    @FXML
+    void handleStockAnalysisButton(ActionEvent event){
+        String predictionType = comboBoxPredictionType.getSelectionModel().getSelectedItem();
+
+         analysisService = new StockAnalysis(predictionType).getStockAnalysisService();
+
+
+        // add listener for what happens on succeed
+        analysisService.valueProperty().addListener((observable, oldValue, newValue) -> {
+            String result;
+
+            if (newValue.isClassification()){
+                result = "Buy";
+                labelResult.setTextFill(Color.LIGHTGREEN);
+            }else {
+                result = "Sell";
+                labelResult.setTextFill(Color.rgb(255, 100, 100)); // light red
+            }
+
+            labelResult.setText(result);
+
+            //format accuracy to 2 decimal places
+            labelAccuracy.setText(String.format("%.2f", newValue.getAccuracy()) + "%");
+
+//            comboBoxPredictionType.setDisable(false);
+//            buttonStockAnalysis.setDisable(false);
+        });
+
+        // bind progress property to loading bar
+        progressBarStockAnalysis.progressProperty().unbind();
+        progressBarStockAnalysis.progressProperty().bind(analysisService.progressProperty());
+        progressBarStockAnalysis.visibleProperty().unbind();
+        progressBarStockAnalysis.visibleProperty().bind(analysisService.runningProperty());
+
+        //  disable dropdown menu if analysis is currently running
+        comboBoxPredictionType.disableProperty().unbind();
+        comboBoxPredictionType.disableProperty().bind(analysisService.runningProperty());
+
+        // disable analysis button if analysis is currently running
+        buttonStockAnalysis.disableProperty().unbind();
+        buttonStockAnalysis.disableProperty().bind(analysisService.runningProperty());
+
+
+        //start the analysis
+        analysisService.start();
+
+    }
+
+    private void initialisePredictionComboBox(){
+        comboBoxPredictionType.getItems().addAll("1-Day", "1-Week", "1-Month");
+        comboBoxPredictionType.getSelectionModel().selectFirst();
+    }
+
+
+    // ===================================== STOCK PRICES METHODS =================================
+    private void initialiseStockPricesFields(){
         initilaiseStockPriceLabel();
         initialiseStockSymbolLabel();
     }
@@ -762,6 +862,44 @@ public class InvestmentManagementViewController {
         stackPaneStockDetailsArea.getChildren().add(stockSellView);
     }
 
+    // ===================================== SIGN OUT METHODS =============================================
+
+    @FXML
+    void handleSignOut(ActionEvent event) throws Exception{
+        SignOutLogic.signOut();
+
+        // try to cancel any current tasks
+        try {
+            chartUpdater.cancel();
+            analysisService.cancel();
+        }catch (Exception ignored){}
+
+        // then destroy the services
+        analysisService = null;
+        chartUpdater = null;
+
+        // close the current window
+        Stage stage = (Stage) menuBarMain.getScene().getWindow();
+        stage.close();
+
+
+        // create new window for Sign In Screen
+        Stage newStage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/SignInView.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+
+        newStage.setScene(new Scene(root));
+        newStage.setResizable(false);
+
+        // finally display the sign in screen
+        newStage.show();
+
+
+        // request garbage collection
+        System.gc();
+    }
+
 
     // ===================================== UTILITY METHODS ==============================================
 
@@ -776,7 +914,6 @@ public class InvestmentManagementViewController {
 
         }
     }
-
 
 
 }
