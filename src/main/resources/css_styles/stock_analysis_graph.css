@@ -1,0 +1,22 @@
+/* should buy colour */
+.default-color0.chart-legend-item-symbol{
+    -fx-background-color: green;
+}
+.default-color0{
+    -fx-background-color: green;
+}
+
+/* should sell colour */
+.default-color1.chart-legend-item-symbol{
+    -fx-background-color: red;
+}
+.default-color1.chart-symbol{
+    -fx-background-color: red;
+    -fx-background-radius: 5px;
+    -fx-background-size: 5px;
+}
+
+
+.axis{
+    -fx-font-size: 15pt;
+}

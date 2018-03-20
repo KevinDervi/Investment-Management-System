@@ -142,4 +142,10 @@ public class InvestmentsHeldByUser {
         UserDetails.getInstance().updateBalance();
     }
 
+    /**
+     * invalidate all data when the user signs out
+     */
+    public void signOut() {
+        instance = null;
+    }
 }
