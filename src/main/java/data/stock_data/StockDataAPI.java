@@ -130,7 +130,8 @@ public class StockDataAPI {
 
         URL stockURL = new URL(url.toString());
         System.out.println(stockURL);
-        JSONTokener tokener = null;
+
+        JSONTokener tokener;
         try {
             tokener = new JSONTokener(stockURL.openStream());
 

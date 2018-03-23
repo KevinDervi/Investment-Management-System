@@ -141,15 +141,38 @@ public class CurrentStockInformation {
             // get price as string instead of double to avoid losing information
             String value = jsonObject.getString("2. price");
 
+            BigDecimal latestValue = new BigDecimal(value);
+
+            // if value received is 0 then return backup value
+            if (latestValue.compareTo(BigDecimal.ZERO) == 0){
+                throw new Exception("latest value for stock is $0");
+            }
+
             //update our current value
-            currentValue.setValue(new BigDecimal(value));
+            currentValue.setValue(latestValue);
 
 
         } catch (Exception e) { // if the array for current is empty (which it appears to be for SPX (S&P 500)
             System.out.println("empty single stock batch quotes");
-            // return a default value of 0
-            currentValue.setValue(null);
+
+            // if SPX is being viewed then return null otherwise return backup value
+            if(stockSymbol.equals("SPX")){
+                currentValue.setValue(null);
+            }else {
+                currentValue.setValue(backUpValue());
+            }
         }
+    }
+
+    /**
+     * returns backup data in case of API failure
+     * @return
+     */
+    private BigDecimal backUpValue() {
+        // get the latest stock value
+        StockData latestData = chartData.get(chartData.size()-1);
+
+        return latestData.getClose();
     }
 
     private void updateChartData() throws Exception{
