@@ -144,14 +144,8 @@ public class CurrentStockInformation {
             //update our current value
             currentValue.setValue(new BigDecimal(value));
 
-        } catch (IOException e){
-            // 503 response code, try again in 2 seconds
-            System.out.println("503 response code (batch stock quotes single value), waiting 2 seconds and trying again");
-            Thread.sleep(2000);
-            // TODO limit to 3 tries only or may be infinite
-            updateCurrentValue();
 
-        } catch (JSONException e) { // if the array for current is empty (which it appears to be for SPX (S&P 500)
+        } catch (Exception e) { // if the array for current is empty (which it appears to be for SPX (S&P 500)
             System.out.println("empty single stock batch quotes");
             // return a default value of 0
             currentValue.setValue(null);

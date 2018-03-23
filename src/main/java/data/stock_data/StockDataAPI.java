@@ -56,27 +56,35 @@ public class StockDataAPI {
 
         // simplest way to get json object from url
         URL stockURL = new URL(url);
-        //System.out.println(stockURL);
-        JSONTokener tokener = new JSONTokener(stockURL.openStream());
+        JSONTokener tokener;
+        JSONObject json;
 
-        JSONObject json = new JSONObject(tokener);
-
-
-        // look for an error message if none is found then return the data
-        try{
-            json.getString("Error Message");
-
-            // TODO if error then return JSON data from a local file
+        try {
+            // try block checks for server or user errors (no data retrieved)
+            tokener = new JSONTokener(stockURL.openStream());
+            json = new JSONObject(tokener);
         }catch (Exception e){
-            System.out.println("stock data retrieval successful");
-            return json;
+            System.out.println("503 error in StockDataAPI");
+            return getStockDataFromBackup(stockSymbol, function, interval, outputSize);
         }
 
-        // TODO store stock data as a local file and return that instead if the url fails
-        // else throw exception
-        System.out.println(json.toString(4)); // print out error message
-        throw new Exception("error with api call");
+
+        try{
+            // look for an error message if found then simply get data from backup
+            json.getString("Error Message");
+
+        }catch (Exception e){
+            System.out.println("stock data retrieval successful");
+            addToBackupStockData(json, stockSymbol, function, interval, outputSize);
+
+
+        }
+
+        // finally return the relevant data (or default if errors)
+        return getStockDataFromBackup(stockSymbol, function, interval, outputSize);
     }
+
+
 
 
     public static JSONObject getSingleLatestStockData(String symbol) throws Exception{
@@ -122,7 +130,14 @@ public class StockDataAPI {
 
         URL stockURL = new URL(url.toString());
         System.out.println(stockURL);
-        JSONTokener tokener = new JSONTokener(stockURL.openStream());
+        JSONTokener tokener = null;
+        try {
+            tokener = new JSONTokener(stockURL.openStream());
+
+        }catch (Exception e){
+            // internet exception
+            return null;
+        }
 
         JSONObject json = new JSONObject(tokener);
 
@@ -131,7 +146,6 @@ public class StockDataAPI {
         try{
             json.getString("Error Message");
 
-            // TODO if error then return JSON data from a local file
         }catch (Exception e){
             System.out.println("stock data retrieval successful");
             return json.getJSONArray("Stock Quotes");
@@ -139,6 +153,7 @@ public class StockDataAPI {
         return null;
     }
 
+    // ======================================= utilities =======================================
     public static Set<Company> getStockMarketCompanyList(){
         Set<Company> companies = new HashSet<>();
 
@@ -216,6 +231,83 @@ public class StockDataAPI {
         }
 
         return companies;
+    }
+
+    /**
+     * retrieve backup data if API fails
+     * @param symbol
+     * @param function
+     * @param interval
+     * @param outputSize
+     * @return
+     * @throws Exception
+     */
+    private static JSONObject getStockDataFromBackup(String symbol, StockTimeSeriesType function, StockTimeSeriesIntradayInterval interval, StockOutputSize outputSize) throws Exception {
+
+        try {
+            String filename = "src/main/resources/backup_stock_data/"; // relative file path
+            filename += symbol + function;
+            if (interval != null){
+                filename += interval;
+            }
+            filename += outputSize;
+
+            filename += ".json";
+
+            // try to find the backup file we want
+            JSONTokener tokener = new JSONTokener(new FileReader(filename));
+
+            // return as JSON Object
+            return new JSONObject(tokener);
+
+        } catch (FileNotFoundException e) {
+
+            System.out.println("backup stock data not found. returning default data");
+
+            // create the url of the default data we want to return
+            String defaultStockDataURL = "src/main/resources/backup_stock_data/default";
+
+            defaultStockDataURL += function;
+
+            if (interval != null){
+                defaultStockDataURL += interval;
+            }
+            defaultStockDataURL += outputSize;
+
+            defaultStockDataURL += ".json";
+
+            // read from and return the default data as a json object
+            JSONTokener backupTokener = new JSONTokener(new FileReader(defaultStockDataURL));
+
+            return new JSONObject(backupTokener);
+
+        }
+
+    }
+
+    private static void addToBackupStockData(JSONObject obj , String symbol, StockTimeSeriesType function, StockTimeSeriesIntradayInterval interval, StockOutputSize outputSize){
+        String filename = symbol + function;
+        if (interval != null){
+            filename += interval;
+        }
+        filename += outputSize;
+
+
+        // try to create file or overwrite one if it already exists
+        try {
+
+
+            FileWriter fileWriter = new FileWriter("src/main/resources/backup_stock_data/" + filename + ".json");
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(obj.toString(4));
+            bufferedWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
 }
