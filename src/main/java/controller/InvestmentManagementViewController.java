@@ -33,6 +33,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * The type Investment management view controller.
+ */
 public class InvestmentManagementViewController {
 
     @FXML
@@ -165,21 +168,17 @@ public class InvestmentManagementViewController {
     private Service<AnalysisResult> analysisService;
 
     /**
-     * the initialize method is run after the view is created and has access to the FXML widgets while the constructor does now
+     * the initialize method is run after the view is created and has access to the FXML widgets
      */
     @FXML
     public void initialize(){
-        // TODO populate users investments held
-        // TODO populate stock data views initially with S&P 500 or dow jones
 
         showInitialLoadingScreen();
+
+
+        // initialise all aspects of the main window
         initialiseGraph();
 
-        // TODO make buying and selling a service in the logic layer and have it communicate with the database and when successfull it will return a value which will be binded to the listview
-
-
-
-        // update user details
         initialiseUserDetails();
 
         initialiseStockPricesFields();
@@ -191,16 +190,11 @@ public class InvestmentManagementViewController {
         intialiseButtons();
 
         initialiseStockAnalysis();
-
-        // TODO make service run in the logic later and make it instanced and bind values by calling to service later instead of creating it in ui layer
-
-        // TODO place all threads in the business logic and let the controller class observe the logic layer
-
-        // TODO check if user card details == null and force user to enter details before allowing them to trade
-
-        // TODO start initial threads here
     }
 
+    /**
+     * displays a loading screen on top of the stock information area (also inhibits user actions while loading)
+     */
     private void showInitialLoadingScreen() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/LoadingIndicator.fxml"));
@@ -212,16 +206,6 @@ public class InvestmentManagementViewController {
 
     }
 
-
-    // TODO disable sell button if user does not hold any investments in that stock
-    // TODO disable buy and sell buttons if market has closed
-    // TODO drop down menu on text change in search bar
-    // TODO delete all text when "X" button is pressed
-    // TODO add stock analysis with KNN
-    // TODO add card functionality (withdraw add remove view deposit)
-
-    // TODO execute transactions (or anything that involves multiple tables at once) as batch statements or use
-
     /**
      * dbConnection.setAutoCommit(false); to start a transaction block.
      * dbConnection.commit(); to end a transaction block
@@ -230,29 +214,19 @@ public class InvestmentManagementViewController {
      */
 
 
-    // TODO maybe use stack pane for pop ups to make the background dark and force user input
 
-    private void displaySAndP500(){
-
-        // set initial values for stock data
-        StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_INTRADAY);
-        StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1);
-        StockDataLogic.setStockSymbol("SPX"); // SPX = S&P 500 index
-        StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME);
-
-        // create the graph
-        createCandleStickChart();
-
-    }
 
     // ===================================== GRAPH METHODS ===============================================
 
+    /**
+     * initialises the main graph that displays the information for the current stock being viewed
+     */
     private void initialiseGraph() {
         // set initial values for chart updater
         chartUpdater.setChartTypeToReturn(ChartType.CANDLESTICK);
 
 
-        displaySAndP500();
+        displayInitialStock();
 
         initialiseListeners();
 
@@ -268,6 +242,24 @@ public class InvestmentManagementViewController {
         initialiseIntervalToggleGroup();
 
         initialiseOutputSizeToggleGroup();
+    }
+
+    /**
+     * currently the initial stock is set to display SPX (S&P 500 index) when user first loads in
+     */
+    private void displayInitialStock(){
+
+        // set initial values for stock data
+
+        // 1 min interval in real-time
+        StockDataLogic.setFunction(StockTimeSeriesType.TIME_SERIES_INTRADAY); // intra day
+        StockDataLogic.setInterval(StockTimeSeriesIntradayInterval.T1); // 1 min interval
+        StockDataLogic.setStockSymbol("SPX"); // SPX = S&P 500 index
+        StockDataLogic.setOutputSize(StockOutputSize.REAL_TIME); // real-time
+
+        // creates the graph
+        createCandleStickChart();
+
     }
 
     private void initialiseListeners() {
@@ -602,6 +594,12 @@ public class InvestmentManagementViewController {
         initialiseBalance();
     }
 
+    /**
+     * Handle deposit withdraw button.
+     *
+     * @param event the event
+     * @throws Exception the exception
+     */
     @FXML
     void handleDepositWithdrawButton(ActionEvent event)throws Exception {
         removePopUp();
@@ -631,6 +629,11 @@ public class InvestmentManagementViewController {
         });
     }
 
+    /**
+     * Get balance big decimal.
+     *
+     * @return the big decimal
+     */
     public BigDecimal getBalance(){
         return UserDetailsLogic.getBalance();
     }
@@ -648,6 +651,11 @@ public class InvestmentManagementViewController {
 
     }
 
+    /**
+     * Handle button delete search text.
+     *
+     * @param event the event
+     */
     @FXML
     void handleButtonDeleteSearchText(ActionEvent event){
         comboBoxStockSearch.getEditor().setText(null);
@@ -720,6 +728,9 @@ public class InvestmentManagementViewController {
         chartUpdater.restart();
     }
 
+    /**
+     * Select last investment held.
+     */
     public void selectLastInvestmentHeld() {
         ListViewInvestmentHeld.getSelectionModel().selectLast();
     }
@@ -751,6 +762,11 @@ public class InvestmentManagementViewController {
         labelAccuracy.setText("");
     }
 
+    /**
+     * Handle stock analysis button.
+     *
+     * @param event the event
+     */
     @FXML
     void handleStockAnalysisButton(ActionEvent event){
         String predictionType = comboBoxPredictionType.getSelectionModel().getSelectedItem();
@@ -836,6 +852,12 @@ public class InvestmentManagementViewController {
         });
     }
 
+    /**
+     * Handle buy button.
+     *
+     * @param event the event
+     * @throws Exception the exception
+     */
     @FXML
     void handleBuyButton(ActionEvent event) throws Exception{
 
@@ -847,6 +869,12 @@ public class InvestmentManagementViewController {
         stackPaneStockDetailsArea.getChildren().add(stockBuyView);
     }
 
+    /**
+     * Handle sell button.
+     *
+     * @param event the event
+     * @throws Exception the exception
+     */
     @FXML
     void handleSellButton(ActionEvent event) throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/StockSellView.fxml"));
@@ -864,6 +892,12 @@ public class InvestmentManagementViewController {
 
     // ===================================== SIGN OUT METHODS =============================================
 
+    /**
+     * Handle sign out.
+     *
+     * @param event the event
+     * @throws Exception the exception
+     */
     @FXML
     void handleSignOut(ActionEvent event) throws Exception{
         SignOutLogic.signOut();
@@ -903,6 +937,9 @@ public class InvestmentManagementViewController {
 
     // ===================================== UTILITY METHODS ==============================================
 
+    /**
+     * Remove pop up.
+     */
     public void removePopUp() {
         try {
             //stackPaneStockDetailsArea.getChildren().remove(1);

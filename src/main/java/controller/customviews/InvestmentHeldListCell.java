@@ -13,6 +13,7 @@ import main.java.util.InvestmentHeld;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
 
@@ -75,6 +76,12 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             labelStockSymbol.setText(investmentHeld.getStockSymbol());
 
             BigDecimal currentPrice = InvestmentsHeldLogic.getCurrentPrice(investmentHeld.getStockSymbol());
+
+            // backup values if non received from API
+            if (currentPrice == null || currentPrice.compareTo(BigDecimal.ZERO) == 0){ // if null or 0
+                currentPrice = backupCurrentPrice(investmentHeld.getIndividualPriceBought());
+            }
+
             labelCurrentPriceValue.setText(currentPrice.toString());
 
             BigDecimal priceBought = investmentHeld.getIndividualPriceBought();
@@ -104,5 +111,30 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
         }
 
 
+    }
+
+    /**
+     * in case of API failure then a random price within a 3% range of the purchase price will be set
+     * @param individualPriceBought
+     * @return
+     */
+    private BigDecimal backupCurrentPrice(BigDecimal individualPriceBought) {
+        System.out.println("backup prices for investments held is being used");
+
+        BigDecimal percentRange = new BigDecimal("3.0"); //3% percent range is going to be used
+
+        // value to add or remove from our original price
+        BigDecimal valueRange = individualPriceBought.divide(new BigDecimal("100")).multiply(percentRange);
+
+        // a random percentage of our maximum range is used to modify the original price
+        BigDecimal value = valueRange.multiply(BigDecimal.valueOf(Math.random()));
+
+        // 50% chance to add or take away
+        if (Math.random() < 0.5){
+            value = value.negate();
+        }
+
+        // return value rounded to 4dp
+        return individualPriceBought.add(value).setScale(4, RoundingMode.HALF_UP);
     }
 }
