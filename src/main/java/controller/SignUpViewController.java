@@ -64,10 +64,13 @@ public class SignUpViewController {
     @FXML
     private TextField usernameTextField;
 
+    /**
+     * validates user input and insert into database upon successful validation
+     * @param event
+     */
     @FXML
-    void handleSignUp(ActionEvent e){
-        // TODO validate all input and if valid then sign up user
-        // TODO set buttons to null until validation checked
+    void handleSignUp(ActionEvent event){
+
         resetErrorMessages();
 
         boolean validInputs = true;
@@ -126,8 +129,7 @@ public class SignUpViewController {
         }
 
         //re-typed password validation
-        String reTypedPasswordMessage = getReTypedPasswordMessage();
-
+        String reTypedPasswordMessage = SignUpLogic.getReTypedPasswordMessage(password, retypedPassword);
 
         if(reTypedPasswordMessage != null){
             reTypedPasswordErrorMessage.setText(reTypedPasswordMessage);
@@ -135,35 +137,23 @@ public class SignUpViewController {
             validInputs = false;
 
         }
-        System.out.println(validInputs);
+
         // if all inputs have been validated
         if(validInputs){
+            System.out.println("all Sign Up inputs are valid");
             SignUpLogic.createUser(username, password, firstName, surname, email);
+
             try {
                 handleBack(null);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            // TODO give message for successful sign up and send to sign in screen
         }
 
     }
-
-    private String getReTypedPasswordMessage(){
-        String password = passwordTextField.getText();
-        String retypedPassword = reTypedPasswordTextField.getText();
-
-        if(!password.equals(retypedPassword)){
-            return "Does not match password";
-        }
-
-        return null;
-    }
-
-
 
     /**
-     * gets the stage of the Sign up scene and replaces it with the sign in scene
+     * sends the user back to the Sign In screen
      * @param e
      * @throws Exception
      */
@@ -179,6 +169,9 @@ public class SignUpViewController {
         stage.sizeToScene();
     }
 
+    /**
+     * resets and hides all the error messages
+     */
     private void resetErrorMessages(){
         firstNameErrorMessage.setText("");
         firstNameErrorMessage.setVisible(false);

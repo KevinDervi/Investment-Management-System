@@ -62,7 +62,6 @@ public class SignUpLogic {
             return "Not valid E-mail format";
         }
 
-        // TODO check is email is already used
         if(validateInput.isEmailTaken(email)){
             return "E-mail is already used";
         }
@@ -83,6 +82,13 @@ public class SignUpLogic {
     }
 
 
+    public static String getReTypedPasswordMessage(String password, String reTypedPassword){
 
+        if(!password.equals(reTypedPassword)){
+            return "Does not match password";
+        }
+
+        return null;
+    }
 
 }

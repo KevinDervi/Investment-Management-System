@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import main.java.logic.UserDetailsLogic;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 public class BalanceModificationController {
 
@@ -27,7 +29,7 @@ public class BalanceModificationController {
     @FXML
     public void initialize(){
 
-        iniialiseComboBoxType();
+        initialiseComboBoxType();
 
         initialiseTextFieldAmount();
     }
@@ -36,25 +38,24 @@ public class BalanceModificationController {
         textFieldAmount.textProperty().addListener(this::onAmountChanged);
     }
 
-    private void iniialiseComboBoxType() {
-        comboBoxType.getItems().addAll("Deposit", "Withdraw");
+    private void initialiseComboBoxType() {
+        // options given to the user
+        String[] options = {"Deposit", "Withdraw"};
+
+        // add options to the combo box
+        comboBoxType.getItems().addAll(options);
+
+        // select first option
         comboBoxType.getSelectionModel().select(0);
 
-        comboBoxType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            String textEntered = textFieldAmount.getText();
-
-            checkIfAmountEnteredIsValid(textEntered);
-
-            if (validAmount){
-                labelErrorMessage.setVisible(false);
-            }else {
-                labelErrorMessage.setText("Please enter a valid amount");
-                labelErrorMessage.setVisible(true);
-            }
-        });
+        // on selection changed listener
+        comboBoxType.getSelectionModel().selectedItemProperty().addListener(this::onOptionChanged);
     }
 
+    /**
+     * checks if user input is valid
+     * @param textEntered user input
+     */
     private void checkIfAmountEnteredIsValid(String textEntered) {
         validAmount = false;
 
@@ -67,7 +68,7 @@ public class BalanceModificationController {
 
             BigDecimal amountEntered = new BigDecimal(textEntered);
 
-            // amount enterd has to be greater than 0
+            // amount entered has to be greater than 0
             if (amountEntered.compareTo(BigDecimal.ZERO) > 0) {
 
                 // if withdraw is selected then check user balance is greater or equal to the amount entered
@@ -80,10 +81,18 @@ public class BalanceModificationController {
         }
     }
 
+    /**
+     * add the main controller to the controller
+     * @param mainController controller of the window that this view is placed in
+     */
     public void setMainController(InvestmentManagementViewController mainController) {
         this.mainController = mainController;
     }
 
+    /**
+     * closes the current view when the cancel button is pressed
+     * @param event
+     */
     @FXML
     void handleCancelButton(ActionEvent event) {
         mainController.removePopUp();
@@ -112,6 +121,19 @@ public class BalanceModificationController {
 
     private void onAmountChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         checkIfAmountEnteredIsValid(newValue);
+
+        if (validAmount) {
+            labelErrorMessage.setVisible(false);
+        } else {
+            labelErrorMessage.setText("Please enter a valid amount");
+            labelErrorMessage.setVisible(true);
+        }
+    }
+
+    private void onOptionChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        String textEntered = textFieldAmount.getText();
+
+        checkIfAmountEnteredIsValid(textEntered);
 
         if (validAmount) {
             labelErrorMessage.setVisible(false);
