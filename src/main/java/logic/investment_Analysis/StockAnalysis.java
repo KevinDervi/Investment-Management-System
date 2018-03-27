@@ -50,6 +50,7 @@ public class StockAnalysis {
 
         function = getFunction(predictionType);
         stockSymbol = CurrentStockInformation.getInstance().getStockSymbol();
+        //stockSymbol = "AAPL";
 
     }
 

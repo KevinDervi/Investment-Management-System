@@ -33,6 +33,11 @@ public class SignInViewController {
     @FXML
     private TextField usernameTextField;
 
+    /**
+     * determines the action taken when the user interacts with the Sign In button
+     * @param event
+     * @throws Exception
+     */
     @FXML
     void HandleSignIn(ActionEvent event) throws Exception{
         errorMessage.setVisible(false);
@@ -40,6 +45,7 @@ public class SignInViewController {
         String usernameInput = usernameTextField.getText();
         String passwordInput = passwordTextField.getText();
 
+        // determines if correct username and password has been inputted
         if (SignInLogic.Authentication(usernameInput, passwordInput)){
             SignInLogic.loadUser(usernameInput);
             // create new window
@@ -68,6 +74,11 @@ public class SignInViewController {
 
     }
 
+    /**
+     * sends the user to the sign up window
+     * @param event
+     * @throws Exception
+     */
     @FXML
     void HandleSignUp(ActionEvent event) throws Exception{
         Stage stage = (Stage) signUpButton.getScene().getWindow();
