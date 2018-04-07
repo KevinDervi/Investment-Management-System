@@ -267,11 +267,27 @@ public class StockAnalysis {
         BigDecimal meanVolume = totalVolume.divide(meanValue, 5, RoundingMode.HALF_DOWN);
         BigDecimal meanPrice = totalPrice.divide(meanValue, 5, RoundingMode.HALF_DOWN);
 
+
+        /**
+         * testing
+         */
+        StockDataPoint currentPoint = dataSet.get(predictionLocation - 1);
+
+        BigDecimal latestVolume = currentPoint.getyValue();
+        BigDecimal latestPrice = currentPoint.getxValue();
+
+        BigDecimal differenceVolume = latestVolume.subtract(meanVolume);
+        BigDecimal differencePrice = latestPrice.subtract(meanPrice);
+
+        BigDecimal predictionVolume = latestVolume.add(differenceVolume);
+        BigDecimal predictionPrice= latestPrice.add(differencePrice);
+
         // actual classification (classification of the next value)
         boolean actualClassification = dataSet.get(predictionLocation).shouldBuy();
 
         // return the mean prediction
-        return new StockDataPoint(meanPrice, meanVolume, actualClassification);
+        //return new StockDataPoint(meanPrice, meanVolume, actualClassification);
+        return new StockDataPoint(predictionPrice, predictionVolume, actualClassification);
     }
 
     private void showChartData(){
@@ -723,7 +739,8 @@ public class StockAnalysis {
 
 
                 // iterate in steps of 2 from 1 - 9 (inclusive) for the k value
-                for (int k = 1; k < 10; k+=2){
+                int maxK = 10;
+                for (int k = 1; k < maxK; k+=2){
                     if(Thread.interrupted()){
                         return null;
                     }
@@ -748,7 +765,7 @@ public class StockAnalysis {
                     System.out.println("time taken for k = " + k + " : " + (System.currentTimeMillis() - startTime)/1000.0 + "s");
 
 
-                    updateProgress(k, 9);
+                    updateProgress(k, maxK);
                 }
 
                 System.out.println("total time taken: " + (System.currentTimeMillis() - initialStartTime)/1000.0 + "s");
