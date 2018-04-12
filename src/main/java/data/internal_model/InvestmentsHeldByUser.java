@@ -20,8 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InvestmentsHeldByUser {
-    // TODO holds all information regarding the values held by the user
-    
+
     //private ObservableList<InvestmentHeld> InvestmentsHeld = FXCollections.observableArrayList();
     private SimpleListProperty<InvestmentHeld> InvestmentsHeld = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -55,8 +54,6 @@ public class InvestmentsHeldByUser {
         ArrayList<InvestmentHeld> userInvestments = InvestmentsHeldDAO.getAllInvestments();
 
         if (userInvestments!= null){
-            // TODO add and remove values based of difference do not just use set all as it will deselect the currently selected listview
-            //InvestmentsHeld.setAll(userInvestments);
             updateList(userInvestments);
         }
     }

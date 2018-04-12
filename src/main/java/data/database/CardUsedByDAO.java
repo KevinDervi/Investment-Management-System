@@ -24,7 +24,6 @@ public class CardUsedByDAO {
                     " )";
 
             statement.executeUpdate(query);
-            // TODO close connection/resultSet/statement (maybe make a utility class)
         } catch(SQLIntegrityConstraintViolationException e){
             System.out.println("card has already been attached to user");
             e.printStackTrace();

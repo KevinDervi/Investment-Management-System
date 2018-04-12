@@ -66,9 +66,9 @@ public class UserDAO {
                     "FROM User " +
                     "WHERE username = '" + username + "'";
 
-            ResultSet resultSet = statement.executeQuery(query); //actual values from query
-            // TODO close connection/resultSet/statement (maybe make a utility class)
-            return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
+            ResultSet resultSet = statement.executeQuery(query); // values from query
+
+            return DBValuesConvertToJava.convertToSingleHashMap(resultSet); // convert resultset to a hash map
 
         } catch (SQLException e){
             System.out.println("error with getUser(username) query");
@@ -108,7 +108,6 @@ public class UserDAO {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
-        // TODO temp solution
         return true;
     }
 
@@ -196,7 +195,6 @@ public class UserDAO {
         Statement statement = null;
 
         try {
-            //TODO first check if the card is connected to the user via card used by table
 
             conn = PooledDBConnection.getInstance().getConnection();
 

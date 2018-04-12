@@ -105,7 +105,6 @@ public class StockDataAPI {
         try{
             json.getString("Error Message");
 
-            // TODO if error then return JSON data from a local file
         }catch (Exception e){
             System.out.println("stock data retrieval successful");
             return json;

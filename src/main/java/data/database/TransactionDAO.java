@@ -49,9 +49,5 @@ public class TransactionDAO {
         }
     }
 
-    protected static void getTransaction(Long transactionId){
-        // TODO maybe not needed
-    }
-
 
 }

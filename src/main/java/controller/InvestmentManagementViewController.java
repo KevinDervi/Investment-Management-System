@@ -511,11 +511,7 @@ public class InvestmentManagementViewController {
     private void attachServiceToChart(XYChart<String, Number> chartStockData) {
         // attach service to the graph
         chartStockData.dataProperty().unbind();
-        chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
-
-        // bind title of chart to updater
-//        chartStockData.titleProperty().unbind();
-//        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
+        chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart
 
     }
 
@@ -625,7 +621,6 @@ public class InvestmentManagementViewController {
     }
 
     private void initialiseBalance(){
-        // TODO format balance to two Decimal places
         labelAccountBalance.setText("$" + getBalance());
         UserDetailsLogic.getBalanceProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("balance updated: " + newValue.toString());

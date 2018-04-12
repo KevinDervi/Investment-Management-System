@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-// TODO add license/copyright to C3PO library here
 
 public class PooledDBConnection {
 

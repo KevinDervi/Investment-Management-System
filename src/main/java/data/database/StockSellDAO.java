@@ -13,7 +13,6 @@ public class StockSellDAO {
     private StockSellDAO(){}
 
     public static void sellStock(Long stockBeingSoldId, BigDecimal individualStockPrice, Long quantitySold){
-        // TODO check quantity told <= current investments held
 
         Connection conn = null;
         ResultSet rs = null;

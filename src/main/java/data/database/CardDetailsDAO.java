@@ -38,9 +38,7 @@ public class CardDetailsDAO {
             rs.next(); // set pointer to the first value (which is id of the inserted row)
 
             Long iDOfCardJustInserted = rs.getLong(1);
-            // TODO close connection/resultSet/statement (maybe make a utility class)
 
-            // TODO make all DAO methods only do one thing and allow internal model to to the database logic
             //CardUsedByDAO.attachCardToUser(iDOfCardJustInserted);
 
         } catch(MySQLIntegrityConstraintViolationException e){
