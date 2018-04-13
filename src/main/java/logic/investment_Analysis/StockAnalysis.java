@@ -1,5 +1,6 @@
 package main.java.logic.investment_Analysis;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -31,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class StockAnalysis {
 
     private final ArrayList<StockDataPoint> dataSet = new ArrayList<>();
+    private final ArrayList<StockDataPoint> TestdataSet = new ArrayList<>();
     private final StockTimeSeriesType function;
     private final String stockSymbol;
 
@@ -50,7 +52,6 @@ public class StockAnalysis {
 
         function = getFunction(predictionType);
         stockSymbol = CurrentStockInformation.getInstance().getStockSymbol();
-        //stockSymbol = "AAPL";
 
     }
 
@@ -139,6 +140,10 @@ public class StockAnalysis {
         // get our prediction for the training data
         StockDataPoint s = getPredictionForDataSetPoint(pointLocation);
 
+        // add to test dataset
+        if (TestdataSet.size() < dataSet.size()){
+            TestdataSet.add(s);
+        }
         // sort the data based on manhattan distance
         ArrayList<StockDataPoint> sortedDataSet = sortByDistance(s);
 
@@ -216,6 +221,16 @@ public class StockAnalysis {
         };
     }
 
+    private Comparator<StockDataPoint> stockDataPointComparatorEuclidean(StockDataPoint s)
+    {
+        final StockDataPoint finalP = new StockDataPoint(s.getxValue(), s.getyValue(), s.shouldBuy());
+        return (s1, s2) -> {
+            BigDecimal s1Compared = s1.getEuclideanDistance(finalP);
+            BigDecimal s2Compared = s2.getEuclideanDistance(finalP);
+            return s1Compared.compareTo(s2Compared);
+        };
+    }
+
     /**
      * gets a prediction based on the mean of the latest 3 values from the dataset
      * @return
@@ -282,6 +297,11 @@ public class StockAnalysis {
         BigDecimal predictionVolume = latestVolume.add(differenceVolume);
         BigDecimal predictionPrice= latestPrice.add(differencePrice);
 
+        // ensure no negative price predictions
+        if (predictionPrice.compareTo(BigDecimal.ZERO) < 0){
+            predictionPrice = BigDecimal.ZERO;
+        }
+
         // actual classification (classification of the next value)
         boolean actualClassification = dataSet.get(predictionLocation).shouldBuy();
 
@@ -337,6 +357,53 @@ public class StockAnalysis {
         }
     }
 
+    private void showTestDataset(){
+        ScatterChart chart = new ScatterChart<>(new NumberAxis(), new NumberAxis());
+
+        XYChart.Series<Number, Number> seriesBuy = new XYChart.Series<>();
+        XYChart.Series<Number, Number> seriesSell = new XYChart.Series<>();
+
+        // convert data to a javafx chart readable format
+        for (StockDataPoint s : TestdataSet) {
+            if(s.shouldBuy()){
+                seriesBuy.getData().add(new XYChart.Data<>(s.getxValue(), s.getyValue()));
+
+            }else {
+                seriesSell.getData().add(new XYChart.Data<>(s.getxValue(), s.getyValue()));
+            }
+        }
+
+        seriesBuy.setName("Buy");
+        seriesSell.setName("Sell");
+        chart.setTitle(stockSymbol + " " + function + " " + "Test Dataset");
+        chart.getXAxis().setLabel("Price");
+
+        chart.getYAxis().setLabel("Volume difference from previous value");
+
+
+        chart.getStylesheets().add(getClass().getResource("/main/resources/css_styles/stock_analysis_graph.css").toExternalForm());
+
+
+        chart.getData().addAll(seriesBuy, seriesSell);
+        chart.setAnimated(false);
+
+        Stage stage = new Stage();
+        Scene scene  = new Scene(chart);
+
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.show();
+
+
+        // save the graph as an image file
+        WritableImage snapShot = scene.snapshot(null);
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", new File(stockSymbol + "_" + function + "_" +  "TestDataset" + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void createDataSetVolumeDifference(JSONObject JSONstockData) {
 
@@ -344,7 +411,7 @@ public class StockAnalysis {
         ArrayList<StockDataPoint> stockDataArrayList = convertJSONToListWithVolumeDifferences(JSONstockData);
 
         // normalise the values
-        //dataSet = normaliseData(stockDataArrayList);
+        //dataSet.addAll(normaliseData(stockDataArrayList));
         dataSet.addAll(stockDataArrayList);
     }
 
@@ -696,7 +763,6 @@ public class StockAnalysis {
 
             BigDecimal xSquaredPlusYSquared = xDifferenceSquared.add(yDifferenceSquared);
 
-
             return xSquaredPlusYSquared.sqrt(MathContext.DECIMAL64);
         }
     }
@@ -726,7 +792,8 @@ public class StockAnalysis {
                 createDataSetVolumeDifference(stockData);
                 //createDataSetVolume(stockData);
 
-                //showChartData();
+                //Platform.runLater(StockAnalysis.this::showChartData);
+
 
                 // create initial best result of 0 accuracy
                 AnalysisResult bestResult = new AnalysisResult(false, 0.0);
@@ -775,6 +842,8 @@ public class StockAnalysis {
                 if(Thread.interrupted()){
                     return null;
                 }
+
+                //Platform.runLater(StockAnalysis.this::showTestDataset);
 
                 // request garbage collection
                 System.gc();
