@@ -122,24 +122,30 @@ public class UserDAO {
     public static void createNewUser(String username, String password, String firstname, String surname, String email){
         Connection conn = null;
         ResultSet rs = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
 
         conn = PooledDBConnection.getInstance().getConnection();
         try {
-            statement = conn.createStatement();
-            String insert = "INSERT INTO User " +
+
+            statement = conn.prepareStatement("INSERT INTO User " +
                     "VALUES( " +
-                    "NULL , '" +
-                    username + "',  " +
-                    "PASSWORD('" + password + "')  , '" +
-                    firstname + "', '" +
-                    surname + "', '" +
-                    email + "', " +
-                    new BigDecimal(0)  + ", " +
+                    "NULL , " +
+                    "? ,  " + //username
+                    "PASSWORD(?)  , " + // password
+                    "? , " + // firstname
+                    "? , " + // surname
+                    "? , '" + // email
+                    BigDecimal.ZERO  + "', " + // money (default 0)
                     "CURRENT_TIMESTAMP, " +
-                    "NULL )";
-            System.out.println("insert statement: "+ insert);
-            System.out.println("value from insert = " + statement.executeUpdate(insert));
+                    "NULL )");
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, firstname);
+            statement.setString(4, surname);
+            statement.setString(5, email);
+
+            statement.executeUpdate();
 
         } catch (MySQLIntegrityConstraintViolationException e){
             System.out.println("user already exists with that username or email");
@@ -156,21 +162,24 @@ public class UserDAO {
     public static boolean authenticateUser(String username, String password){
         Connection conn = null;
         ResultSet rs = null;
-        Statement statement = null;
-
+        PreparedStatement statement = null;
 
         try {
             conn = PooledDBConnection.getInstance().getConnection();
-            statement = conn.createStatement();
-            String query = "SELECT * FROM User " +
+
+            statement = conn.prepareStatement("SELECT * FROM User " +
                     "WHERE " +
-                    "username = '" + username + "' " +
+                    "username =  ? " +
                     "AND " +
-                    "password = PASSWORD('" + password + "')";
+                    "password = PASSWORD(?)");
 
-            ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
-            if (resultSet.next()){ //if there is a user that exists with username and password match
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            rs = statement.executeQuery(); // result from query
+
+            if (rs.next()){ //if there is a user that exists with username and password match
                 return true;
             }
 
