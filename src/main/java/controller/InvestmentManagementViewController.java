@@ -790,8 +790,6 @@ public class InvestmentManagementViewController {
             //format accuracy to 2 decimal places
             labelAccuracy.setText(String.format("%.2f", newValue.getAccuracy()) + "%");
 
-//            comboBoxPredictionType.setDisable(false);
-//            buttonStockAnalysis.setDisable(false);
         });
 
         // bind progress property to loading bar

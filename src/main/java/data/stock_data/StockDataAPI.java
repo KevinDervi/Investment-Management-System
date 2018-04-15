@@ -89,7 +89,8 @@ public class StockDataAPI {
 
         // if no errors then add to backup
         if(!error) {
-            addToBackupStockData(json, stockSymbol, function, interval, outputSize);
+            //addToBackupStockData(json, stockSymbol, function, interval, outputSize)
+            return json;
         }
         // finally return the relevant data (or default if errors)
         return getStockDataFromBackup(stockSymbol, function, interval, outputSize);
@@ -256,7 +257,7 @@ public class StockDataAPI {
     private static JSONObject getStockDataFromBackup(String symbol, StockTimeSeriesType function, StockTimeSeriesIntradayInterval interval, StockOutputSize outputSize) throws Exception {
 
         try {
-            String filename = "src/main/resources/backup_stock_data/"; // relative file path
+            String filename = "backup_stock_data/"; // relative file path
             filename += symbol + function;
             if (interval != null){
                 filename += interval;
@@ -265,18 +266,22 @@ public class StockDataAPI {
 
             filename += ".json";
 
+            InputStreamReader inputStreamReader = new InputStreamReader(StockDataAPI.class.getClassLoader().getResourceAsStream(filename));
+            if(inputStreamReader == null){
+                throw new Exception();
+            }
             // try to find the backup file we want
-            JSONTokener tokener = new JSONTokener(new FileReader(filename));
+            JSONTokener tokener = new JSONTokener(inputStreamReader);
 
             // return as JSON Object
             return new JSONObject(tokener);
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
 
             System.out.println("backup stock data not found. returning default data");
 
             // create the url of the default data we want to return
-            String defaultStockDataURL = "src/main/resources/backup_stock_data/default";
+            String defaultStockDataURL = "backup_stock_data/default";
 
             defaultStockDataURL += function;
 
@@ -287,8 +292,10 @@ public class StockDataAPI {
 
             defaultStockDataURL += ".json";
 
+            InputStreamReader inputStreamReader = new InputStreamReader(StockDataAPI.class.getClassLoader().getResourceAsStream(defaultStockDataURL));
             // read from and return the default data as a json object
-            JSONTokener backupTokener = new JSONTokener(new FileReader(defaultStockDataURL));
+            //JSONTokener backupTokener = new JSONTokener(new FileReader(defaultStockDataURL));
+            JSONTokener backupTokener = new JSONTokener(inputStreamReader);
 
             return new JSONObject(backupTokener);
 
@@ -307,8 +314,9 @@ public class StockDataAPI {
         // try to create file or overwrite one if it already exists
         try {
 
-
-            FileWriter fileWriter = new FileWriter("src/main/resources/backup_stock_data/" + filename + ".json");
+            URL url = StockDataAPI.class.getClassLoader().getResource("backup_stock_data/" + filename + ".json");
+            System.out.println("url = " + url.getFile());
+            FileWriter fileWriter = new FileWriter(url.getPath());
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(obj.toString(4));
