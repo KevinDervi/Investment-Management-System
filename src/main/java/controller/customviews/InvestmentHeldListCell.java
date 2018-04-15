@@ -12,6 +12,8 @@ import main.java.logic.InvestmentsHeldLogic;
 import main.java.util.InvestmentHeld;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -92,11 +94,13 @@ public class InvestmentHeldListCell extends ListCell<InvestmentHeld> {
             // if value is positive then colour will be green otherwise red
             if (priceDifference.compareTo(BigDecimal.ZERO) > 0){
                 labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-green");
-                Image positiveIndicator = new Image("file:src/main/resources/images/green_up_triangle.png");
+                InputStream inputStream = InvestmentHeldListCell.class.getClassLoader().getResourceAsStream("images/green_up_triangle.png");
+                Image positiveIndicator = new Image(inputStream);
                 imageArrow.setImage(positiveIndicator);
             }else{
                 labelPriceDifferenceValue.getStyleClass().set(1, "label-colour-red");
-                Image negativeIndicator = new Image("file:src/main/resources/images/red_down_triangle.png");
+                InputStream inputStream = InvestmentHeldListCell.class.getClassLoader().getResourceAsStream("images/red_down_triangle.png");
+                Image negativeIndicator = new Image(inputStream);
                 imageArrow.setImage(negativeIndicator);
             }
             labelPriceDifferenceValue.setText(priceDifference.toString());
