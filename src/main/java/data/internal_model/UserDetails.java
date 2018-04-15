@@ -15,7 +15,6 @@ import java.util.Map;
 /**
  * where the users details will be stored during their current session
  */
-// TODO make singleton class
 public class UserDetails {
     private Long id;
     private String username;
@@ -43,7 +42,6 @@ public class UserDetails {
 
     public void initialiseUserDetails(String username){
         Map<String, Object> details = UserDAO.getUser(username);
-        // TODO add the values from get user to the details
         id = (long) details.get("id");
         this.username = (String) details.get("username");
         firstname = (String) details.get("firstname");
@@ -51,7 +49,6 @@ public class UserDetails {
         email = (String) details.get("email");
         balance.setValue((BigDecimal) details.get("balance"));
 
-        // TODO add cards being used
 
 
     }
@@ -71,7 +68,7 @@ public class UserDetails {
         cards = null;
     }
 
-    public boolean authenticateUser(String username, String password){
+    public boolean authenticateUser(String username, String password) throws Exception{
         return UserDAO.authenticateUser(username, password);
     }
 
@@ -156,10 +153,8 @@ public class UserDetails {
     }
 
     public void removeCard(Long cardId){
-        //TODO remove card
     }
 
-    // TODO have update methods for Username, Password, and email that does logic and interacts with the DAO
 
     public void updateBalance(BigDecimal byAmount) throws SQLException {
         UserDAO.modifyBalanceBy(byAmount);

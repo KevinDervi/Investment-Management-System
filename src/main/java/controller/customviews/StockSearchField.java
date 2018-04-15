@@ -21,11 +21,10 @@ import javafx.scene.control.Label;
 
 public class StockSearchField extends ComboBox<Company> {
     private HashSet<Company> stockSearchMenuItemSet = new HashSet<>();
-    ObservableSet<Company> filteredStockSearchCells = FXCollections.observableSet();
+    private ObservableSet<Company> filteredStockSearchCells = FXCollections.observableSet();
 
     private static final int LIST_DISPLAY_LIMIT = 20;
 
-    // TODO make search text field a combo box instead since context menu cannot get selected item
     public StockSearchField() {
         super();
 
@@ -39,11 +38,12 @@ public class StockSearchField extends ComboBox<Company> {
         // filter context menu when typing
         this.getEditor().textProperty().addListener(this::onTextChanged);
 
+        // prevents drop down menu from being filed with empty rows
         this.setConverter(new StringConverter<>() {
             @Override
             public String toString(Company object) {
                 if (object == null) return null;
-                return null;//object.getSymbol();
+                return null;
             }
 
             @Override
@@ -89,9 +89,11 @@ public class StockSearchField extends ComboBox<Company> {
 
             // filter list
             filteredStockSearchCells.removeIf(stockSearchCompany -> {
-                String valueEntered = newValue.toLowerCase();
-                String menuItemSymbol = stockSearchCompany.getSymbol().toLowerCase();
-                String menuItemCompanyName = stockSearchCompany.getCompanyName().toLowerCase();
+
+                // make all inputs and results case insensitive
+                String valueEntered = newValue.toLowerCase(); // string entered by user
+                String menuItemSymbol = stockSearchCompany.getSymbol().toLowerCase(); // company stock symbol
+                String menuItemCompanyName = stockSearchCompany.getCompanyName().toLowerCase(); // company name
 
                 // if String entered by user is not contained in the symbol or company name then remove
                 return !menuItemSymbol.contains(valueEntered) && !menuItemCompanyName.contains(valueEntered);

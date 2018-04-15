@@ -8,7 +8,7 @@ public class SignInLogic {
     }
 
 
-    public static boolean Authentication(String username, String password){
+    public static boolean Authentication(String username, String password) throws Exception{
         return UserDetails.getInstance().authenticateUser(username,password );
     }
 

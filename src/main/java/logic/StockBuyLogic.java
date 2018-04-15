@@ -11,7 +11,6 @@ import main.java.util.StockData;
 import java.math.BigDecimal;
 
 public class StockBuyLogic {
-    // TODO create service that will be used to buy stock
 
     private StockBuyLogic(){}
 

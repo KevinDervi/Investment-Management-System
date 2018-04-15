@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-// TODO add license/copyright to C3PO library here
 
 public class PooledDBConnection {
 
@@ -40,10 +39,15 @@ public class PooledDBConnection {
 
             comboPooledDBConnection.setUser(DB_USERNAME);
             comboPooledDBConnection.setPassword(DB_PASSWORD);
+
+            comboPooledDBConnection.setLoginTimeout(1);
+            comboPooledDBConnection.setAcquireRetryAttempts(2);
         }
         catch (PropertyVetoException ex1) {
             System.out.println("error setting up database connection");
             ex1.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -61,10 +65,10 @@ public class PooledDBConnection {
      * takes an unused connection from the pool and returns it
      * @return a single connection from the pool
      */
-    public Connection getConnection() {
+    public Connection getConnection() throws SQLException{
         try {
             return comboPooledDBConnection.getConnection();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("unable to retrieve connection from pool");
             e.printStackTrace();
         }
