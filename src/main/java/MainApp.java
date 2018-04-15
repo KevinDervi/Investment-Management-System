@@ -1,4 +1,4 @@
-package main.java.controller;
+package main.java;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class where the application first starts
+ */
 public class MainApp extends Application {
     public static void main(String[] args){launch(args);}
 
@@ -13,7 +16,7 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         // load initial screen to show user (Sign In Screen)
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/SignInView.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
+        Parent root = fxmlLoader.load();
 
         primaryStage.setTitle("Investment Management System");
 
