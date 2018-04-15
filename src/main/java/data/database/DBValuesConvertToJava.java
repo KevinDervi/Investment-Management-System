@@ -19,8 +19,6 @@ class DBValuesConvertToJava {
         Map<String, Object> data = null;
 
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-        //TODO if number of rows greater than 1 then make a list of hash maps otherwise return a single (or make another method for converting lists)
-        //TODO check that there is only a single value in the result set
 
         int noOfColumns = resultSetMetaData.getColumnCount();
 

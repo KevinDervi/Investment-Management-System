@@ -69,17 +69,28 @@ public class StockDataAPI {
         }
 
 
+        boolean error = false;
         try{
             // look for an error message if found then simply get data from backup
             json.getString("Error Message");
+            error = true;
+        }catch (Exception ignored){
 
-        }catch (Exception e){
-            System.out.println("stock data retrieval successful");
-            addToBackupStockData(json, stockSymbol, function, interval, outputSize);
-
+        }
+        // check if information is given (too many api calls)
+        try{
+            // look for an error message if found then simply get data from backup
+            json.getString("Information");
+            System.out.println("Too many API calls");
+            error = true;
+        }catch (Exception ignored){
 
         }
 
+        // if no errors then add to backup
+        if(!error) {
+            addToBackupStockData(json, stockSymbol, function, interval, outputSize);
+        }
         // finally return the relevant data (or default if errors)
         return getStockDataFromBackup(stockSymbol, function, interval, outputSize);
     }
@@ -105,7 +116,6 @@ public class StockDataAPI {
         try{
             json.getString("Error Message");
 
-            // TODO if error then return JSON data from a local file
         }catch (Exception e){
             System.out.println("stock data retrieval successful");
             return json;

@@ -271,26 +271,30 @@ public class InvestmentManagementViewController {
 
         chartStockData.dataProperty().addListener(this::showLoadingIconWhenUpdating);
 
-        paneChart.hvalueProperty().addListener((observable, oldValue, newValue) -> {
-            int numberOfDatapoints;
-            try {
-                numberOfDatapoints = chartStockData.getData().get(0).getData().size();
-            } catch (Exception e){
-                numberOfDatapoints = 0;
-            }
+        // update Y axis
+        paneChart.hvalueProperty().addListener(this::updateYAxisLocation);
+        paneChart.widthProperty().addListener(this::updateYAxisLocation);
+    }
 
-            double widthBetweenPoints = 20.0;
+    private void updateYAxisLocation(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        int numberOfDatapoints;
+        try {
+            numberOfDatapoints = chartStockData.getData().get(0).getData().size();
+        } catch (Exception e) {
+            numberOfDatapoints = 0;
+        }
 
-            double valueToTranslate = newValue.doubleValue() * (numberOfDatapoints * widthBetweenPoints - paneChart.getWidth());
+        double widthBetweenPoints = 20.0;
 
-            if (valueToTranslate < 0.0) {
-                valueToTranslate = 0.0;
-            }
+        double valueToTranslate = paneChart.getHvalue() * (numberOfDatapoints * widthBetweenPoints - paneChart.getWidth());
 
-            valueToTranslate -= 10.0;
+        if (valueToTranslate < 0.0) {
+            valueToTranslate = 0.0;
+        }
 
-            chartStockData.getYAxis().setTranslateX(valueToTranslate);
-        });
+        valueToTranslate -= 10.0;
+
+        chartStockData.getYAxis().setTranslateX(valueToTranslate);
     }
 
     private void showLoadingIconWhenUpdating(ObservableValue<? extends ObservableList<XYChart.Series<String, Number>>> observable, ObservableList<XYChart.Series<String, Number>> oldValue, ObservableList<XYChart.Series<String, Number>> newValue) {
@@ -507,11 +511,7 @@ public class InvestmentManagementViewController {
     private void attachServiceToChart(XYChart<String, Number> chartStockData) {
         // attach service to the graph
         chartStockData.dataProperty().unbind();
-        chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart //  TODO add to project report that i am using javafx services for concurrency
-
-        // bind title of chart to updater
-//        chartStockData.titleProperty().unbind();
-//        chartStockData.titleProperty().bind(chartUpdater.currentStockSymbolProperty());
+        chartStockData.dataProperty().bind(chartUpdater.lastValueProperty()); // bind the value of the service to the chart
 
     }
 
@@ -621,7 +621,6 @@ public class InvestmentManagementViewController {
     }
 
     private void initialiseBalance(){
-        // TODO format balance to two Decimal places
         labelAccountBalance.setText("$" + getBalance());
         UserDetailsLogic.getBalanceProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("balance updated: " + newValue.toString());
@@ -951,6 +950,7 @@ public class InvestmentManagementViewController {
 
         }
     }
+
 
 
 }

@@ -66,9 +66,9 @@ public class UserDAO {
                     "FROM User " +
                     "WHERE username = '" + username + "'";
 
-            ResultSet resultSet = statement.executeQuery(query); //actual values from query
-            // TODO close connection/resultSet/statement (maybe make a utility class)
-            return DBValuesConvertToJava.convertToSingleHashMap(resultSet);
+            ResultSet resultSet = statement.executeQuery(query); // values from query
+
+            return DBValuesConvertToJava.convertToSingleHashMap(resultSet); // convert resultset to a hash map
 
         } catch (SQLException e){
             System.out.println("error with getUser(username) query");
@@ -108,7 +108,6 @@ public class UserDAO {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
 
-        // TODO temp solution
         return true;
     }
 
@@ -123,24 +122,30 @@ public class UserDAO {
     public static void createNewUser(String username, String password, String firstname, String surname, String email){
         Connection conn = null;
         ResultSet rs = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
 
-        conn = PooledDBConnection.getInstance().getConnection();
+
         try {
-            statement = conn.createStatement();
-            String insert = "INSERT INTO User " +
+            conn = PooledDBConnection.getInstance().getConnection();
+            statement = conn.prepareStatement("INSERT INTO User " +
                     "VALUES( " +
-                    "NULL , '" +
-                    username + "',  " +
-                    "PASSWORD('" + password + "')  , '" +
-                    firstname + "', '" +
-                    surname + "', '" +
-                    email + "', " +
-                    new BigDecimal(0)  + ", " +
+                    "NULL , " +
+                    "? ,  " + //username
+                    "PASSWORD(?)  , " + // password
+                    "? , " + // firstname
+                    "? , " + // surname
+                    "? , '" + // email
+                    BigDecimal.ZERO  + "', " + // money (default 0)
                     "CURRENT_TIMESTAMP, " +
-                    "NULL )";
-            System.out.println("insert statement: "+ insert);
-            System.out.println("value from insert = " + statement.executeUpdate(insert));
+                    "NULL )");
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, firstname);
+            statement.setString(4, surname);
+            statement.setString(5, email);
+
+            statement.executeUpdate();
 
         } catch (MySQLIntegrityConstraintViolationException e){
             System.out.println("user already exists with that username or email");
@@ -154,30 +159,34 @@ public class UserDAO {
 
     }
 
-    public static boolean authenticateUser(String username, String password){
+    public static boolean authenticateUser(String username, String password) throws Exception{
         Connection conn = null;
         ResultSet rs = null;
-        Statement statement = null;
-
+        PreparedStatement statement = null;
 
         try {
             conn = PooledDBConnection.getInstance().getConnection();
-            statement = conn.createStatement();
-            String query = "SELECT * FROM User " +
+
+            statement = conn.prepareStatement("SELECT * FROM User " +
                     "WHERE " +
-                    "username = '" + username + "' " +
+                    "username =  ? " +
                     "AND " +
-                    "password = PASSWORD('" + password + "')";
+                    "password = PASSWORD(?)");
 
-            ResultSet resultSet = statement.executeQuery(query); //actual values from query
 
-            if (resultSet.next()){ //if there is a user that exists with username and password match
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            rs = statement.executeQuery(); // result from query
+
+            if (rs.next()){ //if there is a user that exists with username and password match
                 return true;
             }
 
-        } catch (SQLException e){
+        } catch (Exception e){
             System.out.println("error with authenticating user");
             e.printStackTrace();
+            throw new Exception("cannot connect to database");
         }finally {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
@@ -196,7 +205,6 @@ public class UserDAO {
         Statement statement = null;
 
         try {
-            //TODO first check if the card is connected to the user via card used by table
 
             conn = PooledDBConnection.getInstance().getConnection();
 

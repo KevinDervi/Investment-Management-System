@@ -68,7 +68,7 @@
          <graphic>
               <ImageView fx:id="usernameInfo" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                      <Image url="@/main/resources/images/Information_Icon_teal.png" />
+                      <Image url="@/main/resources/images/Information_Icon_white.png" />
                   </image>
               </ImageView>
          </graphic>

@@ -91,7 +91,6 @@ public class InvestmentsHeldDAO {
     }
 
     public static void sellStockFromInvestment(Long investmentId, Long amountToRemove){
-        // TODO check if result from removal is 0 then remove the item
 
         Connection conn = null;
         ResultSet rs = null;

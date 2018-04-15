@@ -22,11 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class StockDataLogic {
-    // TODO attempt to make the service run in the logic layer and update the UI from here (potentially illtegalStateException so try with a dummy serivce first)
 
-    // TODO add conversion methods for candlestick chart and normal line chart
-
-    // TODO make chart data return a series of data that can be added straight to the chart
     public static ObservableList<XYChart.Series<String, Number>> getCandleStickChartData(){
         // values must be double and date must be gregorian calendar
         List<StockData> rawData = CurrentStockInformation.getInstance().getChartData();
@@ -148,7 +144,6 @@ public class StockDataLogic {
      * updates the internal data and UI every set interval
      */
     public class StockDataUpdaterService extends ScheduledService<ObservableList<XYChart.Series<String, Number> > >{
-        // TODO add listener for Investments Held and update
         private ChartType chartTypeToReturn = null; // should be candlestick or line
 
         private final StringProperty currentStockValue = new SimpleStringProperty(); // returns the current value as a string to be displayed
@@ -223,7 +218,6 @@ public class StockDataLogic {
 
                     setCurrentStockSymbol(CurrentStockInformation.getInstance().getStockSymbol());
                 });
-                System.out.println("=============================================test===============================");
                 if(isCancelled()){
                     System.out.println("task was cancelled");
                     return null;

@@ -18,7 +18,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class CurrentStockInformation {
-    // TODO holds all the information on the current stock that the user is viewing
 
     private boolean stockMarketsClosed = false;
 
@@ -99,8 +98,6 @@ public class CurrentStockInformation {
 
     // updates the internal model with the latest stock data
     public void updateStockData() throws Exception {
-        // TODO handle IO Exception 503 (server busy) by trying again in a few seconds
-        // TODO also update if the stock markets are closed and ensure the user in unable to buy and sell
         // ensure there are no null values before data is retrieved
         assert function != null;
         assert stockSymbol != null;
@@ -179,7 +176,6 @@ public class CurrentStockInformation {
         // get json data
         JSONObject JSONStockData;
         try {
-            // TODO talk about threads not being fully terminated and still being run in background despite interruption
             if(Thread.interrupted()){
                 System.out.println("stopping update of internal model due to thread interruption");
                 return;
@@ -203,7 +199,6 @@ public class CurrentStockInformation {
             // 503 response code, try again in 2 seconds
             System.out.println("503 response code, waiting 2 seconds and trying again");
             Thread.sleep(2000);
-            // TODO limit to 3 tries only or may be infinite
             updateChartData();
         }
     }

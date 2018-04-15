@@ -14,8 +14,9 @@ public class CardUsedByDAO {
     private CardUsedByDAO(){}
 
     public static void attachCardToUser(Long cardToAttachId){
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+
         try {
+            Connection conn = PooledDBConnection.getInstance().getConnection();
             Statement statement = conn.createStatement();
             String query = "INSERT INTO CardUsedBy " +
                     "VALUES( " +
@@ -24,7 +25,6 @@ public class CardUsedByDAO {
                     " )";
 
             statement.executeUpdate(query);
-            // TODO close connection/resultSet/statement (maybe make a utility class)
         } catch(SQLIntegrityConstraintViolationException e){
             System.out.println("card has already been attached to user");
             e.printStackTrace();
