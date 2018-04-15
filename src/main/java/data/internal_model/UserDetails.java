@@ -68,7 +68,7 @@ public class UserDetails {
         cards = null;
     }
 
-    public boolean authenticateUser(String username, String password){
+    public boolean authenticateUser(String username, String password) throws Exception{
         return UserDAO.authenticateUser(username, password);
     }
 

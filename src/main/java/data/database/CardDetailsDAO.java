@@ -55,8 +55,9 @@ public class CardDetailsDAO {
     }
 
     public static CardDetails getCardDetails(Long cardId){
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+
         try {
+            Connection conn = PooledDBConnection.getInstance().getConnection();
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM CardDetails WHERE id = " + cardId;
 

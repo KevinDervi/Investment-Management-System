@@ -45,30 +45,35 @@ public class SignInViewController {
         String usernameInput = usernameTextField.getText();
         String passwordInput = passwordTextField.getText();
 
-        // determines if correct username and password has been inputted
-        if (SignInLogic.Authentication(usernameInput, passwordInput)){
-            SignInLogic.loadUser(usernameInput);
-            // create new window
-            Stage newStage = new Stage();
+        try {
+            // determines if correct username and password has been inputted
+            if (SignInLogic.Authentication(usernameInput, passwordInput)) {
+                SignInLogic.loadUser(usernameInput);
+                // create new window
+                Stage newStage = new Stage();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/InvestmentManagementView.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/views/InvestmentManagementView.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
 
-            newStage.setScene(new Scene(root));
-            newStage.show();
+                newStage.setScene(new Scene(root));
+                newStage.show();
 
-            // set minimum size of main Investment management window
-            newStage.setMinWidth(newStage.getWidth());
-            newStage.setMinHeight(newStage.getHeight());
+                // set minimum size of main Investment management window
+                newStage.setMinWidth(newStage.getWidth());
+                newStage.setMinHeight(newStage.getHeight());
 
 
-            // close the current window
-            Stage currentStage = (Stage) signInButton.getScene().getWindow();
-            currentStage.close();
+                // close the current window
+                Stage currentStage = (Stage) signInButton.getScene().getWindow();
+                currentStage.close();
 
-        }
-        else{
-            errorMessage.setText("Wrong Username or Password");
+            } else {
+                errorMessage.setText("Wrong Username or Password");
+                errorMessage.setVisible(true);
+            }
+
+        }catch (Exception e){
+            errorMessage.setText("Unable to Connect to server");
             errorMessage.setVisible(true);
         }
 

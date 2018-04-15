@@ -14,8 +14,9 @@ public class CardUsedByDAO {
     private CardUsedByDAO(){}
 
     public static void attachCardToUser(Long cardToAttachId){
-        Connection conn = PooledDBConnection.getInstance().getConnection();
+
         try {
+            Connection conn = PooledDBConnection.getInstance().getConnection();
             Statement statement = conn.createStatement();
             String query = "INSERT INTO CardUsedBy " +
                     "VALUES( " +

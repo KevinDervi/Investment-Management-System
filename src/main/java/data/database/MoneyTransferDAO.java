@@ -45,6 +45,7 @@ public class MoneyTransferDAO {
     }
 
     public static void withdrawFromAccount(BigDecimal amountToWithdraw){
+        // TODO check it is not more than is currently in the account
         Connection conn = null;
         ResultSet rs = null;
         Statement statement = null;

@@ -124,9 +124,9 @@ public class UserDAO {
         ResultSet rs = null;
         PreparedStatement statement = null;
 
-        conn = PooledDBConnection.getInstance().getConnection();
-        try {
 
+        try {
+            conn = PooledDBConnection.getInstance().getConnection();
             statement = conn.prepareStatement("INSERT INTO User " +
                     "VALUES( " +
                     "NULL , " +
@@ -159,7 +159,7 @@ public class UserDAO {
 
     }
 
-    public static boolean authenticateUser(String username, String password){
+    public static boolean authenticateUser(String username, String password) throws Exception{
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement statement = null;
@@ -183,9 +183,10 @@ public class UserDAO {
                 return true;
             }
 
-        } catch (SQLException e){
+        } catch (Exception e){
             System.out.println("error with authenticating user");
             e.printStackTrace();
+            throw new Exception("cannot connect to database");
         }finally {
             PooledDBConnection.getInstance().closeConnection(conn, statement, rs);
         }
